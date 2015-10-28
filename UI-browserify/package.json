@@ -1,0 +1,42 @@
+{
+	"name": "canooradio",
+	"description": "canoo radio",
+	"author": "CodeCamp",
+	"version": "1.0.0",
+	"dependencies": {
+
+    "underscore" : "*",
+    "jquery" : "*",
+    "bootstrap" : "*"
+	},
+	"devDependencies": {
+    "browserify": "*",
+    "envify": "*",
+    "jest-cli": "*",
+    "uglify-js": "*",
+    "watchify": "*"
+  },
+  "scripts": {
+    "build-js": "browserify js/app.js -o public/dist/app.js && notify-send \"browserified canoo radio\" \"`date`\"",
+    "build-min-js": "browserify js/app.js | uglifyjs -o public/dist/app.min.js  && notify-send \"browserified and uglified canoo radio\" \"`date`\"",
+    "watch-js": "nodemon -e js -w js -x 'npm run build-js'",
+    "watch-min-js": "nodemon -e js -w js -x 'npm run build-min-js'",
+    "build-sass": "node-sass sass/main.scss public/dist/main.css",
+    "build-min-sass": "node-sass sass/main.scss | cleancss -o public/dist/main.min.css",
+    "watch-sass": "nodemon -e scss -w sass -x 'npm run build-sass'",
+    "build": "npm run build-js",
+    "watch": "npm run watch-js",
+    "watch-min": "npm run watch-min-js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "browserify": {
+    "transform": [
+      "envify"
+    ]
+  },
+  "jest": {
+    "rootDir": "./js"
+  }
+
+}
+
