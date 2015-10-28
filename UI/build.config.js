@@ -62,10 +62,12 @@ module.exports.config = {
 
         vendor: {
             js: [
+                'vendor/jquery/dist/jquery.js',
                 'vendor/angular/angular.js',
                 'vendor/angular-ui-router/release/angular-ui-router.js',
                 'vendor/angular-ui-utils/ui-utils.js',
-		        'vendor/angular-bootstrap/ui-bootstrap-tpls.js'
+                'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
+                'vendor/bootstrap-sass-official/assets/javascripts/bootstrap.js'
             ],
 
             spec: [
