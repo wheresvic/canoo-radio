@@ -65,8 +65,7 @@ module.exports.config = {
                 'vendor/angular/angular.js',
                 'vendor/angular-ui-router/release/angular-ui-router.js',
                 'vendor/angular-ui-utils/ui-utils.js',
-		        'vendor/angular-bootstrap/ui-bootstrap-tpls.js',
-		        'vendor/amoeba-template/js/skrollr.min.js',
+		        'vendor/angular-bootstrap/ui-bootstrap-tpls.js'
             ],
 
             spec: [
@@ -74,11 +73,11 @@ module.exports.config = {
             ],
 
             styles: [
-                'vendor/amoeba-template/skin/default.css',
-                'vendor/amoeba-template/css/bootstrap-theme.css',
-                'vendor/amoeba-template/css/style.css',
-                'vendor/amoeba-template/css/animate.css',
-                'vendor/amoeba-template/css/overwrite.css'
+                'theme/amoeba-template/skin/default.css',
+                'theme/amoeba-template/css/bootstrap-theme.css',
+                'theme/amoeba-template/css/style.css',
+                'theme/amoeba-template/css/animate.css',
+                'theme/amoeba-template/css/overwrite.css'
             ],
 
             font: [
