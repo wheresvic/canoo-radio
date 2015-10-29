@@ -2,7 +2,7 @@ table.playlist td {
   vertical-align: middle !important; }
 
 table.playlist td.voting {
-  background-color: #efebed; }
+  background-color: #f1f1f1; }
 
 table.playlist tr.played {
   color: #aaa; }
