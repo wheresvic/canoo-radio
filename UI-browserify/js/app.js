@@ -72,7 +72,16 @@ app.controller('PlaylistController', function($scope, $http, $interval){
         console.log($scope.user);
 
         pollPlaylists();
+
         $interval(pollPlaylists, 5000);
+
+        setTimeout(function () {
+            console.log($scope.playlists.played);
+        }, 2000);
+
+        $interval(function () {
+            console.log($scope.user);
+        }, 5000);
     };
 
 
@@ -111,6 +120,19 @@ app.controller('PlaylistController', function($scope, $http, $interval){
         }
 
         if (previousVote === indication) {
+
+            delete $scope.user.votes[song.id];
+
+            angular.forEach($scope.playlists.played, function (value, index) {
+               if (song.id === value.id) {
+                   if (indication < 0) {
+                       value.votes += 1;
+                   } else if (indication > 0) {
+                       value.votes -= 1;
+                   }
+               }
+            });
+
             return;
         }
 

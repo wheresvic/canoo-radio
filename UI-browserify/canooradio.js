@@ -111,9 +111,9 @@ app.get('/api/user/:id', function (req, res, next) {
 
     var user = {
         votes : {
-            '/var/mp3/cc.mp3' : 1,
-            '/var/mp3/dd.mp3' : 1,
-            '/var/mp3/ee.mp3' : -1
+            "01 Welcome.mp3" : 1,
+            "04 Pretty Fly (For a White Guy).mp3" : 1,
+            "05 The Kids Aren't Alright.mp3" : -1
         }
     };
 
