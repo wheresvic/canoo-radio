@@ -1,5 +1,9 @@
 table.playlist tr.played {
   color: #aaa; }
+  table.playlist tr.played i:hover {
+    color: #79CDC0; }
+  table.playlist tr.played i.voted {
+    color: #35A49C; }
 
 table.playlist tr.current {
   background-color: #79CDC0; }

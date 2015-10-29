@@ -1,6 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var angular = require('angular');
 
+
 var app = angular.module('canooradio', []);
 
 app.config = {
@@ -16,44 +17,87 @@ app.controller('PlaylistController', function($scope, $http){
     };
 
     $scope.current = {
+        artist: '',
+        song: '',
+        votes: 0,
+        id: 'id'
+    };
+
+    $scope.user = {
+        votes: {
+
+        }
+    };
+
+    var httpErrorCb = function (response) {
+        console.error(response);
+    }
+
+    var successUserData = function (response) {
+
+        $scope.user = response.data;
+        console.log($scope.user);
+
+        $http.get(app.config.serverBaseUrl + "/playlist/played")
+            .then(
+                function successCB(response) {
+                    $scope.playlists.played = response.data;
+                },
+                httpErrorCb
+            );
+
+        $http.get(app.config.serverBaseUrl + "/playlist/upcoming")
+            .then(
+                function successCB(response) {
+                    $scope.playlists.upcoming = response.data;
+                },
+                httpErrorCb
+            );
+
+        $http.get(app.config.serverBaseUrl + "/playlist/current")
+            .then(
+                function successCB(response) {
+                    $scope.current = response.data;
+                },
+                httpErrorCb
+            );
 
     };
 
-    $http.get(app.config.serverBaseUrl + "/playlist/played").then(
-        function successCB(response) {
-            $scope.playlists.played = response.data;
-        },
-        function errorCB(response) {
-            console.error(response);
-        }
-    );
+    $http.get(app.config.serverBaseUrl + "/user/xxx")
+        .then(successUserData, httpErrorCb);
 
-    $http.get(app.config.serverBaseUrl + "/playlist/upcoming").then(
-        function successCB(response) {
-            $scope.playlists.upcoming = response.data;
-        },
-        function errorCB(response) {
-            console.error(response);
-        }
-    );
 
-    $http.get(app.config.serverBaseUrl + "/playlist/current").then(
-        function successCB(response) {
-            $scope.current = response.data;
-        },
-        function errorCB(response) {
-            console.error(response);
-        }
-    );
+    $scope.votedCss = function (song, indication) {
 
-    $http.get(app.config.serverBaseUrl + "/user/xxx").then(
-        function successCB(response) {
-            $scope.user = response.data;
-        },
-        function errorCB(response) {
-            console.error(response);
+        var cssClass = '';
+
+        if ($scope.user.votes.hasOwnProperty(song.id)) {
+            if (indication > 0 && $scope.user.votes[song.id] > 0) {
+                cssClass = 'voted';
+            } else if (indication < 0 && $scope.user.votes[song.id] < 0) {
+                cssClass = 'voted';
+            }
         }
-    );
+
+        return cssClass;
+    }
+
+    $scope.vote = function (song, indication) {
+        $scope.user.votes[song.id] = indication;
+
+        angular.forEach($scope.playlists.played, function (value, index) {
+
+            if (song.id === value.id) {
+               if (indication > 0) {
+                   value.votes += 1;
+               } else if (indication < 0) {
+                   value.votes -= 1;
+               }
+           }
+            
+        });
+    }
 
 });
 

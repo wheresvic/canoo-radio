@@ -111,8 +111,9 @@ app.get('/api/user/:id', function (req, res, next) {
 
     var user = {
         votes : {
-            up: ['/var/mp3/cc.mp3', '/var/mp3/dd.mp3'],
-            down: ['/var/mp3/ee.mp3']
+            '/var/mp3/cc.mp3' : 1,
+            '/var/mp3/dd.mp3' : 1,
+            '/var/mp3/ee.mp3' : -1
         }
     };
 

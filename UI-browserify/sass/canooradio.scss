@@ -2,6 +2,14 @@ table.playlist {
 
   tr.played {
     color: #aaa;
+
+    i:hover {
+      color: #79CDC0;
+    }
+
+    i.voted {
+      color: #35A49C;
+    }
   }
 
   tr.current {
