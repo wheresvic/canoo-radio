@@ -25,9 +25,9 @@ public class Mp3UploadController {
             try {
                 byte[] bytes = file.getBytes();
                 final File mp3File = new File(mpdFolder + "/" + name);
-                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(mp3File));
-                stream.write(bytes);
-                stream.close();
+                try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(mp3File))) {
+                    stream.write(bytes);
+                }
                 return "You successfully uploaded " + name + "!";
             } catch (Exception e) {
                 return "You failed to upload " + name + " => " + e.getMessage();
