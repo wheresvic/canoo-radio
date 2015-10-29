@@ -8,7 +8,7 @@ app.config = {
 };
 
 
-app.controller('PlaylistController', function($scope, $http){
+app.controller('PlaylistController', function($scope, $http, $interval){
 
     $scope.playlists = {
         upcoming: [],
@@ -28,8 +28,41 @@ app.controller('PlaylistController', function($scope, $http){
         }
     };
 
+    $scope.music = [];
+
     var httpErrorCb = function (response) {
         console.error(response);
+    };
+
+    var pollPlaylists = function () {
+
+        $http.get(app.config.serverBaseUrl + "/playlist/played")
+            .then(
+            function successCB(response) {
+                $scope.playlists.played = response.data;
+            },
+            httpErrorCb
+        );
+
+        $http.get(app.config.serverBaseUrl + "/playlist/upcoming")
+            .then(
+            function successCB(response) {
+                $scope.playlists.upcoming = response.data;
+            },
+            httpErrorCb
+        );
+
+        $http.get(app.config.serverBaseUrl + "/playlist/current")
+            .then(
+            function successCB(response) {
+                $scope.current = response.data;
+            },
+            httpErrorCb
+        );
+    };
+
+    var getMusic = function (pageNumber) {
+
     }
 
     var successUserData = function (response) {
@@ -37,34 +70,14 @@ app.controller('PlaylistController', function($scope, $http){
         $scope.user = response.data;
         console.log($scope.user);
 
-        $http.get(app.config.serverBaseUrl + "/playlist/played")
-            .then(
-                function successCB(response) {
-                    $scope.playlists.played = response.data;
-                },
-                httpErrorCb
-            );
-
-        $http.get(app.config.serverBaseUrl + "/playlist/upcoming")
-            .then(
-                function successCB(response) {
-                    $scope.playlists.upcoming = response.data;
-                },
-                httpErrorCb
-            );
-
-        $http.get(app.config.serverBaseUrl + "/playlist/current")
-            .then(
-                function successCB(response) {
-                    $scope.current = response.data;
-                },
-                httpErrorCb
-            );
-
+        pollPlaylists();
+        $interval(pollPlaylists, 5000);
     };
+
 
     $http.get(app.config.serverBaseUrl + "/user/xxx")
         .then(successUserData, httpErrorCb);
+
 
 
     $scope.votedCss = function (song, indication) {
