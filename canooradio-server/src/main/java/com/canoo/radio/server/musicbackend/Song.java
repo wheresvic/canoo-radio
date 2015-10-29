@@ -2,21 +2,21 @@ package com.canoo.radio.server.musicbackend;
 
 public class Song {
 
-    private final int id;
+    private final String fileName;
     private final String artist;
     private final String song;
     private final String album;
     private int votes = 0;
 
-    public Song(int id, String artist, String song, String album) {
-        this.id = id;
+    public Song(String fileName, String artist, String song, String album) {
+        this.fileName = fileName;
         this.artist = artist;
         this.song = song;
         this.album = album;
     }
 
-    public int getId() {
-        return id;
+    public String getFileName() {
+        return fileName;
     }
 
     public String getArtist() {

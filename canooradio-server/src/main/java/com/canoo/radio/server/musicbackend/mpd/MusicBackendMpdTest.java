@@ -51,8 +51,8 @@ public class MusicBackendMpdTest {
     @Test
     public void testCurrentSong() throws MPDConnectionException, UnknownHostException, MPDPlayerException {
         MusicBackendMpd mpdBackend = new MusicBackendMpd();
-        int id = mpdBackend.getCurrentSong().getId();
-        assertTrue(id > 0);
+        String fileName = mpdBackend.getCurrentSong().getFileName();
+        assertNotNull(fileName);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class MusicBackendMpdTest {
         MusicBackendMpd mpdBackend = new MusicBackendMpd();
         final List<Song> upcomingSongs = mpdBackend.getUpcomingSongs();
         assertTrue(upcomingSongs.size() > 0);
-        System.out.println(upcomingSongs.get(0).getId());
+        System.out.println(upcomingSongs.get(0).getFileName());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class MusicBackendMpdTest {
         mpdBackend.removeSongFromQueue(newSong);
 
         assertFalse(mpdBackend.getUpcomingSongs().contains(newSong));
-        System.out.printf(newSong.getId() + "");
+        System.out.printf(newSong.getFileName() + "");
     }
 
     @Test

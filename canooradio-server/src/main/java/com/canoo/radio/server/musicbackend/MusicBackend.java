@@ -18,7 +18,7 @@ public interface MusicBackend {
 
     void addSongToQueue(Song song) throws Exception;
 
-    void addSongToQueue(int songId) throws Exception;
+    void addSongToQueue(String fileName) throws Exception;
 
     void startPlayback() throws Exception;
 
