@@ -1,3 +1,5 @@
+$red1: #f6b8c5;
+$red2: #62494e;
 table.playlist {
 
   td {
@@ -12,11 +14,11 @@ table.playlist {
     color: #aaa;
 
     i:hover {
-      color: #79CDC0;
+      color: $red1;
     }
 
     i.voted {
-      color: #35A49C;
+      color: $red2;
     }
 
   }
@@ -28,7 +30,8 @@ table.playlist {
   }
 
   tr.current {
-     background-color: #79CDC0;
+     background-color: $red2;
+     color: #fdfdfd;
   }
 
 }
@@ -36,6 +39,29 @@ table.playlist {
 .nav-tabs > li > a {
   color: #999;
 }
+
+.on-air-background {
+  padding: 200px 0 60px;
+  color: #fdfdfd;
+  background-image: url("/img/onair.jpg") !important;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.on-air-background h2.slogan {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 900;
+}
+
+/* inner heading */
+.on-air-background.inner {
+  background: #eee;
+  padding: 150px 0 50px;
+}
+
 
 #browser-tab input[type=text] {
   width: 100%;
