@@ -2,4 +2,24 @@ table.playlist tr.played {
   color: #aaa; }
 
 table.playlist tr.current {
-  /* color: #44BCDD; */ }
+  background-color: #79CDC0; }
+
+#browser-tab input[type=text] {
+  width: 100%;
+  background: #e3e7e4;
+  font-family: 'Open Sans', sans serif;
+  border: 0;
+  font-size: 14px;
+  text-align: left;
+  vertical-align: middle;
+  padding: 0 10px; }
+
+#browser-tab input[type=text]:focus {
+  background: #656a64;
+  color: #eff1ef;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  transition: background 0.25 ease-in;
+  -moz-transition: background 0.25 ease-in;
+  -webkit-transition: background 0.25 ease-in; }

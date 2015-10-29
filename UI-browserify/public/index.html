@@ -92,6 +92,7 @@
 					<div class="col-md-offset-3 col-md-6">
 						<div class="section-header">
 							<h2 class="section-heading animated" data-animation="bounceInUp">Song queue</h2>
+						</div>
 					</div>
 				</div>
 
@@ -113,7 +114,7 @@
                                 {{song.votes}}
                             </td>
 						</tr>
-						<tr class="current info">
+						<tr class="current">
 							<td>{{current.artist}}</td>
 							<td>{{current.name}}</td>
 							<td>{{current.votes}}</td>
@@ -130,148 +131,75 @@
 		</section>
 
 
-			<!-- section vote -->
+		<!-- section vote -->
 		<section id="section-vote" class="section appear clearfix">
 			<div class="container">
-				
-				<div class="row mar-bot40">
+
+				<div class="row align-center mar-bot40">
 					<div class="col-md-offset-3 col-md-6">
 						<div class="section-header">
-							<h2 class="section-heading animated" data-animation="bounceInUp">Vote for songs</h2>
-							<p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet consectetur, adipisci velit, sed quia non numquam.</p>
+							<h2 class="section-heading animated" data-animation="bounceInUp">Music browser</h2>
+							<ul class="nav nav-tabs">
+								<li class="active"><a data-toggle="tab" href="#browser-tab">Browser</a></li>
+								<li><a data-toggle="tab" href="#chart-tab">Canoo Charts</a></li>
+								<li><a data-toggle="tab" href="#mostplayed-tab">Most Played</a></li>
+							</ul>
 						</div>
 					</div>
 				</div>
-					
-                        <div class="row">
-                          <nav id="filter" class="col-md-12 text-center">
-                            <ul>
-                              <li><a href="#" class="current btn-theme btn-small" data-filter="*">All</a></li>
-                              <li><a href="#"  class="btn-theme btn-small" data-filter=".webdesign" >Web Design</a></li>
-                              <li><a href="#"  class="btn-theme btn-small" data-filter=".photography">Photography</a></li>
-                              <li ><a href="#" class="btn-theme btn-small" data-filter=".print">Print</a></li>
-                            </ul>
-                          </nav>
-                          <div class="col-md-12">
-                            <div class="row">
-                              <div class="portfolio-items isotopeWrapper clearfix" id="3">
-							  
-                                <article class="col-md-4 isotopeItem webdesign">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img1.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img1.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
 
-                                <article class="col-md-4 isotopeItem photography">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img2.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img2.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-								
+				<div class="row mar-bot40 col-md-8 col-md-offset-2">
 
-                                <article class="col-md-4 isotopeItem photography">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img3.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img3.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
+					<div class="tab-content">
+						<div id="browser-tab" class="tab-pane fade in active">
+							<div class="input-group">
+								<input type="text" class="form-control" placeholder="Search for...">
+      								<span class="input-group-btn">
+        							<button class="btn btn-theme" type="button">Go!</button>
+      							</span>
+							</div><!-- /input-group -->
+							<table class="table table-hover">
+								<thead>
+								<tr>
+									<th></th>
+									<th>Artist</th>
+									<th>Song</th>
+									<th>Album</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td><i class="fa fa-play-circle"></i></td>
+									<td>John</td>
+									<td>Doe</td>
+									<td>Album</td>
+								</tr>
+								<tr>
+									<td><i class="fa fa-play-circle"></i></td>
+									<td>Mary</td>
+									<td>Moe</td>
+									<td>Album</td>
+								</tr>
+								<tr>
+									<td><i class="fa fa-play-circle"></i></td>
+									<td>July</td>
+									<td>Dooley</td>
+									<td>Album</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div id="chart-tab" class="tab-pane fade">
+							<h3>Section B</h3>
+							<p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
+						</div>
+						<div id="mostplayed-tab" class="tab-pane fade">
+							<h3>Section B</h3>
+							<p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
+						</div>
+					</div>
+				</div>
 
-                                <article class="col-md-4 isotopeItem print">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img4.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img4.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-
-                                <article class="col-md-4 isotopeItem photography">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img5.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img5.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-
-                                <article class="col-md-4 isotopeItem webdesign">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img6.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img6.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-
-                                <article class="col-md-4 isotopeItem print">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img7.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img7.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-
-                                <article class="col-md-4 isotopeItem photography">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img8.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img8.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-
-                                <article class="col-md-4 isotopeItem print">
-									<div class="portfolio-item">
-										<img src="img/portfolio/img9.jpg" alt="" />
-										 <div class="portfolio-desc align-center">
-											<div class="folio-info">
-												<h5><a href="#">Portfolio name</a></h5>
-												<a href="img/portfolio/img9.jpg" class="fancybox"><i class="fa fa-plus fa-2x"></i></a>
-											 </div>										   
-										 </div>
-									</div>
-                                </article>
-                                </div>
-                                        
-							</div>
-                                     
-
-							</div>
-                        </div>
-				
 			</div>
 		</section>
 
