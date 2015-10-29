@@ -87,7 +87,9 @@
                 <table class="table playlist">
                     <thead>
                     <tr>
-                        <th></th>
+                        <th class="voting"></th>
+                        <th class="voting"></th>
+                        <th class="voting"></th>
                         <th>Artist</th>
                         <th>Song</th>
 
@@ -95,9 +97,13 @@
                     </thead>
                     <tbody>
                     <tr class="played" ng-repeat="song in playlists.played">
-                        <td class="text-center">
+                        <td class="align-right voting">
                             <i class="fa fa-thumbs-o-up fa-lg" ng-class="votedCss(song, 1)" ng-click="vote(song, 1)"></i>
+                        </td>
+                        <td class="text-center voting">
                             <span class="votes">{{song.votes}}</span>
+                        </td>
+                        <td class="align-left voting">
                             <i class="fa fa-thumbs-o-down fa-lg" ng-class="votedCss(song, -1)" ng-click="vote(song, -1)"></i>
                         </td>
                         <td>{{song.artist}}</td>
@@ -105,10 +111,14 @@
                     </tr>
                     <tr class="current">
                         <td></td>
+                        <td></td>
+                        <td></td>
                         <td>{{current.artist}}</td>
                         <td>{{current.name}}</td>
                     </tr>
                     <tr ng-repeat="song in playlists.upcoming">
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td>{{song.artist}}</td>
                         <td>{{song.song}}</td>

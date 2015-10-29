@@ -69,7 +69,7 @@ app.controller('PlaylistController', function($scope, $http){
 
     $scope.votedCss = function (song, indication) {
 
-        var cssClass = '';
+        var cssClass = 'vote';
 
         if ($scope.user.votes.hasOwnProperty(song.id)) {
             if (indication > 0 && $scope.user.votes[song.id] > 0) {
@@ -82,19 +82,52 @@ app.controller('PlaylistController', function($scope, $http){
         return cssClass;
     }
 
+    /**
+     * TODO: sync up with the backend
+     *
+     * @param song
+     * @param indication
+     */
     $scope.vote = function (song, indication) {
+
+        var previousVote = 0;
+
+        if ($scope.user.votes.hasOwnProperty(song.id)) {
+            previousVote = $scope.user.votes[song.id];
+        }
+
+        if (previousVote === indication) {
+            return;
+        }
+
         $scope.user.votes[song.id] = indication;
 
         angular.forEach($scope.playlists.played, function (value, index) {
 
             if (song.id === value.id) {
+
                if (indication > 0) {
-                   value.votes += 1;
+
+                   var increment = 1;
+
+                   if (previousVote < 0) {
+                       increment += 1;
+                   }
+
+                   value.votes += increment;
+
                } else if (indication < 0) {
-                   value.votes -= 1;
+
+                   var decrement = 1;
+
+                   if (previousVote > 0) {
+                       decrement += 1;
+                   }
+
+                   value.votes -= decrement;
                }
            }
-            
+
         });
     }
 

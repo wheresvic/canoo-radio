@@ -1,5 +1,13 @@
 table.playlist {
 
+  td {
+    vertical-align: middle !important;
+  }
+
+  td.voting {
+    background-color: #efebed;
+  }
+
   tr.played {
     color: #aaa;
 
@@ -9,6 +17,12 @@ table.playlist {
 
     i.voted {
       color: #35A49C;
+    }
+
+    .votes {
+      font-size: 2em;
+      vertical-align: middle;
+      margin-left: 3px;
     }
   }
 
