@@ -136,5 +136,5 @@
 	$(window).load(initNice);
 	$(window).resize(initNice);
     */
-    
+
 })(jQuery);

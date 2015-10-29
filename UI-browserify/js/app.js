@@ -6,6 +6,7 @@ app.config = {
     serverBaseUrl:"/api"
 };
 
+
 app.controller('PlaylistController', function($scope, $http){
 
     $scope.playlists = {
@@ -19,7 +20,7 @@ app.controller('PlaylistController', function($scope, $http){
 
     $http.get(app.config.serverBaseUrl + "/playlist/played").then(
         function successCB(response) {
-            $scope.playlists.played = response;
+            $scope.playlists.played = response.data;
         },
         function errorCB(response) {
             console.error(response);
@@ -28,7 +29,7 @@ app.controller('PlaylistController', function($scope, $http){
 
     $http.get(app.config.serverBaseUrl + "/playlist/upcoming").then(
         function successCB(response) {
-            $scope.playlists.upcoming = response;
+            $scope.playlists.upcoming = response.data;
         },
         function errorCB(response) {
             console.error(response);
@@ -37,7 +38,7 @@ app.controller('PlaylistController', function($scope, $http){
 
     $http.get(app.config.serverBaseUrl + "/playlist/current").then(
         function successCB(response) {
-            $scope.current = response;
+            $scope.current = response.data;
         },
         function errorCB(response) {
             console.error(response);
