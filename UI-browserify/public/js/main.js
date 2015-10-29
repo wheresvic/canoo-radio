@@ -38,7 +38,7 @@
 
     //scroll menu
     jQuery('.appear').appear();
-    jQuery(".appear").on("appear", function(data) {
+    jQuery('.appear').on("appear", function(data) {
         var id = $(this).attr("id");
         jQuery('.nav li').removeClass('active');
         jQuery(".nav a[href='#" + id + "']").parent().addClass("active");
