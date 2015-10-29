@@ -1,8 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html ng-app="canooradio">
     <head>
 		<!-- BASICS -->
         <meta charset="utf-8">
@@ -79,7 +76,8 @@
 
 				<div class="row align-center mar-bot40">
 					<audio controls="" preload="none" id="player" onloadedmetadata="app.displayData(event);">
-						<source src="http://stream.freshrock.net:8000/ogg" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>
+						<!--<source src="http://stream.freshrock.net:8000/ogg" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>-->
+						<source src="http://10.0.1.24:1337" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>
 					</audio>
 				</div>
 
@@ -87,7 +85,7 @@
 		</section>
 		<!-- /listen -->
 
-		<section id="section-queue" class="section appear clearfix">
+		<section id="section-queue" class="section appear clearfix" ng-controller="PlaylistController">
 			<div class="container">
 				<div class="row mar-bot40">
 					<div class="col-md-offset-3 col-md-6">

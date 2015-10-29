@@ -4,17 +4,16 @@
 	"author": "CodeCamp",
 	"version": "1.0.0",
 	"dependencies": {
-
-    "underscore" : "*",
-    "jquery" : "*",
-    "bootstrap" : "*"
+    "express" :"4.13.3",
+    "underscore" : "1.8.3",
+    "angular" : "1.4.7"
 	},
 	"devDependencies": {
-    "browserify": "*",
-    "envify": "*",
-    "jest-cli": "*",
-    "uglify-js": "*",
-    "watchify": "*"
+    "browserify": "11.2.0",
+    "envify": "3.4.0",
+    "jest-cli": "0.6.1",
+    "uglify-js": "2.5.0",
+    "watchify": "3.5.0"
   },
   "scripts": {
     "build-js": "browserify js/app.js -o public/dist/app.js && notify-send \"browserified canoo radio\" \"`date`\"",

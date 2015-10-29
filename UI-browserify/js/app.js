@@ -1,12 +1,19 @@
+var angular = require('angular');
 
-console.log('hello world');
+var app = angular.module('canooradio', []);
 
-var app = {
-
-    displayData : function (event) {
-        console.log('xx');
-    }
-
+app.config = {
+    serverBaseUrl:"/api"
 };
 
-window.app = app;
+app.controller('PlaylistController', function($scope, $http){
+
+    $http.get(app.config.serverBaseUrl + "/playlist").then(
+        function successCB(response) {
+            $scope.playlist = response;
+        },
+        function errorCB(response) {
+            console.error(response);
+        });
+
+});
