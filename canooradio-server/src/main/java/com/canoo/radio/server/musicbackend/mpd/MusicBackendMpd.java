@@ -3,58 +3,86 @@ package com.canoo.radio.server.musicbackend.mpd;
 import com.canoo.radio.server.musicbackend.MusicBackend;
 import com.canoo.radio.server.musicbackend.Song;
 import org.bff.javampd.MPD;
+import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDDatabaseException;
+import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.exception.MPDPlaylistException;
+import org.bff.javampd.objects.MPDSong;
 
+import java.net.UnknownHostException;
 import java.util.List;
+
+import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.*;
 
 class MusicBackendMpd implements MusicBackend {
     private MPD mpd;
 
-    public MusicBackendMpd() {
-        try {
-            mpd = new MPD.Builder().server("10.0.1.24").port(6600).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+    public MusicBackendMpd() throws UnknownHostException, MPDConnectionException {
+        mpd = new MPD.Builder().server("10.0.1.24").port(6600).build();
     }
 
-    public Song getCurrentSong() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public Song getCurrentSong() throws MPDPlayerException {
+        return convertMpdSongToSong(mpd.getPlayer().getCurrentSong());
     }
 
-    public List<Song> getUpcommingSongs() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public List<Song> getPlayedSongs() throws Exception {
+        final List<MPDSong> songList = mpd.getPlaylist().getSongList();
+        final int currentIndex = songList.indexOf(mpd.getPlaylist().getCurrentSong());
+        final List<MPDSong> playedSongs = songList.subList(0, currentIndex);
+        return convertMpdSongListToSongList(playedSongs);
     }
 
-    public List<Song> getRecentlyPlayedSongs() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public List<Song> getUpcomingSongs() throws MPDPlaylistException {
+        final List<MPDSong> songList = mpd.getPlaylist().getSongList();
+        final int currentIndex = songList.indexOf(mpd.getPlaylist().getCurrentSong());
+        final List<MPDSong> upcomingSongs = songList.subList(currentIndex + 1, songList.size());
+        return convertMpdSongListToSongList(upcomingSongs);
     }
 
-    public List<Song> getAllSongs() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public List<Song> getAllSongs() throws MPDDatabaseException {
+        return convertMpdSongListToSongList(mpd.getDatabase().listAllSongs());
     }
 
-    public void addSongToQueue(Song song) {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public void removeSongFromQueue(Song song) throws Exception {
+        final MPDSong mpdSong = getMpdSong(song, mpd.getDatabase().listAllSongs());
+        mpd.getPlaylist().removeSong(mpdSong);
     }
 
-    public void addSongmpdToQueue(Song song) {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public void addSongToQueue(Song song) throws MPDDatabaseException, MPDPlaylistException {
+        MPDSong mpdSong = getMpdSong(song, mpd.getDatabase().listAllSongs());
+
+        mpd.getPlaylist().addSong(mpdSong);
+
     }
 
-    public void startPlayback() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public void startPlayback() throws MPDPlayerException {
+        mpd.getPlayer().play();
     }
 
-    public void stopPlayback() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public void stopPlayback() throws MPDPlayerException {
+        mpd.getPlayer().stop();
     }
 
-    public void nextSong() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public void nextSong() throws MPDPlayerException {
+        mpd.getPlayer().playNext();
     }
 
-    public void previousSong() {
-        throw new RuntimeException("Not implemented yet!");
+    @Override
+    public void previousSong() throws MPDPlayerException {
+        mpd.getPlayer().playPrev();
+    }
+
+    @Override
+    public void clearQueue() throws Exception {
+        mpd.getPlaylist().clearPlaylist();
     }
 }

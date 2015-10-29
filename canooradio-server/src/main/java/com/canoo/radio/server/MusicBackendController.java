@@ -15,7 +15,7 @@ public class MusicBackendController {
 
     @RequestMapping("/song")
     public Song getSong(@RequestParam(value = "name", defaultValue = "DefaultName") String name) {
-        return new Song(name + " yehe", "a file name for " + name);
+        return new Song(name + " yehe", "a file name for " + name, 5);
     }
 
 }

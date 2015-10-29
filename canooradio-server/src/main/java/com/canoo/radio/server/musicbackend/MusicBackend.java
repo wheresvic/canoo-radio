@@ -6,21 +6,25 @@ import java.util.List;
  * ...
  */
 public interface MusicBackend {
-    Song getCurrentSong();
+    Song getCurrentSong() throws Exception;
 
-    List<Song> getUpcommingSongs();
+    List<Song> getPlayedSongs() throws Exception;
 
-    List<Song> getRecentlyPlayedSongs();
+    List<Song> getUpcomingSongs() throws Exception;
 
-    List<Song> getAllSongs();
+    List<Song> getAllSongs() throws Exception;
 
-    void addSongToQueue(Song song);
+    void removeSongFromQueue(Song song) throws Exception;
 
-    void startPlayback();
+    void addSongToQueue(Song song) throws Exception;
 
-    void stopPlayback();
+    void startPlayback() throws Exception;
 
-    void nextSong();
+    void stopPlayback() throws Exception;
 
-    void previousSong();
+    void nextSong() throws Exception;
+
+    void previousSong() throws Exception;
+
+    void clearQueue() throws Exception;
 }
