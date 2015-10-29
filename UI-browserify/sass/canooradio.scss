@@ -20,9 +20,10 @@ table.playlist {
     }
 
     .votes {
-      font-size: 2em;
       vertical-align: middle;
       margin-left: 3px;
+      font-weight: bold;
+      font-family: cursive;
     }
   }
 
@@ -30,6 +31,10 @@ table.playlist {
      background-color: #79CDC0;
   }
 
+}
+
+.nav-tabs > li > a {
+  color: #999;
 }
 
 #browser-tab input[type=text] {
