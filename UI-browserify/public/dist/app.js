@@ -46,7 +46,17 @@ app.controller('PlaylistController', function($scope, $http){
         }
     );
 
+    $http.get(app.config.serverBaseUrl + "/user/xxx").then(
+        function successCB(response) {
+            $scope.user = response.data;
+        },
+        function errorCB(response) {
+            console.error(response);
+        }
+    );
+
 });
+
 },{"angular":3}],2:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7

@@ -27,7 +27,7 @@
     "build": "npm run build-js",
     "watch": "npm run watch-js",
     "watch-min": "npm run watch-min-js",
-    "all": "nodemon -e js,scss -w js -w sass -x 'npm run build-js && npm run build-sass",
+    "all": "nodemon -e js,scss -w js -w sass -x 'npm run build-js && npm run build-sass'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "browserify": {
