@@ -1,0 +1,5 @@
+table.playlist tr.played {
+  color: #aaa; }
+
+table.playlist tr.current {
+  /* color: #44BCDD; */ }

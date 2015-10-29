@@ -1033,10 +1033,6 @@ a.socialIcon:hover, .socialHoverClass {
 	border-bottom: 4px solid;
 }
 
-table.playlist tr.played {
-	color: #aaa;
-}
-
 
 /* ========================================
 Media queries
