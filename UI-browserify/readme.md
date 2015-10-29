@@ -15,11 +15,10 @@ npm install
 # running
 
 ```
-npm run watch-js
-npm run watch-sass
+npm run all
 ```
 
-This will dist the combined `app.js` under the `public/dist/` folder and the `watch-sass` task will dist the `canooradio.css` to the dist folder as well. 
+This will dist the combined `app.js` under the `public/dist/` folder and the `canooradio.css` to the dist folder as well. Changes to the `js` folder and the `sass` folder are watched via nodemon
 
 ```
 node canooradio.js
