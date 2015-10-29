@@ -7,6 +7,7 @@ app.config = {
     serverBaseUrl:"/api"
 };
 
+
 app.controller('PlaylistController', function($scope, $http){
 
     $scope.playlists = {
