@@ -8,12 +8,40 @@ app.config = {
 
 app.controller('PlaylistController', function($scope, $http){
 
-    $http.get(app.config.serverBaseUrl + "/playlist").then(
+    $scope.playlists = {
+        upcoming: [],
+        played: []
+    };
+
+    $scope.current = {
+
+    };
+
+    $http.get(app.config.serverBaseUrl + "/playlist/played").then(
         function successCB(response) {
-            $scope.playlist = response;
+            $scope.playlists.played = response;
         },
         function errorCB(response) {
             console.error(response);
-        });
+        }
+    );
+
+    $http.get(app.config.serverBaseUrl + "/playlist/upcoming").then(
+        function successCB(response) {
+            $scope.playlists.upcoming = response;
+        },
+        function errorCB(response) {
+            console.error(response);
+        }
+    );
+
+    $http.get(app.config.serverBaseUrl + "/playlist/current").then(
+        function successCB(response) {
+            $scope.current = response;
+        },
+        function errorCB(response) {
+            console.error(response);
+        }
+    );
 
 });

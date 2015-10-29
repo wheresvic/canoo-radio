@@ -122,7 +122,8 @@
             });
 
         }
-	
+
+    /*
 	//nicescroll
 	$("html").niceScroll({zindex:999,cursorborder:"",cursorborderradius:"2px",cursorcolor:"#191919",cursoropacitymin:.5});
 	function initNice() {
@@ -134,5 +135,6 @@
 	}
 	$(window).load(initNice);
 	$(window).resize(initNice);
-
+    */
+    
 })(jQuery);

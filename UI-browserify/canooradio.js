@@ -62,6 +62,20 @@ app.get('/api/playlist/upcoming', function (req, res, next) {
 
     res.send(playlist);
 
+})
+
+app.get('/api/playlist/current', function (req, res, next) {
+
+    var playlist = {
+        id : '/var/mp3/current.mp3',
+        artist : 'Current',
+        song: 'current',
+        album: 'album',
+        votes: 2
+    };
+
+    res.send(playlist);
+
 });
 
 var app_http = app.listen(8000);
