@@ -95,8 +95,8 @@
 				</div>
 
 
-				<div class="row align-center mar-bot40 col-md-8 col-md-offset-2">
-					<table class="table table-hover">
+				<div class="row mar-bot40 col-md-8 col-md-offset-2">
+					<table class="table playlist">
 						<thead>
 						<tr>
 							<th>Artist</th>
@@ -105,20 +105,20 @@
 						</tr>
 						</thead>
 						<tbody>
-						<tr>
-							<td>John</td>
-							<td>Doe</td>
-							<td>***</td>
+						<tr class="played" ng-repeat="song in playlists.played">
+							<td>{{song.artist}}</td>
+							<td>{{song.song}}</td>
+							<td>{{song.votes}}</td>
 						</tr>
-						<tr>
-							<td>Mary</td>
-							<td>Moe</td>
-							<td>**</td>
+						<tr class="current">
+							<td>{{current.artist}}</td>
+							<td>{{current.name}}</td>
+							<td>{{current.votes}}</td>
 						</tr>
-						<tr>
-							<td>July</td>
-							<td>Dooley</td>
-							<td>*</td>
+						<tr ng-repeat="song in playlists.played">
+							<td>{{song.artist}}</td>
+							<td>{{song.song}}</td>
+							<td>{{song.votes}}</td>
 						</tr>
 						</tbody>
 					</table>
