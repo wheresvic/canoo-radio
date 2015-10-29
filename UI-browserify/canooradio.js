@@ -34,7 +34,36 @@ app.get('/api/playlist/played', function (req, res, next) {
             song: 'Berlin city girl',
             album: 'album',
             votes: 4
+        },
+        {
+            id : '/var/mp3/dd.mp3',
+            artist : 'dd',
+            song: 'dd',
+            album: 'album',
+            votes: 7
+        },
+        {
+            id : '/var/mp3/ee.mp3',
+            artist : 'ee',
+            song: 'ee',
+            album: 'album',
+            votes: 8
+        },
+        {
+            id : '/var/mp3/ff.mp3',
+            artist : 'ff',
+            song: 'ff',
+            album: 'album',
+            votes: 4
+        },
+        {
+            id : '/var/mp3/gg.mp3',
+            artist : 'gg',
+            song: 'gg',
+            album: 'album',
+            votes: 4
         }
+
     ];
 
     res.send(playlist);
@@ -75,6 +104,19 @@ app.get('/api/playlist/current', function (req, res, next) {
     };
 
     res.send(playlist);
+
+});
+
+app.get('/api/user/:id', function (req, res, next) {
+
+    var user = {
+        votes : {
+            up: ['/var/mp3/cc.mp3', '/var/mp3/dd.mp3'],
+            down: ['/var/mp3/ee.mp3']
+        }
+    };
+
+    res.send(user);
 
 });
 
