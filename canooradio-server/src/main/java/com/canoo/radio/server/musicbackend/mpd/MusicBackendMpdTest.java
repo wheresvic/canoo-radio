@@ -1,8 +1,13 @@
 package com.canoo.radio.server.musicbackend.mpd;
 
 import com.canoo.radio.server.musicbackend.Song;
+import org.bff.javampd.exception.MPDConnectionException;
+import org.bff.javampd.exception.MPDDatabaseException;
+import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.exception.MPDPlaylistException;
 import org.junit.Test;
 
+import java.net.UnknownHostException;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -44,151 +49,86 @@ public class MusicBackendMpdTest {
     }
 
     @Test
-    public void testCurrentSong() {
-        try {
-
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            final String filename = mpdBackend.getCurrentSong().getFilename();
-            assertNotNull(filename);
-            System.out.println(filename);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public void testCurrentSong() throws MPDConnectionException, UnknownHostException, MPDPlayerException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        int id = mpdBackend.getCurrentSong().getId();
+        assertTrue(id > 0);
     }
 
     @Test
-    public void testUpcomingSongs() {
-        try {
-
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            final List<Song> upcomingSongs = mpdBackend.getUpcomingSongs();
-            assertTrue(upcomingSongs.size() > 0);
-            System.out.println(upcomingSongs.get(0).getFilename());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public void testUpcomingSongs() throws MPDConnectionException, UnknownHostException, MPDPlaylistException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        final List<Song> upcomingSongs = mpdBackend.getUpcomingSongs();
+        assertTrue(upcomingSongs.size() > 0);
+        System.out.println(upcomingSongs.get(0).getId());
     }
 
     @Test
-    public void testGetAllSongs() {
-        try {
-
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            final List<Song> allSongs = mpdBackend.getAllSongs();
-            assertTrue(allSongs.size() > 0);
-            System.out.println(allSongs.size());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    public void testGetAllSongs() throws MPDConnectionException, UnknownHostException, MPDDatabaseException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        final List<Song> allSongs = mpdBackend.getAllSongs();
+        assertTrue(allSongs.size() > 0);
+        System.out.println(allSongs.size());
     }
 
     @Test
-    public void testRemoveSongFromQueue() {
-        try {
+    public void testRemoveSongFromQueue() throws Exception {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        Song newSong = mpdBackend.getUpcomingSongs().get(0);
 
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            Song newSong = mpdBackend.getUpcomingSongs().get(0);
+        mpdBackend.removeSongFromQueue(newSong);
 
-            mpdBackend.removeSongFromQueue(newSong);
-
-            assertFalse(mpdBackend.getUpcomingSongs().contains(newSong));
-            System.out.printf(newSong.getFilename());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        assertFalse(mpdBackend.getUpcomingSongs().contains(newSong));
+        System.out.printf(newSong.getId() + "");
     }
 
     @Test
-    public void testStopPlayback(){
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            mpdBackend.stopPlayback();
+    public void testStopPlayback() throws MPDPlayerException, MPDConnectionException, UnknownHostException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        mpdBackend.stopPlayback();
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    @Test
+    public void testStartPlayback() throws MPDConnectionException, UnknownHostException, MPDPlayerException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        mpdBackend.startPlayback();
+
 
     }
 
     @Test
-    public void testStartPlayback(){
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            mpdBackend.startPlayback();
+    public void testNextSong() throws MPDPlayerException, MPDConnectionException, UnknownHostException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        mpdBackend.nextSong();
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+    @Test
+    public void testPreviousSong() throws MPDConnectionException, UnknownHostException, MPDPlayerException {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        mpdBackend.previousSong();
+    }
+
+    @Test
+    public void testPlayedSongs() throws Exception {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        final List<Song> playedSongs = mpdBackend.getPlayedSongs();
+
+        assertNotEquals(0, playedSongs.size());
+        System.out.println(playedSongs.size());
 
     }
 
     @Test
-    public void testNextSong(){
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            mpdBackend.nextSong();
+    public void testClearPlaylist() throws Exception {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        final int sizeBefore = mpdBackend.getUpcomingSongs().size();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        mpdBackend.clearQueue();
 
-    }
+        final int sizeAfter = mpdBackend.getUpcomingSongs().size();
 
-    @Test
-    public void testPreviousSong(){
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            mpdBackend.previousSong();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    @Test
-    public void testPlayedSongs() {
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            final List<Song> playedSongs = mpdBackend.getPlayedSongs();
-
-            assertNotEquals(0, playedSongs.size());
-            System.out.println(playedSongs.size());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
-    public void testClearPlaylist(){
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            final int sizeBefore = mpdBackend.getUpcomingSongs().size();
-
-            mpdBackend.clearQueue();
-
-            final int sizeAfter = mpdBackend.getUpcomingSongs().size();
-
-            assertTrue(sizeAfter < sizeBefore);
-            assertTrue(sizeAfter == 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-
+        assertTrue(sizeAfter < sizeBefore);
+        assertTrue(sizeAfter == 0);
     }
 
 

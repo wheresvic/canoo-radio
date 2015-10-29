@@ -10,11 +10,12 @@ table.playlist tr.played {
     color: #79CDC0; }
   table.playlist tr.played i.voted {
     color: #35A49C; }
-  table.playlist tr.played .votes {
-    vertical-align: middle;
-    margin-left: 3px;
-    font-weight: bold;
-    font-family: cursive; }
+
+table.playlist .votes {
+  vertical-align: middle;
+  margin-left: 3px;
+  font-weight: bold;
+  font-family: cursive; }
 
 table.playlist tr.current {
   background-color: #79CDC0; }
@@ -45,14 +46,26 @@ table.playlist tr.current {
 @keyframes fa-blink {
   0% {
     opacity: 0; }
-  25% {
+  10% {
     opacity: 0.25; }
-  50% {
+  20% {
     opacity: 0.5; }
-  75% {
+  30% {
     opacity: 0.75; }
+  40% {
+    opacity: 1; }
+  50% {
+    opacity: 1; }
+  60% {
+    opacity: 1; }
+  70% {
+    opacity: 0.75; }
+  80% {
+    opacity: 0.5; }
+  90% {
+    opacity: 0.25; }
   100% {
-    opacity: 1; } }
+    opacity: 0; } }
 
 .fa-blink {
   -webkit-animation: fa-blink 2s linear infinite;
