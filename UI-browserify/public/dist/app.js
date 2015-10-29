@@ -5,7 +5,8 @@ var angular = require('angular');
 var app = angular.module('canooradio', []);
 
 app.config = {
-    serverBaseUrl:"/api"
+    url: "/api",
+    serverBaseUrl: "http://localhost:8080"
 };
 
 
@@ -16,11 +17,11 @@ app.controller('PlaylistController', function($scope, $http, $interval){
         played: []
     };
 
-    $scope.current = {
-        artist: '',
-        song: '',
+    $scope.currenCut = {
+        artist: 'Artist',
+        song: 'Song',
         votes: 0,
-        id: 'id'
+        id: 1
     };
 
     $scope.user = {
@@ -37,7 +38,7 @@ app.controller('PlaylistController', function($scope, $http, $interval){
 
     var pollPlaylists = function () {
 
-        $http.get(app.config.serverBaseUrl + "/playlist/played")
+        $http.get(app.config.serverBaseUrl + "/playedSongs")
             .then(
             function successCB(response) {
                 $scope.playlists.played = response.data;
@@ -45,7 +46,7 @@ app.controller('PlaylistController', function($scope, $http, $interval){
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/playlist/upcoming")
+        $http.get(app.config.serverBaseUrl + "/upcomingSongs")
             .then(
             function successCB(response) {
                 $scope.playlists.upcoming = response.data;
@@ -53,7 +54,7 @@ app.controller('PlaylistController', function($scope, $http, $interval){
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/playlist/current")
+        $http.get(app.config.serverBaseUrl + "/currentSong")
             .then(
             function successCB(response) {
                 $scope.current = response.data;
@@ -76,7 +77,7 @@ app.controller('PlaylistController', function($scope, $http, $interval){
     };
 
 
-    $http.get(app.config.serverBaseUrl + "/user/xxx")
+    $http.get(app.config.url + "/user/xxx")
         .then(successUserData, httpErrorCb);
 
 
