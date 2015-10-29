@@ -111,16 +111,20 @@
                         <td>{{song.song}}</td>
                     </tr>
                     <tr class="current">
-                        <td></td>
-                        <td class="text-center"><i class="fa fa-play-circle fa-blink"></i></td>
-                        <td></td>
+						<td class="align-right"></td>
+						<td class="text-center">
+							<span class="votes fa-blink">{{current.votes}}</span>
+						</td>
+						<td class="align-left"></td>
                         <td>{{current.artist}}</td>
                         <td>{{current.name}}</td>
                     </tr>
                     <tr ng-repeat="song in playlists.upcoming">
-                        <td></td>
-                        <td></td>
-                        <td></td>
+						<td class="align-right voting"></td>
+						<td class="text-center voting">
+							<span class="votes">{{song.votes}}</span>
+						</td>
+						<td class="align-left voting"></td>
                         <td>{{song.artist}}</td>
                         <td>{{song.song}}</td>
                     </tr>
