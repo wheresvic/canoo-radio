@@ -39,6 +39,7 @@ public class MusicBackendController {
     public void addSong(@RequestParam(value="fileName") String fileName) throws Exception {
         musicBackend.addSongToQueue(fileName);
     }
+
     @RequestMapping("/clearQueue")
     public void addSong() throws Exception {
         musicBackend.clearQueue();
