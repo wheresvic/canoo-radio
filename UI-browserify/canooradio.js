@@ -33,7 +33,7 @@ app.get('/api/playlist/played', function (req, res, next) {
             artist : 'Culcha Candela',
             song: 'Berlin city girl',
             album: 'album',
-            votes: 4
+            votes: 40
         },
         {
             id : '/var/mp3/dd.mp3',
@@ -47,7 +47,7 @@ app.get('/api/playlist/played', function (req, res, next) {
             artist : 'ee',
             song: 'ee',
             album: 'album',
-            votes: 8
+            votes: 1000
         },
         {
             id : '/var/mp3/ff.mp3',
@@ -111,8 +111,9 @@ app.get('/api/user/:id', function (req, res, next) {
 
     var user = {
         votes : {
-            up: ['/var/mp3/cc.mp3', '/var/mp3/dd.mp3'],
-            down: ['/var/mp3/ee.mp3']
+            '/var/mp3/cc.mp3' : 1,
+            '/var/mp3/dd.mp3' : 1,
+            '/var/mp3/ee.mp3' : -1
         }
     };
 
