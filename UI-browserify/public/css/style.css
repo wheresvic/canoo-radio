@@ -404,10 +404,10 @@ h1 a.navbar-brand {
 }
 
 .navbar-brand {
-	padding: 0;
 	display: table-cell;
 	vertical-align: middle;
 	line-height: 90px;
+	padding: 0 0 0 15px;
 }
 
 .navbar-brand img {
@@ -418,10 +418,6 @@ h1 a.navbar-brand {
 	padding: 0;
 	margin: 0;
 	width: 80px;
-}
-
-.navbar-collapse.in {
-	margin-top: -5px !important;
 }
 
 
