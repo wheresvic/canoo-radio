@@ -10,7 +10,7 @@ import java.util.List;
 class MpdUtils {
 
     public static Song convertMpdSongToSong(MPDSong mpdSong) {
-        Song song = new Song(mpdSong.getTitle(), mpdSong.getFile(), mpdSong.getId());
+        Song song = new Song(mpdSong.getId(), mpdSong.getArtistName(), mpdSong.getTitle(), mpdSong.getArtistName());
         return song;
     }
 
@@ -24,7 +24,7 @@ class MpdUtils {
         return songList;
     }
 
-    public static MPDSong getMpdSong(String songFilename, Collection<MPDSong> allSongs) {
-        return allSongs.stream().filter(s -> s.getFile().equals(songFilename)).findFirst().orElse(null);
+    public static MPDSong getMpdSong(int id, Collection<MPDSong> allSongs) {
+        return allSongs.stream().filter(s -> s.getId() == id).findFirst().orElseGet(null); //Get Lastone
     }
 }
