@@ -1,14 +1,15 @@
 {
-	"name": "canooradio",
-	"description": "canoo radio",
-	"author": "CodeCamp",
-	"version": "1.0.0",
-	"dependencies": {
-    "express" :"4.13.3",
-    "underscore" : "1.8.3",
-    "angular" : "1.4.7"
-	},
-	"devDependencies": {
+  "name": "canooradio",
+  "description": "canoo radio",
+  "author": "CodeCamp",
+  "version": "1.0.0",
+  "dependencies": {
+    "angular": "1.4.7",
+    "express": "4.13.3",
+    "morgan": "^1.6.1",
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
     "browserify": "11.2.0",
     "envify": "3.4.0",
     "jest-cli": "0.6.1",
@@ -36,6 +37,4 @@
   "jest": {
     "rootDir": "./js"
   }
-
 }
-

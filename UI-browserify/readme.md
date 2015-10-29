@@ -20,13 +20,9 @@ npm run watch-js
 This will dist the combined `app.js` under the `public/dist/` folder. Then 
 
 ```
-cd public
-python -m SimpleHTTPServer
+node canooradio.js
 ```
 
-to run a browser instance which can serve the frontend.
+to run a server which can serve the frontend.
 
-# TODO
-
-set up a simple node.js server with CORS :)
 
