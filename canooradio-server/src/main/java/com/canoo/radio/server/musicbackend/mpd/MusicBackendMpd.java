@@ -8,12 +8,14 @@ import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.exception.MPDPlaylistException;
 import org.bff.javampd.objects.MPDSong;
+import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
 import java.util.List;
 
 import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.*;
 
+@Service
 class MusicBackendMpd implements MusicBackend {
     private MPD mpd;
 
@@ -49,16 +51,20 @@ class MusicBackendMpd implements MusicBackend {
 
     @Override
     public void removeSongFromQueue(Song song) throws Exception {
-        final MPDSong mpdSong = getMpdSong(song, mpd.getDatabase().listAllSongs());
+        final MPDSong mpdSong = getMpdSong(song.getFilename(), mpd.getDatabase().listAllSongs());
         mpd.getPlaylist().removeSong(mpdSong);
     }
 
     @Override
     public void addSongToQueue(Song song) throws MPDDatabaseException, MPDPlaylistException {
-        MPDSong mpdSong = getMpdSong(song, mpd.getDatabase().listAllSongs());
-
+        MPDSong mpdSong = getMpdSong(song.getFilename(), mpd.getDatabase().listAllSongs());
         mpd.getPlaylist().addSong(mpdSong);
+    }
 
+    @Override
+    public void addSongToQueue(String songId) throws Exception {
+        final MPDSong mpdSong = getMpdSong(songId, mpd.getDatabase().listAllSongs());
+        mpd.getPlaylist().addSong(mpdSong);
     }
 
     @Override
