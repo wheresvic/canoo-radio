@@ -9,9 +9,6 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-}
 group 'com.canoo.radio'
 version '1.0-SNAPSHOT'
 
@@ -23,6 +20,3 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-}
