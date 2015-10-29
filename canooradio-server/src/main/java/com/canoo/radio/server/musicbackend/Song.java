@@ -1,4 +1,4 @@
-package com.canoo.radio.server.mpd;
+package com.canoo.radio.server.musicbackend;
 
 public class Song {
 
