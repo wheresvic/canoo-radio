@@ -11,4 +11,6 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:1.2.7.RELEASE")
+    compile("net.thejavashop:javampd:5.0.3")
+    testCompile("junit:junit:4.12")
 }
