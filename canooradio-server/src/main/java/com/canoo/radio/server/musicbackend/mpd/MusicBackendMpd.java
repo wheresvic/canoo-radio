@@ -8,6 +8,7 @@ import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.exception.MPDPlaylistException;
 import org.bff.javampd.objects.MPDSong;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
@@ -17,10 +18,17 @@ import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.*;
 
 @Service
 class MusicBackendMpd implements MusicBackend {
+
+    @Value("${mpd.host}")
+    private String mpdHost;
+
+    @Value("${mpd.port}")
+    private int mpdPort;
+
     private MPD mpd;
 
     public MusicBackendMpd() throws UnknownHostException, MPDConnectionException {
-        mpd = new MPD.Builder().server("10.0.1.24").port(6600).build();
+        mpd = new MPD.Builder().server(mpdHost).port(mpdPort).build();
     }
 
     @Override
