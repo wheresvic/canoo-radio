@@ -64,7 +64,8 @@ app.controller('RadioController',
             url: app.config.serverBaseUrl + '/music/upload',
             data: {file: file}
         }).then(function (resp) {
-            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            // console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            console.log(resp);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
             postNotification('error', resp.status);

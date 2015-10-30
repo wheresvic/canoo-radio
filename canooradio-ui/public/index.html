@@ -243,12 +243,12 @@
 						<div class="section-header">
 							<h2 class="section-heading animated" data-animation="bounceInUp">Upload MP3 Files</h2>
 							<p>Share your music with the Canoo Community!</p>
-							<div id="drop-files" ondragover="return false"> <!-- ondragover for firefox -->
+							<div id="drop-files" ondragover="return false" ngf-select="upload($file)"> <!-- ondragover for firefox -->
 								Drop MP3 Songs Here
 							</div>
 
                             <form>
-								<div class="button" ngf-select="upload($file)">Upload on file select</div>
+								<div class="button" ngf-select="upload($file)">Or click here to select a file to upload</div>
                             </form>
 
 						</div>
