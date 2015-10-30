@@ -114,10 +114,14 @@ table.playlist {
   float: left;
   font-weight: bold;
   margin: 0 20px 20px 0;
-  text-align: center;
-  padding-top: 2em;
   &.dragover {
     border: 4px dashed $red2;
+  }
+  >p{
+    margin: auto 20px auto 20px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
