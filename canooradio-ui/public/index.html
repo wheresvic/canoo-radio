@@ -131,7 +131,7 @@
                         <td>{{current.artist}}</td>
                         <td>{{current.song}}</td>
                     </tr>
-                    <tr ng-repeat="song in playlists.upcoming">
+                    <tr ng-repeat="song in playlists.upcoming" ng-class="isAnimated(song)">
 						<td class="align-right voting"></td>
 						<td class="text-center voting">
 							<span class="votes">{{song.votes}}</span>

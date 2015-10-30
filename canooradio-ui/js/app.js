@@ -58,6 +58,16 @@ app.controller('RadioController',
         $scope.notification.alertClass = '';
     };
 
+    $scope.isAnimated = function (song) {
+        var cssClass = '';
+
+        if (song.isAdded) {
+            cssClass = 'animated fadeInDown';
+        }
+
+        return cssClass;
+    };
+
     // upload on file select or drop
     $scope.upload = function (file) {
         if (file.size === 0) {
@@ -117,6 +127,7 @@ app.controller('RadioController',
     $scope.addToPlaylist = function (song) {
         $http.get(app.config.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
             function successCB() {
+                song.isAdded = true;
                 $scope.playlists.upcoming.push(song);
             },
             httpErrorCb
