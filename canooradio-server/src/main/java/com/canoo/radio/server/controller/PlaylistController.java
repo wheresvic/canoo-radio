@@ -12,37 +12,33 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @RestController
-public class MusicBackendController {
+@RequestMapping("/playlist")
+public class PlaylistController {
 
     @Autowired
     private MusicBackend musicBackend;
 
-    @RequestMapping("/currentSong")
+    @RequestMapping("/current")
     public Song getCurrentSong() throws Exception {
         return musicBackend.getCurrentSong();
     }
 
-    @RequestMapping("/upcomingSongs")
+    @RequestMapping("/upcoming")
     public List<Song> getUpcomingSongs() throws Exception {
         return musicBackend.getUpcomingSongs();
     }
 
-    @RequestMapping("/playedSongs")
+    @RequestMapping("/played")
     public List<Song> getPlayedSongs() throws Exception {
         return musicBackend.getPlayedSongs().stream().limit(10).collect(toList());
     }
 
-    @RequestMapping("/allSongs")
-    public List<Song> getAllSongs() throws Exception {
-        return musicBackend.getAllSongs();
-    }
-
-    @RequestMapping("/addSong")
+    @RequestMapping("/add")
     public void addSong(@RequestParam(value="fileName") String fileName) throws Exception {
         musicBackend.addSongToQueue(fileName);
     }
 
-    @RequestMapping("/clearQueue")
+    @RequestMapping("/clear")
     public void addSong() throws Exception {
         musicBackend.clearQueue();
     }

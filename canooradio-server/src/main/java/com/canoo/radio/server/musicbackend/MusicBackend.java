@@ -11,6 +11,8 @@ public interface MusicBackend {
 
     List<Song> getAllSongs() throws Exception;
 
+    List<Song> searchSongs(String query) throws Exception;
+
     void removeSongFromQueue(Song song) throws Exception;
 
     void addSongToQueue(Song song) throws Exception;

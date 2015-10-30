@@ -6,13 +6,14 @@ public class Song {
     private final String artist;
     private final String song;
     private final String album;
-    private int votes = 0;
+    private int votes;
 
-    public Song(String id, String artist, String song, String album) {
+    public Song(String id, String artist, String song, String album, int votes) {
         this.id = id;
         this.artist = artist;
         this.song = song;
         this.album = album;
+        this.votes = votes;
     }
 
     public String getId() {

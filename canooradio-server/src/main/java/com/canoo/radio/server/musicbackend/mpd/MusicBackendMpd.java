@@ -1,26 +1,29 @@
 package com.canoo.radio.server.musicbackend.mpd;
 
-import javax.annotation.PostConstruct;
-import java.net.UnknownHostException;
-import java.util.List;
-
 import com.canoo.radio.server.musicbackend.MusicBackend;
 import com.canoo.radio.server.musicbackend.Song;
+import com.canoo.radio.server.voting.VoteRepository;
 import org.bff.javampd.MPD;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.exception.MPDPlaylistException;
 import org.bff.javampd.objects.MPDSong;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.convertMpdSongListToSongList;
-import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.convertMpdSongToSong;
-import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.getMpdSong;
+import javax.annotation.PostConstruct;
+import java.net.UnknownHostException;
+import java.util.List;
+
+import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.*;
 
 @Service
 class MusicBackendMpd implements MusicBackend {
+    @Autowired
+    private VoteRepository voteRepository;
+
 
     @Value("${mpd.host}")
     private String mpdHost;
@@ -38,8 +41,8 @@ class MusicBackendMpd implements MusicBackend {
     }
 
     @Override
-    public Song getCurrentSong() throws MPDPlayerException, MPDConnectionException, UnknownHostException {
-        return convertMpdSongToSong(mpd.getPlayer().getCurrentSong());
+    public Song getCurrentSong() throws MPDPlayerException {
+        return convertMpdSongToSong(mpd.getPlayer().getCurrentSong(), voteRepository);
     }
 
     @Override
@@ -47,7 +50,7 @@ class MusicBackendMpd implements MusicBackend {
         final List<MPDSong> songList = mpd.getPlaylist().getSongList();
         final int currentIndex = songList.indexOf(mpd.getPlaylist().getCurrentSong());
         final List<MPDSong> playedSongs = songList.subList(0, currentIndex);
-        return convertMpdSongListToSongList(playedSongs);
+        return convertMpdSongListToSongList(playedSongs, voteRepository);
     }
 
     @Override
@@ -55,12 +58,17 @@ class MusicBackendMpd implements MusicBackend {
         final List<MPDSong> songList = mpd.getPlaylist().getSongList();
         final int currentIndex = songList.indexOf(mpd.getPlaylist().getCurrentSong());
         final List<MPDSong> upcomingSongs = songList.subList(currentIndex + 1, songList.size());
-        return convertMpdSongListToSongList(upcomingSongs);
+        return convertMpdSongListToSongList(upcomingSongs, voteRepository);
     }
 
     @Override
     public List<Song> getAllSongs() throws MPDDatabaseException {
-        return convertMpdSongListToSongList(mpd.getDatabase().listAllSongs());
+        return convertMpdSongListToSongList(mpd.getDatabase().listAllSongs(), voteRepository);
+    }
+
+    @Override
+    public List<Song> searchSongs(String query) throws Exception {
+        return convertMpdSongListToSongList(mpd.getDatabase().searchAny(query), voteRepository);
     }
 
     @Override
