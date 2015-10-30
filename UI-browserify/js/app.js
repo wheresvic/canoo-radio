@@ -4,6 +4,7 @@ var angular = require('angular');
 var app = angular.module('canooradio', []);
 
 app.config = {
+    userId: '',
     url: "/api",
     serverBaseUrl: "http://localhost:8080"
 };
@@ -18,7 +19,7 @@ app.controller('RadioController', function($scope, $http, $interval){
         played: []
     };
 
-    $scope.currenCut = {
+    $scope.current = {
         artist: 'Artist',
         song: 'Song',
         votes: 0,
@@ -33,8 +34,139 @@ app.controller('RadioController', function($scope, $http, $interval){
 
     $scope.music = [];
 
+    $scope.searchKeyPress = function(keyEvent) {
+        if (keyEvent.which === 13) {
+            $scope.searchSongs($scope.searchInput);
+        }
+    };
+
+    $scope.searchSongs = function (searchString, maxResults) {
+        $http.get(app.config.url + "/search?q=" + searchString +"&maxResults=" + maxResults)
+            .then(
+            function successCB(response) {
+                $scope.music = response.data;
+            },
+            httpErrorCb
+        );
+    };
+
+    $scope.votedCss = function (song, indication) {
+
+        var cssClass = 'vote';
+
+        if ($scope.user.votes.hasOwnProperty(song.id)) {
+            if (indication > 0 && $scope.user.votes[song.id] > 0) {
+                cssClass = 'voted';
+            } else if (indication < 0 && $scope.user.votes[song.id] < 0) {
+                cssClass = 'voted';
+            }
+        }
+
+        return cssClass;
+    }
+
+    /**
+     * TODO: sync up with the backend
+     *
+     * @param song
+     * @param indication
+     */
+    $scope.vote = function (song, indication) {
+
+        if (!app.config.userId) {
+            return;
+        }
+
+        var previousVote = 0;
+
+        if ($scope.user.votes.hasOwnProperty(song.id)) {
+            previousVote = $scope.user.votes[song.id];
+        }
+
+        if (previousVote === indication) {
+
+            delete $scope.user.votes[song.id];
+
+            angular.forEach($scope.playlists.played, function (value, index) {
+                if (song.id === value.id) {
+                    if (indication < 0) {
+                        value.votes += 1;
+                    } else if (indication > 0) {
+                        value.votes -= 1;
+                    }
+                }
+            });
+
+            return;
+        }
+
+        $scope.user.votes[song.id] = indication;
+
+        angular.forEach($scope.playlists.played, function (value, index) {
+
+            if (song.id === value.id) {
+
+                if (indication > 0) {
+
+                    var increment = 1;
+
+                    if (previousVote < 0) {
+                        increment += 1;
+                    }
+
+                    value.votes += increment;
+
+                } else if (indication < 0) {
+
+                    var decrement = 1;
+
+                    if (previousVote > 0) {
+                        decrement += 1;
+                    }
+
+                    value.votes -= decrement;
+                }
+            }
+
+        });
+    };
+
     var httpErrorCb = function (response) {
         console.error(response);
+    };
+
+    var successUserData = function (response) {
+
+        $scope.user = response.data;
+        console.log($scope.user);
+
+        igniteRadioData();
+    };
+
+    var igniteRadio = function () {
+        if (app.config.userId) {
+            $http.get(app.config.url + "/user/xxx").then(successUserData, httpErrorCb);
+        } else {
+            igniteRadioData();
+        }
+    };
+
+    var igniteRadioData = function () {
+
+        pollPlaylists();
+        $scope.searchSongs("", 25);
+
+        $interval(pollPlaylists, 5000);
+
+        /*
+         setTimeout(function () {
+         console.log($scope.playlists.played);
+         }, 2000);
+
+         $interval(function () {
+         console.log($scope.user);
+         }, 5000);
+         */
     };
 
     var pollPlaylists = function () {
@@ -64,123 +196,17 @@ app.controller('RadioController', function($scope, $http, $interval){
         );
     };
 
-    $scope.searchKeyPress = function(keyEvent) {
-        if (keyEvent.which === 13) {
-            $scope.searchSongs($scope.searchInput);
-        }
-    };
+    igniteRadio();
 
-    $scope.searchSongs = function (searchString, maxResults) {
-        $http.get(app.config.url + "/search?q=" + searchString +"&maxResults=" + maxResults)
-            .then(
-            function successCB(response) {
-                console.log(response.data);
-                $scope.music = response.data;
-            },
-            httpErrorCb
-        );
-    };
+});
 
-    var successUserData = function (response) {
+app.run(function () {
 
-        $scope.user = response.data;
-        console.log($scope.user);
+    console.log('Hello World');
 
-        pollPlaylists();
-        $scope.searchSongs("", 25);
+    if (typeof(Storage) !== "undefined") {
 
-        $interval(pollPlaylists, 5000);
-
-        setTimeout(function () {
-            console.log($scope.playlists.played);
-        }, 2000);
-
-        $interval(function () {
-            console.log($scope.user);
-        }, 5000);
-    };
-
-
-    $http.get(app.config.url + "/user/xxx")
-        .then(successUserData, httpErrorCb);
-
-
-
-    $scope.votedCss = function (song, indication) {
-
-        var cssClass = 'vote';
-
-        if ($scope.user.votes.hasOwnProperty(song.id)) {
-            if (indication > 0 && $scope.user.votes[song.id] > 0) {
-                cssClass = 'voted';
-            } else if (indication < 0 && $scope.user.votes[song.id] < 0) {
-                cssClass = 'voted';
-            }
-        }
-
-        return cssClass;
+    } else {
+        alert('Sorry no localstorage support, voting will be disabled');
     }
-
-    /**
-     * TODO: sync up with the backend
-     *
-     * @param song
-     * @param indication
-     */
-    $scope.vote = function (song, indication) {
-
-        var previousVote = 0;
-
-        if ($scope.user.votes.hasOwnProperty(song.id)) {
-            previousVote = $scope.user.votes[song.id];
-        }
-
-        if (previousVote === indication) {
-
-            delete $scope.user.votes[song.id];
-
-            angular.forEach($scope.playlists.played, function (value, index) {
-               if (song.id === value.id) {
-                   if (indication < 0) {
-                       value.votes += 1;
-                   } else if (indication > 0) {
-                       value.votes -= 1;
-                   }
-               }
-            });
-
-            return;
-        }
-
-        $scope.user.votes[song.id] = indication;
-
-        angular.forEach($scope.playlists.played, function (value, index) {
-
-            if (song.id === value.id) {
-
-               if (indication > 0) {
-
-                   var increment = 1;
-
-                   if (previousVote < 0) {
-                       increment += 1;
-                   }
-
-                   value.votes += increment;
-
-               } else if (indication < 0) {
-
-                   var decrement = 1;
-
-                   if (previousVote > 0) {
-                       decrement += 1;
-                   }
-
-                   value.votes -= decrement;
-               }
-           }
-
-        });
-    }
-
 });
