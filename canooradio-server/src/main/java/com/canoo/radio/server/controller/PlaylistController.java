@@ -39,8 +39,18 @@ public class PlaylistController {
     }
 
     @RequestMapping("/clear")
-    public void addSong() throws Exception {
+    public void clearPlaylist() throws Exception {
         musicBackend.clearQueue();
+    }
+
+    @RequestMapping("/next")
+    public void nextSong() throws Exception {
+        musicBackend.nextSong();
+    }
+
+    @RequestMapping("/previous")
+    public void previousSong() throws Exception {
+        musicBackend.previousSong();
     }
 
 }
