@@ -72,7 +72,9 @@ class MusicBackendMpd implements MusicBackend {
     @Override
     public void addSongToQueue(String fileName) throws Exception {
         final MPDSong mpdSong = getMpdSong(fileName, mpd.getDatabase().listAllSongs());
-        mpd.getPlaylist().addSong(mpdSong);
+        if (mpdSong != null) {
+            mpd.getPlaylist().addSong(mpdSong);
+        }
     }
 
     @Override

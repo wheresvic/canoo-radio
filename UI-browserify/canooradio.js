@@ -110,6 +110,7 @@ app.get('/api/playlist/current', function (req, res, next) {
 app.get('/api/user/:id', function (req, res, next) {
 
     var user = {
+        id: req.params.id,
         votes : {
             "01 Welcome.mp3" : 1,
             "04 Pretty Fly (For a White Guy).mp3" : 1,
@@ -121,66 +122,102 @@ app.get('/api/user/:id', function (req, res, next) {
 
 });
 
+
+app.get('/api/vote/up', function (req, res, next) {
+
+    var data = req.body;
+
+    console.log(data);
+
+    res.status(200).send();
+
+});
+
+
+app.get('/api/vote/down', function (req, res, next) {
+
+    var data = req.body;
+
+    console.log(data);
+
+    res.status(200).send();
+
+});
+
+app.get('/api/vote/clear', function (req, res, next) {
+
+    var data = req.body;
+
+    console.log(data);
+
+    res.status(200).send();
+
+});
+
 app.get('/api/search', function (req, res) {
-    var songs = [];
+
+    console.log(req.query);
+
+    var songs = [
+        {
+            id : '/var/mp3/snoop.mp3',
+            artist : 'Snoop Dawg',
+            song: 'Peaches N Cream',
+            album: 'album',
+            votes: 2
+        },
+        {
+            id : '/var/mp3/cc.mp3',
+            artist : 'Culcha Candela',
+            song: 'Berlin city girl',
+            album: 'album',
+            votes: 40
+        },
+        {
+            id : '/var/mp3/dd.mp3',
+            artist : 'dd',
+            song: 'dd',
+            album: 'album',
+            votes: 7
+        },
+        {
+            id : '/var/mp3/ee.mp3',
+            artist : 'ee',
+            song: 'ee',
+            album: 'album',
+            votes: 1000
+        },
+        {
+            id : '/var/mp3/ff.mp3',
+            artist : 'ff',
+            song: 'ff',
+            album: 'album',
+            votes: 4
+        },
+        {
+            id : '/var/mp3/gg.mp3',
+            artist : 'gg',
+            song: 'gg',
+            album: 'album',
+            votes: 4
+        }
+    ];
+
     if(req.query.q !== "") {
-        songs = [
-            {
-                id: '/var/mp3/snoop.mp3',
-                artist: 'Snoop Dawg',
-                song: 'Peaches N Cream',
-                album: 'album',
-                votes: 2
-            }
-        ];
+        res.send([songs[0]]);
     } else {
-        songs = [
-            {
-                id : '/var/mp3/snoop.mp3',
-                artist : 'Snoop Dawg',
-                song: 'Peaches N Cream',
-                album: 'album',
-                votes: 2
-            },
-            {
-                id : '/var/mp3/cc.mp3',
-                artist : 'Culcha Candela',
-                song: 'Berlin city girl',
-                album: 'album',
-                votes: 40
-            },
-            {
-                id : '/var/mp3/dd.mp3',
-                artist : 'dd',
-                song: 'dd',
-                album: 'album',
-                votes: 7
-            },
-            {
-                id : '/var/mp3/ee.mp3',
-                artist : 'ee',
-                song: 'ee',
-                album: 'album',
-                votes: 1000
-            },
-            {
-                id : '/var/mp3/ff.mp3',
-                artist : 'ff',
-                song: 'ff',
-                album: 'album',
-                votes: 4
-            },
-            {
-                id : '/var/mp3/gg.mp3',
-                artist : 'gg',
-                song: 'gg',
-                album: 'album',
-                votes: 4
-            }
-        ];
+        res.send(songs);
     }
 
-    res.send(songs);
+});
+
+app.get('/api/addSong', function (req, res, next) {
+
+    var data = req.query;
+
+    console.log(data);
+
+    res.status(200).send();
 
 });
 

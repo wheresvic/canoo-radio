@@ -1,5 +1,6 @@
 $red1: #f6b8c5;
 $red2: #62494e;
+
 table.playlist {
 
   td {
@@ -62,6 +63,12 @@ table.playlist {
   padding: 150px 0 50px;
 }
 
+
+#music-browser {
+  margin-top: 20px;
+  height: 600px;
+  overflow-y: auto;
+}
 
 #browser-tab input[type=text] {
   width: 100%;
