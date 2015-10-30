@@ -10,7 +10,7 @@ var app = angular.module('canooradio', [require('ng-file-upload')]);
 
 app.config = {
     url: "/api",
-    serverBaseUrl: ""
+    serverBaseUrl: (window.location.hostname === 'localhost' ? 'http://localhost:8080' : '')
 };
 
 
@@ -40,6 +40,7 @@ app.controller('RadioController',
     };
 
     $scope.music = [];
+    $scope.charts = [];
 
     $scope.notification = {
         alertClass : '',
@@ -322,17 +323,17 @@ app.controller('RadioController',
 
     var igniteRadioData = function () {
 
-        pollPlaylists();
+        pollData();
         $scope.searchSongs("", 25);
 
-        $interval(pollPlaylists, 5000);
+        $interval(pollData, 5000);
     };
 
 
     /**
-     * Poll playlist data
+     * Poll playlist & music data
      */
-    var pollPlaylists = function () {
+    var pollData = function () {
 
         $http.get(app.config.serverBaseUrl + "/playlist/played").then(
             function successCB(response) {
@@ -351,6 +352,13 @@ app.controller('RadioController',
         $http.get(app.config.serverBaseUrl + "/playlist/current").then(
             function successCB(response) {
                 $scope.current = response.data;
+            },
+            httpErrorCb
+        );
+
+        $http.get(app.config.serverBaseUrl + "/music/charts?limit=25").then(
+            function successCB(response) {
+                $scope.charts = response.data;
             },
             httpErrorCb
         );
