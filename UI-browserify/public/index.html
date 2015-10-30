@@ -10,6 +10,8 @@
 		<link rel="stylesheet" type="text/css" href="css/isotope.css" media="screen" />
 		<link rel="stylesheet" href="js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
 		<link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/animate.css">
+        <link rel="stylesheet" href="css/overwrite.css">
 		<link rel="stylesheet" href="css/bootstrap-theme.css">
 		<link rel="stylesheet" href="css/font-awesome.css">
         <link rel="stylesheet" href="css/Lato-Regular.css">
@@ -22,10 +24,10 @@
     <body ng-controller="RadioController">
 
         <div id="alert-view-container">
-            <div class="alert alert-dismissible fade in" ng-class="[notification.alertClass]" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <div id="notification" ng-if="notification.message" class="alert" ng-class="[notification.alertClass]" role="alert">
+                <button type="button" class="close" aria-label="Close" ng-click="closeNotification()">
                     <span aria-hidden="true">×</span></button>
-                <span>{{notification.value}}</span>
+                <span>{{notification.message}}</span>
             </div>
         </div>
 
@@ -175,6 +177,7 @@
 							</div><!-- /input-group -->
 
                             <div id="music-browser">
+
                                 <table class="table table-hover">
                                     <thead>
                                     <tr>

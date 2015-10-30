@@ -7,7 +7,7 @@ var app = angular.module('canooradio', []);
 app.config = {
     userId: '',
     url: "/api",
-    serverBaseUrl: "http://localhost:8080"
+    serverBaseUrl: "http://localhost:8080/"
 };
 
 
@@ -36,8 +36,20 @@ app.controller('RadioController', function($scope, $http, $interval){
     $scope.music = [];
 
     $scope.notification = {
-        alertClass : 'alert-danger',
-        value: 'snoop'
+        alertClass : '',
+        message: '',
+        timeout: null
+    };
+
+    $scope.closeNotification = function () {
+        console.log('clicked');
+
+        if ($scope.notification.timeout) {
+            clearTimeout($scope.notification.timeout);
+        }
+
+        $scope.notification.message = '';
+        $scope.notification.alertClass = '';
     };
 
     $scope.searchKeyPress = function(keyEvent) {
@@ -169,8 +181,35 @@ app.controller('RadioController', function($scope, $http, $interval){
         });
     };
 
+    //
+    // private functions, consider refactoring to services
+    //
+
+    var postNotification = function (type, message) {
+
+        if ($scope.notification.timeout) {
+            clearTimeout($scope.notification.timeout);
+        }
+
+        $scope.notification.alertClass = '';
+
+        if (type === 'error') {
+            $scope.notification.alertClass += 'alert-danger';
+        } else {
+            $scope.notification.alertClass += 'alert-info';
+        }
+
+        $scope.notification.message = message;
+
+        $scope.notification.timeout = setTimeout(function () {
+            $scope.notification.message = '';
+            $scope.notification.alertClass = '';
+        }, 5000);
+    };
+
     var httpErrorCb = function (response) {
-        console.error(response);
+        var message = response.data.path + ' ' + response.data.status + ' ' + response.data.error;
+        postNotification('error', message);
     };
 
     var successUserData = function (response) {
@@ -232,6 +271,8 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     igniteRadio();
+
+    // postNotification('error', 'wtf');
 
 });
 
