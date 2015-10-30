@@ -103,6 +103,22 @@ table.playlist {
   -webkit-transition: background 0.25 ease-in;
 }
 
+#drop-files {
+  width: 100%;
+  height: 125px;
+  background: $red2;
+  opacity: 0.5;
+  border: 4px dashed #777;
+  font-size: 2em;
+  float: left;
+  font-weight: bold;
+  margin: 0 20px 20px 0;
+  text-align: center;
+  padding-top: 1.5em;
+  &:hover {
+    opacity: 1;
+  }
+}
 
 #mask{
   position:fixed;
