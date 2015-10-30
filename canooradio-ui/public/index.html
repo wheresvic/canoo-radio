@@ -97,61 +97,61 @@
             </div>
         </div>
 
-    <div class="row align-center mar-bot40">
-        <audio controls="" preload="none" id="player" onloadedmetadata="">
-            <source src="http://10.0.1.24:4711/stream" type="audio/mpeg">
-            <p>Your browser doesn't support HTML audio. Sorry.</p>
-        </audio>
-    </div>
+        <div class="row align-center mar-bot40">
+            <audio controls="" preload="none" id="player" onloadedmetadata="">
+                <source src="http://10.0.1.24:4711/stream" type="audio/mpeg">
+                <p>Your browser doesn't support HTML audio. Sorry.</p>
+            </audio>
+        </div>
 
-    <div class="row mar-bot40 col-md-8 col-md-offset-2">
-        <table class="table playlist">
-            <thead>
-            <tr>
-                <th class="voting"></th>
-                <th class="voting"></th>
-                <th class="voting"></th>
-                <th>Artist</th>
-                <th>Song</th>
+        <div class="row mar-bot40 col-md-8 col-md-offset-2">
+            <table class="table playlist">
+                <thead>
+                <tr>
+                    <th class="voting"></th>
+                    <th class="voting"></th>
+                    <th class="voting"></th>
+                    <th>Artist</th>
+                    <th>Song</th>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="played" ng-repeat="song in playlists.played">
-                <td class="align-right voting">
-                    <i ng-if="userId" class="fa fa-thumbs-o-up fa-lg" ng-class="votedCss(song, 1)" ng-click="vote(song, 1)"></i>
-                </td>
-                <td class="text-center voting">
-                    <span class="votes">{{song.votes}}</span>
-                </td>
-                <td class="align-left voting">
-                    <i ng-if="userId" class="fa fa-thumbs-o-down fa-lg" ng-class="votedCss(song, -1)" ng-click="vote(song, -1)"></i>
-                </td>
-                <td>{{song.artist}}</td>
-                <td>{{song.song}}</td>
-            </tr>
-            <tr class="current">
-                <td class="align-right"></td>
-                <td class="text-center">
-                    <span class="votes">{{current.votes}}</span>
-                </td>
-                <td class="align-left"></td>
-                <td>{{current.artist}}</td>
-                <td>{{current.song}}</td>
-            </tr>
-            <tr ng-repeat="song in playlists.upcoming" ng-class="isAnimated(song)">
-                <td class="align-right voting"></td>
-                <td class="text-center voting">
-                    <span class="votes">{{song.votes}}</span>
-                </td>
-                <td class="align-left voting"></td>
-                <td>{{song.artist}}</td>
-                <td>{{song.song}}</td>
-            </tr>
-            </tbody>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="played" ng-repeat="song in playlists.played">
+                    <td class="align-right voting">
+                        <i ng-if="userId" class="fa fa-thumbs-o-up fa-lg addSongCursor" ng-class="votedCss(song, 1)" ng-click="vote(song, 1)"></i>
+                    </td>
+                    <td class="text-center voting">
+                        <span class="votes">{{song.votes}}</span>
+                    </td>
+                    <td class="align-left voting">
+                        <i ng-if="userId" class="fa fa-thumbs-o-down fa-lg addSongCursor" ng-class="votedCss(song, -1)" ng-click="vote(song, -1)"></i>
+                    </td>
+                    <td>{{song.artist}}</td>
+                    <td>{{song.song}}</td>
+                </tr>
+                <tr class="current">
+                    <td class="align-right"></td>
+                    <td class="text-center">
+                        <span class="votes">{{current.votes}}</span>
+                    </td>
+                    <td class="align-left"></td>
+                    <td>{{current.artist}}</td>
+                    <td>{{current.song}}</td>
+                </tr>
+                <tr ng-repeat="song in playlists.upcoming" ng-class="isAnimated(song)">
+                    <td class="align-right voting"></td>
+                    <td class="text-center voting">
+                        <span class="votes">{{song.votes}}</span>
+                    </td>
+                    <td class="align-left voting"></td>
+                    <td>{{song.artist}}</td>
+                    <td>{{song.song}}</td>
+                </tr>
+                </tbody>
 
-        </table>
-    </div>
+            </table>
+        </div>
 
     </div>
 </section>
@@ -260,7 +260,6 @@
 <!-- upload -->
 <section id="section-upload" class="section appear clearfix">
     <div class="container">
-
         <div class="row mar-bot40">
             <div class="col-md-offset-3 col-md-6">
                 <div class="section-header">
@@ -275,16 +274,6 @@
                 </div>
             </div>
         </div>
-
-        <p>Share your music with the Canoo Community!</p>
-
-        <div id="drop-files" ngf-drop="upload($file)" ngf-select="upload($file)"> <!-- ondragover for firefox -->
-            <p>Drag&drop or click to upload MP3 Songs</p>
-        </div>
-    </div>
-    </div>
-    </div>
-
     </div>
 </section>
 
