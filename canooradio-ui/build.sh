@@ -11,7 +11,7 @@ browserify js/app.js -o public/dist/app.js &&
 echo ""
 
 echo "-Sass-"
-node-sass sass/canooradio.scss public/dist/canooradio.cs
+node-sass sass/canooradio.scss public/dist/canooradio.css
 echo ""
 
 echo "Remove and Copy static Content"
