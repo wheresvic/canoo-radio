@@ -1,5 +1,9 @@
 package com.canoo.radio.server.musicbackend.mpd;
 
+import javax.annotation.PostConstruct;
+import java.net.UnknownHostException;
+import java.util.List;
+
 import com.canoo.radio.server.musicbackend.MusicBackend;
 import com.canoo.radio.server.musicbackend.Song;
 import org.bff.javampd.MPD;
@@ -11,10 +15,9 @@ import org.bff.javampd.objects.MPDSong;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.net.UnknownHostException;
-import java.util.List;
-
-import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.*;
+import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.convertMpdSongListToSongList;
+import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.convertMpdSongToSong;
+import static com.canoo.radio.server.musicbackend.mpd.MpdUtils.getMpdSong;
 
 @Service
 class MusicBackendMpd implements MusicBackend {
@@ -27,12 +30,16 @@ class MusicBackendMpd implements MusicBackend {
 
     private MPD mpd;
 
-    public MusicBackendMpd() throws UnknownHostException, MPDConnectionException {
-        mpd = new MPD.Builder().server(mpdHost).port(mpdPort).build();
+    @PostConstruct
+    private void initialize() throws UnknownHostException, MPDConnectionException {
+        if (mpd == null) {
+            mpd = new MPD.Builder().server(mpdHost).port(mpdPort).build();
+        }
     }
 
     @Override
-    public Song getCurrentSong() throws MPDPlayerException {
+    public Song getCurrentSong() throws MPDPlayerException, MPDConnectionException, UnknownHostException {
+        initialize();
         return convertMpdSongToSong(mpd.getPlayer().getCurrentSong());
     }
 
