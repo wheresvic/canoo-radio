@@ -57,7 +57,7 @@ class MusicBackendMpd implements MusicBackend {
         MPDSong current = mpd.getPlaylist().getCurrentSong();
 
         if (current != null) {
-            final int currentIndex = songList.indexOf(current);
+            final int currentIndex = songList.lastIndexOf(current);
             final List<MPDSong> playedSongs = songList.subList(0, currentIndex);
             return convertMpdSongListToSongList(playedSongs, voteRepository);
         }
@@ -72,7 +72,7 @@ class MusicBackendMpd implements MusicBackend {
         MPDSong current = mpd.getPlaylist().getCurrentSong();
 
         if (current != null) {
-            final int currentIndex = songList.indexOf(current);
+            final int currentIndex = songList.lastIndexOf(current);
             final List<MPDSong> upcomingSongs = songList.subList(currentIndex + 1, songList.size());
             return convertMpdSongListToSongList(upcomingSongs, voteRepository);
         }
