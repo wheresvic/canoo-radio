@@ -42,6 +42,8 @@ app.controller('RadioController',
     $scope.music = [];
     $scope.charts = [];
 
+    $scope.songAdded = false;
+
     $scope.notification = {
         alertClass : '',
         message: '',
@@ -127,6 +129,7 @@ app.controller('RadioController',
     $scope.addToPlaylist = function (song) {
         $http.get(app.config.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
             function successCB() {
+                $scope.songAdded = true;
                 song.isAdded = true;
                 $scope.playlists.upcoming.push(song);
             },
