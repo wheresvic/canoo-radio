@@ -1,2 +1,1 @@
-- gradle buildUI
 - gradle run
