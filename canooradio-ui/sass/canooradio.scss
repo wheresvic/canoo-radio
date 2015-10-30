@@ -1,5 +1,7 @@
 $red1: #f6b8c5;
 $red2: #62494e;
+$bgcolor1: #e3e7e4;
+$bgcolor2: #656a64;
 
 #alert-view-container {
   position: fixed;
@@ -22,7 +24,7 @@ table.playlist {
   }
 
   td.voting {
-    background-color: #e3e7e4;
+    background-color: $bgcolor1;
   }
 
   tr.played {
@@ -106,17 +108,16 @@ table.playlist {
 #drop-files {
   width: 100%;
   height: 125px;
-  background: $red2;
-  opacity: 0.5;
-  border: 4px dashed #777;
-  font-size: 2em;
+  background: $bgcolor1;
+  border: 4px dashed $red1;
+  font-size: 1.5em;
   float: left;
   font-weight: bold;
   margin: 0 20px 20px 0;
   text-align: center;
-  padding-top: 1.5em;
-  &:hover {
-    opacity: 1;
+  padding-top: 2em;
+  &.dragover {
+    border: 4px dashed $red2;
   }
 }
 
