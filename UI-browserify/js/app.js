@@ -51,8 +51,18 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     $scope.addToPlaylist = function (song) {
-        song.queued = true;
         $scope.playlists.upcoming.push(song);
+    };
+
+    $scope.isNotQueued = function (songId) {
+        var isNotQueued = true;
+        angular.forEach($scope.playlists.upcoming, function (value, index) {
+            if (songId === value.id) {
+                isNotQueued = false;
+            }
+        });
+        console.log(isNotQueued);
+        return isNotQueued;
     };
 
     $scope.votedCss = function (song, indication) {
@@ -68,7 +78,7 @@ app.controller('RadioController', function($scope, $http, $interval){
         }
 
         return cssClass;
-    }
+    };
 
     /**
      * TODO: sync up with the backend
