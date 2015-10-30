@@ -11,3 +11,6 @@ build/
 *.db
 
 gradle.properties
+
+UI-browserify/node_modules/
+UI-browserify/public/dist/

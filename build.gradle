@@ -11,4 +11,5 @@ repositories {
 
 dependencies {
     compile project(':canooradio-server')
+    compile project(':canooradio-ui')
 }
