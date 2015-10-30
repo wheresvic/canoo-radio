@@ -83,7 +83,10 @@ app.controller('RadioController',
             url: app.config.serverBaseUrl + '/music/upload',
             data: {file: file}
         }).then(function (resp) {
+
             postNotification('success', "Successfully uploaded your song");
+            updateMusicBrowser();
+            
             console.log(resp);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
@@ -105,12 +108,7 @@ app.controller('RadioController',
 
         if (searchString === '') {
 
-            $http.get(app.config.serverBaseUrl + '/music/random?limit=25').then(
-                function successCB(response) {
-                    $scope.music = response.data;
-                },
-                httpErrorCb
-            );
+            updateMusicBrowser();
 
         } else {
             $http.get(app.config.serverBaseUrl + "/music/search?query=" + searchString).then(
@@ -313,6 +311,15 @@ app.controller('RadioController',
         console.log($scope.user);
 
         igniteRadioData();
+    };
+
+    var updateMusicBrowser = function () {
+        $http.get(app.config.serverBaseUrl + '/music/random?limit=25').then(
+            function successCB(response) {
+                $scope.music = response.data;
+            },
+            httpErrorCb
+        );
     };
 
     var igniteRadio = function () {
