@@ -131,7 +131,7 @@
                         <td>{{current.artist}}</td>
                         <td>{{current.song}}</td>
                     </tr>
-                    <tr ng-repeat="song in playlists.upcoming">
+                    <tr ng-repeat="song in playlists.upcoming" ng-class="isAnimated(song)">
 						<td class="align-right voting"></td>
 						<td class="text-center voting">
 							<span class="votes">{{song.votes}}</span>
@@ -256,7 +256,8 @@
 						<div class="section-header">
 							<h2 class="section-heading animated" data-animation="bounceInUp">Upload MP3 Files</h2>
 							<p>Share your music with the Canoo Community!</p>
-							<div id="drop-files" ngf-drop="upload($file)" ngf-select="upload($file)"> <!-- ondragover for firefox -->
+							<div id="drop-files" ngf-drop="upload($file)" ngf-select="upload($file)"
+								 ngf-validate-fn="validate($file)">
 								<p>Drag&drop or click to upload MP3 Songs</p>
 							</div>
 						</div>
