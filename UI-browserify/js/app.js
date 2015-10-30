@@ -1,5 +1,6 @@
 var angular = require('angular');
-
+var Chance = require('chance'),
+    chance = new Chance();
 
 var app = angular.module('canooradio', []);
 
@@ -160,7 +161,7 @@ app.controller('RadioController', function($scope, $http, $interval){
 
     var igniteRadio = function () {
         if (app.config.userId) {
-            $http.get(app.config.url + "/user/xxx").then(successUserData, httpErrorCb);
+            $http.get(app.config.url + "/user/" + app.config.userId).then(successUserData, httpErrorCb);
         } else {
             igniteRadioData();
         }
@@ -217,9 +218,17 @@ app.controller('RadioController', function($scope, $http, $interval){
 
 app.run(function () {
 
-    console.log('Hello World');
-
     if (typeof(Storage) !== "undefined") {
+        // localStorage.removeItem('canooradio-userid');
+
+        app.config.userId = localStorage.getItem('canooradio-userid');
+
+        if (!app.config.userId) {
+            app.config.userId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', length: 8});
+            localStorage.setItem('canooradio-userid', app.config.userId);
+        }
+
+        console.log('Hello ' + app.config.userId);
 
     } else {
         alert('Sorry no localstorage support, voting will be disabled');
