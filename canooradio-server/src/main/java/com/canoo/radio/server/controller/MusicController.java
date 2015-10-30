@@ -54,6 +54,16 @@ public class MusicController {
                 .collect(toList());
     }
 
+    @RequestMapping("/play")
+    public void play() throws Exception {
+        musicBackend.startPlayback();
+    }
+
+    @RequestMapping("/stop")
+    public void stop() throws Exception {
+        musicBackend.stopPlayback();
+    }
+
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public void handleFileUpload(@RequestParam("file") MultipartFile file) throws Exception{

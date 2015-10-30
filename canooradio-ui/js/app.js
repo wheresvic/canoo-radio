@@ -10,7 +10,7 @@ var app = angular.module('canooradio', [require('ng-file-upload')]);
 
 app.config = {
     url: "/api",
-    serverBaseUrl: "http://localhost:8080/"
+    serverBaseUrl: ""
 };
 
 

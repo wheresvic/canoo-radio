@@ -83,15 +83,16 @@
                 <div class="col-md-offset-3 col-md-6">
                     <div class="section-header">
                         <h2 class="section-heading animated" data-animation="bounceInUp">Listen</h2>
-                        <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet consectetur, adipisci velit, sed quia non numquam.</p>
+                        <p>Hit the play button to start Canoo Radio!</p>
+                        <p>Below you find the playlist with recently broadcasted songs ready to be rated, the currently
+							played title and the upcoming songs.</p>
                     </div>
                 </div>
             </div>
 
             <div class="row align-center mar-bot40">
                 <audio controls="" preload="none" id="player" onloadedmetadata="">
-                    <!--<source src="http://stream.freshrock.net:8000/ogg" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>-->
-                    <source src="http://10.0.1.24:1337" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>
+                    <source src="http://10.0.1.24:4711/stream" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>
                 </audio>
             </div>
 
@@ -147,7 +148,6 @@
 		</section>
 		<!-- /listen -->
 
-
 		<!-- section vote -->
 		<section id="section-browser" class="section appear clearfix">
 			<div class="container">
@@ -156,10 +156,9 @@
 					<div class="col-md-offset-3 col-md-6">
 						<div class="section-header">
 							<h2 class="section-heading animated" data-animation="bounceInUp">Music browser</h2>
-							<ul class="nav nav-tabs">
+							<ul class="nav nav-tabs browser_tabs">
 								<li class="active"><a data-toggle="tab" href="#browser-tab">Browser</a></li>
 								<li><a data-toggle="tab" href="#chart-tab">Canoo Charts</a></li>
-								<li><a data-toggle="tab" href="#mostplayed-tab">Most Played</a></li>
 							</ul>
 						</div>
 					</div>
@@ -189,7 +188,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="song in music">
-                                            <td><i ng-class="{'fa fa-plus-circle' : isNotQueued(song.id)}" ng-click="addToPlaylist(song)"></i></td>
+                                            <td><i class="addSongCursor" ng-class="{'fa fa-plus-circle' : isNotQueued(song.id)}" ng-click="addToPlaylist(song)"></i></td>
                                             <td>{{song.artist}}</td>
                                             <td>{{song.song}}</td>
                                             <td>{{song.album}}</td>
@@ -259,10 +258,6 @@
 			<div class="row animated opacity mar-bot20" data-andown="fadeIn" data-animation="animation">
 				<div class="col-sm-12 align-center">
                     <ul class="social-network social-circle">
-                        <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-rss"></i></a></li>
-                        <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-google-plus"></i></a></li>
                         <li><a href="#header" class="icoLinkedin" title="Relax" ng-click="showOverlay = true;"><i class="fa fa-heart"></i></a></li>
                     </ul>				
 				</div>
