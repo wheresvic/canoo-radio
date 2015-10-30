@@ -42,7 +42,9 @@ app.controller('RadioController',
     $scope.music = [];
     $scope.charts = [];
 
-    $scope.songAdded = false;
+    // a poor attempt to try and get the browser to slide down when a song is added
+    // but it's pointless given that the list refreshes on poll anyways
+    $scope.songAdded = '';
 
     $scope.notification = {
         alertClass : '',
@@ -129,7 +131,7 @@ app.controller('RadioController',
     $scope.addToPlaylist = function (song) {
         $http.get(app.config.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
             function successCB() {
-                $scope.songAdded = true;
+                $scope.songAdded = 'animated slideInDown';
                 song.isAdded = true;
                 $scope.playlists.upcoming.push(song);
             },
