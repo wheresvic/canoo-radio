@@ -38,22 +38,22 @@ public class MusicController {
 
     @ResponseBody
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String handleFileUpload(@RequestParam("name") String name, @RequestParam("file") MultipartFile file) {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
-                final File mp3File = new File(mpdFolder + "/" + name);
+                final File mp3File = new File(mpdFolder + "/" + file.getName());
                 try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(mp3File))) {
                     stream.write(bytes);
                 }
                 musicBackend.updateDatabase();
 
-                return "You successfully uploaded " + name + "!";
+                return "You successfully uploaded " + file.getName() + "!";
             } catch (Exception e) {
-                return "You failed to upload " + name + " => " + e.getMessage();
+                return "You failed to upload " + file.getName() + " => " + e.getMessage();
             }
         } else {
-            return "You failed to upload " + name + " because the file was empty.";
+            return "You failed to upload " + file.getName() + " because the file was empty.";
         }
     }
 }

@@ -12,7 +12,7 @@ build/
 
 gradle.properties
 
-UI-browserify/node_modules/
-UI-browserify/public/dist/
+canooradio-ui/node_modules/
+canooradio-ui/public/dist/
 
 canooradio-server/src/main/resources/static
