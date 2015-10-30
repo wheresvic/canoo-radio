@@ -9,7 +9,9 @@ app.config = {
 };
 
 
-app.controller('PlaylistController', function($scope, $http, $interval){
+app.controller('RadioController', function($scope, $http, $interval){
+
+    $scope.searchInput = "";
 
     $scope.playlists = {
         upcoming: [],
@@ -62,9 +64,22 @@ app.controller('PlaylistController', function($scope, $http, $interval){
         );
     };
 
-    var getMusic = function (pageNumber) {
+    $scope.searchKeyPress = function(keyEvent) {
+        if (keyEvent.which === 13) {
+            $scope.searchSongs($scope.searchInput);
+        }
+    };
 
-    }
+    $scope.searchSongs = function (searchString, maxResults) {
+        $http.get(app.config.url + "/search?q=" + searchString +"&maxResults=" + maxResults)
+            .then(
+            function successCB(response) {
+                console.log(response.data);
+                $scope.music = response.data;
+            },
+            httpErrorCb
+        );
+    };
 
     var successUserData = function (response) {
 
@@ -72,6 +87,7 @@ app.controller('PlaylistController', function($scope, $http, $interval){
         console.log($scope.user);
 
         pollPlaylists();
+        $scope.searchSongs("", 25);
 
         $interval(pollPlaylists, 5000);
 

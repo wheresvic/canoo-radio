@@ -121,52 +121,64 @@ app.get('/api/user/:id', function (req, res, next) {
 
 });
 
-app.get('/api/music/:page', function (req, res, next) {
-
-    var songs = [
-        {
-            id : '/var/mp3/snoop.mp3',
-            artist : 'Snoop Dawg',
-            song: 'Peaches N Cream',
-            album: 'album',
-            votes: 2
-        },
-        {
-            id : '/var/mp3/cc.mp3',
-            artist : 'Culcha Candela',
-            song: 'Berlin city girl',
-            album: 'album',
-            votes: 40
-        },
-        {
-            id : '/var/mp3/dd.mp3',
-            artist : 'dd',
-            song: 'dd',
-            album: 'album',
-            votes: 7
-        },
-        {
-            id : '/var/mp3/ee.mp3',
-            artist : 'ee',
-            song: 'ee',
-            album: 'album',
-            votes: 1000
-        },
-        {
-            id : '/var/mp3/ff.mp3',
-            artist : 'ff',
-            song: 'ff',
-            album: 'album',
-            votes: 4
-        },
-        {
-            id : '/var/mp3/gg.mp3',
-            artist : 'gg',
-            song: 'gg',
-            album: 'album',
-            votes: 4
-        }
-    ];
+app.get('/api/search', function (req, res) {
+    var songs = [];
+    if(req.query.q !== "") {
+        songs = [
+            {
+                id: '/var/mp3/snoop.mp3',
+                artist: 'Snoop Dawg',
+                song: 'Peaches N Cream',
+                album: 'album',
+                votes: 2
+            }
+        ];
+    } else {
+        songs = [
+            {
+                id : '/var/mp3/snoop.mp3',
+                artist : 'Snoop Dawg',
+                song: 'Peaches N Cream',
+                album: 'album',
+                votes: 2
+            },
+            {
+                id : '/var/mp3/cc.mp3',
+                artist : 'Culcha Candela',
+                song: 'Berlin city girl',
+                album: 'album',
+                votes: 40
+            },
+            {
+                id : '/var/mp3/dd.mp3',
+                artist : 'dd',
+                song: 'dd',
+                album: 'album',
+                votes: 7
+            },
+            {
+                id : '/var/mp3/ee.mp3',
+                artist : 'ee',
+                song: 'ee',
+                album: 'album',
+                votes: 1000
+            },
+            {
+                id : '/var/mp3/ff.mp3',
+                artist : 'ff',
+                song: 'ff',
+                album: 'album',
+                votes: 4
+            },
+            {
+                id : '/var/mp3/gg.mp3',
+                artist : 'gg',
+                song: 'gg',
+                album: 'album',
+                votes: 4
+            }
+        ];
+    }
 
     res.send(songs);
 

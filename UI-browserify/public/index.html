@@ -19,7 +19,7 @@
 		<link rel="stylesheet" href="skin/default.css">
     </head>
 
-    <body>
+    <body ng-controller="RadioController">
 		<section id="header" class="appear">
 		<div class="navbar navbar-fixed-top" role="navigation" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,1);">
 			 <div class="container">
@@ -65,7 +65,7 @@
 
 
 		<!-- listen -->
-		<section id="section-listen" class="section appear clearfix" ng-controller="PlaylistController">
+		<section id="section-listen" class="section appear clearfix">
 		<div class="container">
 
             <div class="row mar-bot40">
@@ -159,9 +159,9 @@
 					<div class="tab-content">
 						<div id="browser-tab" class="tab-pane fade in active">
 							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Search for...">
+								<input type="text" class="form-control" placeholder="Search for..." ng-model="searchInput" ng-keypress="searchKeyPress($event)">
       								<span class="input-group-btn">
-        							<button class="btn btn-theme" type="button">Go!</button>
+        							<button class="btn btn-theme" type="button" ng-click="searchSongs(searchInput)">Go!</button>
       							</span>
 							</div><!-- /input-group -->
 							<table class="table table-hover">
@@ -174,24 +174,12 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr>
-									<td><i class="fa fa-play-circle"></i></td>
-									<td>John</td>
-									<td>Doe</td>
-									<td>Album</td>
-								</tr>
-								<tr>
-									<td><i class="fa fa-play-circle"></i></td>
-									<td>Mary</td>
-									<td>Moe</td>
-									<td>Album</td>
-								</tr>
-								<tr>
-									<td><i class="fa fa-play-circle"></i></td>
-									<td>July</td>
-									<td>Dooley</td>
-									<td>Album</td>
-								</tr>
+									<tr ng-repeat="song in music">
+										<td><i class="fa fa-play-circle"></i></td>
+										<td>{{song.artist}}</td>
+										<td>{{song.song}}</td>
+										<td>{{song.album}}</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>

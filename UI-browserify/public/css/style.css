@@ -1010,10 +1010,6 @@ a.socialIcon:hover, .socialHoverClass {
 }
 
 /* buttons */
-.btn {
-	border: 0;
-}
-
 .btn.bold {
 	font-weight: 600;
 }
