@@ -1,15 +1,15 @@
 package com.canoo.radio.server.controller;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.canoo.radio.server.musicbackend.MusicBackend;
 import com.canoo.radio.server.musicbackend.Song;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/playlist")
@@ -30,11 +30,15 @@ public class PlaylistController {
 
     @RequestMapping("/played")
     public List<Song> getPlayedSongs() throws Exception {
-        return musicBackend.getPlayedSongs().stream().limit(10).collect(toList());
+        final List<Song> playedSongs = musicBackend.getPlayedSongs();
+        Collections.reverse(playedSongs);
+        final List<Song> returnedList = playedSongs.stream().limit(10).collect(Collectors.toList());
+        Collections.reverse(returnedList);
+        return returnedList;
     }
 
     @RequestMapping("/add")
-    public void addSong(@RequestParam(value="fileName") String fileName) throws Exception {
+    public void addSong(@RequestParam(value = "fileName") String fileName) throws Exception {
         musicBackend.addSongToQueue(fileName);
     }
 
@@ -52,5 +56,4 @@ public class PlaylistController {
     public void previousSong() throws Exception {
         musicBackend.previousSong();
     }
-
 }
