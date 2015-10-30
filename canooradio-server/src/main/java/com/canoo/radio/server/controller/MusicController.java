@@ -45,8 +45,8 @@ public class MusicController {
         return randomSongs.subList(0, limit - 1);
     }
 
-    @RequestMapping("/mostplayed")
-    public List<Song> getMostPlayed(@RequestParam("limit") long limit) throws Exception {
+    @RequestMapping("/charts")
+    public List<Song> getCharts(@RequestParam("limit") long limit) throws Exception {
         return musicBackend.getAllSongs()
                 .stream()
                 .sorted((s1, s2) -> new Integer(s1.getVotes()).compareTo(new Integer(s2.getVotes())))
