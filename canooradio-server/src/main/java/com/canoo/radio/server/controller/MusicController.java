@@ -1,5 +1,16 @@
 package com.canoo.radio.server.controller;
 
+import com.canoo.radio.server.Strings;
+import com.canoo.radio.server.musicbackend.MusicBackend;
+import com.canoo.radio.server.musicbackend.Song;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.Mp3File;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -9,21 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.canoo.radio.server.Strings;
-import com.canoo.radio.server.musicbackend.MusicBackend;
-import com.canoo.radio.server.musicbackend.Song;
-import com.mpatric.mp3agic.ID3v2;
-import com.mpatric.mp3agic.Mp3File;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/music")
@@ -46,6 +43,15 @@ public class MusicController {
         Collections.shuffle(randomSongs);
 
         return randomSongs.subList(0, limit - 1);
+    }
+
+    @RequestMapping("/mostplayed")
+    public List<Song> getMostPlayed(@RequestParam("limit") long limit) throws Exception {
+        return musicBackend.getAllSongs()
+                .stream()
+                .sorted((s1, s2) -> new Integer(s1.getVotes()).compareTo(new Integer(s2.getVotes())))
+                .limit(limit)
+                .collect(toList());
     }
 
     @ResponseBody
