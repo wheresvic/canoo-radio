@@ -115,7 +115,6 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     /**
-     * TODO: sync up with the backend
      *
      * @param song
      * @param indication
@@ -134,50 +133,71 @@ app.controller('RadioController', function($scope, $http, $interval){
 
         if (previousVote === indication) {
 
-            delete $scope.user.votes[song.id];
+            $http.get(app.config.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + app.config.userId).then(
+                function successCB() {
+                    delete $scope.user.votes[song.id];
 
-            angular.forEach($scope.playlists.played, function (value, index) {
-                if (song.id === value.id) {
-                    if (indication < 0) {
-                        value.votes += 1;
-                    } else if (indication > 0) {
-                        value.votes -= 1;
-                    }
-                }
-            });
+                    angular.forEach($scope.playlists.played, function (value, index) {
+                        if (song.id === value.id) {
+                            if (indication < 0) {
+                                value.votes += 1;
+                            } else if (indication > 0) {
+                                value.votes -= 1;
+                            }
+                        }
+                    });
+                },
+                httpErrorCb
+            );
 
             return;
         }
 
-        $scope.user.votes[song.id] = indication;
+        var cb = function () {
 
-        angular.forEach($scope.playlists.played, function (value, index) {
+            $scope.user.votes[song.id] = indication;
 
-            if (song.id === value.id) {
+            angular.forEach($scope.playlists.played, function (value, index) {
 
-                if (indication > 0) {
+                if (song.id === value.id) {
 
-                    var increment = 1;
+                    if (indication > 0) {
 
-                    if (previousVote < 0) {
-                        increment += 1;
+                        var increment = 1;
+
+                        if (previousVote < 0) {
+                            increment += 1;
+                        }
+
+                        value.votes += increment;
+
+                    } else if (indication < 0) {
+
+                        var decrement = 1;
+
+                        if (previousVote > 0) {
+                            decrement += 1;
+                        }
+
+                        value.votes -= decrement;
                     }
-
-                    value.votes += increment;
-
-                } else if (indication < 0) {
-
-                    var decrement = 1;
-
-                    if (previousVote > 0) {
-                        decrement += 1;
-                    }
-
-                    value.votes -= decrement;
                 }
-            }
 
-        });
+            });
+        };
+
+        var url = '';
+
+        if (indication > 0) {
+            url = app.config.serverBaseUrl + "/vote/up";
+        } else if (indication < 0) {
+            url = app.config.serverBaseUrl + "/vote/down";
+        }
+
+        url += "?filename=" + song.id + "&userId=" + app.config.userId;
+
+        $http.get(url).then(cb, httpErrorCb);
+
     };
 
     //

@@ -2,6 +2,7 @@ package com.canoo.radio.server.controller;
 
 import com.canoo.radio.server.voting.User;
 import com.canoo.radio.server.voting.UserRepository;
+import com.canoo.radio.server.voting.Vote;
 import com.canoo.radio.server.voting.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,12 @@ public class VotingController {
     public void getClearVote(@RequestParam("filename") String fileName, @RequestParam("userId") String userId) {
         final User user = userRepository.findOne(userId);
         if (user != null) {
-            user.clearVote(fileName);
+            Vote vote = user.clearVote(fileName);
+
+            if (vote != null) {
+                voteRepository.delete(vote);
+            }
+
             userRepository.save(user);
         }
     }

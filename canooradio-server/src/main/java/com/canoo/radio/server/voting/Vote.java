@@ -31,6 +31,10 @@ public class Vote {
 
     private VoteValue value;
 
+    public Vote() {
+
+    }
+
     public Vote(String songFilename, VoteValue value) {
         this.songFilename = songFilename;
         this.value = value;
