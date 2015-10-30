@@ -29,4 +29,6 @@ public interface MusicBackend {
     void previousSong() throws Exception;
 
     void clearQueue() throws Exception;
+
+    void updateDatabase() throws Exception;
 }

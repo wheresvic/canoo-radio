@@ -5,6 +5,7 @@ import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.exception.MPDPlaylistException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.UnknownHostException;
@@ -129,6 +130,19 @@ public class MusicBackendMpdTest {
 
         assertTrue(sizeAfter < sizeBefore);
         assertTrue(sizeAfter == 0);
+    }
+
+    @Ignore //TODO Add a new File to MPD
+    @Test
+    public void testUpdateDatabase() throws Exception {
+        MusicBackendMpd mpdBackend = new MusicBackendMpd();
+        final int oldSize = mpdBackend.getAllSongs().size();
+
+        mpdBackend.updateDatabase();
+
+        final int newSize = mpdBackend.getAllSongs().size();
+        assertNotEquals(oldSize, newSize);
+        assertTrue(oldSize < newSize);
     }
 
 

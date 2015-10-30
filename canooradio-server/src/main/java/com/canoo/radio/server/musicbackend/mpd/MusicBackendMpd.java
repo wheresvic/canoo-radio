@@ -91,4 +91,9 @@ class MusicBackendMpd implements MusicBackend {
     public void clearQueue() throws Exception {
         mpd.getPlaylist().clearPlaylist();
     }
+
+    @Override
+    public void updateDatabase() throws Exception {
+        mpd.getAdmin().updateDatabase();
+    }
 }
