@@ -5,13 +5,14 @@ var Chance = require('chance'),
 var app = angular.module('canooradio', []);
 
 app.config = {
-    userId: '',
     url: "/api",
     serverBaseUrl: "http://localhost:8080/"
 };
 
 
 app.controller('RadioController', function($scope, $http, $interval){
+
+    $scope.userId = '';
 
     $scope.searchInput = "";
 
@@ -99,6 +100,13 @@ app.controller('RadioController', function($scope, $http, $interval){
         return isNotQueued;
     };
 
+    /**
+     * Determine if the vote indicator icon is set or not
+     *
+     * @param song
+     * @param indication
+     * @returns {string}
+     */
     $scope.votedCss = function (song, indication) {
 
         var cssClass = 'vote';
@@ -115,13 +123,14 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     /**
+     * Re-implementing stackoverflow voting :)
      *
-     * @param song
-     * @param indication
+     * @param {String}  song        the song object
+     * @param {Integer} indication  in the absence of an enum class, a +1 indicates and up vote and a -1 indicates a down vote
      */
     $scope.vote = function (song, indication) {
 
-        if (!app.config.userId) {
+        if (!$scope.userId) {
             return;
         }
 
@@ -131,9 +140,13 @@ app.controller('RadioController', function($scope, $http, $interval){
             previousVote = $scope.user.votes[song.id];
         }
 
+        //
+        // if you click on your previous vote you want to clear it
+        //
+
         if (previousVote === indication) {
 
-            $http.get(app.config.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + app.config.userId).then(
+            $http.get(app.config.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + $scope.userId).then(
                 function successCB() {
                     delete $scope.user.votes[song.id];
 
@@ -152,6 +165,12 @@ app.controller('RadioController', function($scope, $http, $interval){
 
             return;
         }
+
+        //
+        // this callback is run after voting
+        // - update user votes
+        // - loop through played songs and update their counts
+        //
 
         var cb = function () {
 
@@ -186,6 +205,10 @@ app.controller('RadioController', function($scope, $http, $interval){
             });
         };
 
+        //
+        // figure out which vote action to do
+        //
+
         var url = '';
 
         if (indication > 0) {
@@ -194,7 +217,7 @@ app.controller('RadioController', function($scope, $http, $interval){
             url = app.config.serverBaseUrl + "/vote/down";
         }
 
-        url += "?filename=" + song.id + "&userId=" + app.config.userId;
+        url += "?filename=" + song.id + "&userId=" + $scope.userId;
 
         $http.get(url).then(cb, httpErrorCb);
 
@@ -240,11 +263,37 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     var igniteRadio = function () {
-        if (app.config.userId) {
-            $http.get(app.config.serverBaseUrl + "/user/" + app.config.userId).then(successUserData, httpErrorCb);
+
+        //
+        // get userId from localStorage or generate one
+        //
+
+        // if (true) {
+        if (typeof(Storage) === "undefined") {
+
+            postNotification('error', 'Sorry no localstorage support, voting will be disabled');
+
+        } else {
+
+            $scope.userId = localStorage.getItem('canooradio-userid');
+
+            if (!$scope.userId) {
+                $scope.userId = chance.string({
+                    pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+                    length: 8
+                });
+                localStorage.setItem('canooradio-userid', $scope.userId);
+            }
+
+            console.log('Hello ' + $scope.userId);
+        }
+
+        if ($scope.userId) {
+            $http.get(app.config.serverBaseUrl + "/user/" + $scope.userId).then(successUserData, httpErrorCb);
         } else {
             igniteRadioData();
         }
+
     };
 
     var igniteRadioData = function () {
@@ -253,18 +302,12 @@ app.controller('RadioController', function($scope, $http, $interval){
         $scope.searchSongs("", 25);
 
         $interval(pollPlaylists, 5000);
-
-        /*
-         setTimeout(function () {
-         console.log($scope.playlists.played);
-         }, 2000);
-
-         $interval(function () {
-         console.log($scope.user);
-         }, 5000);
-         */
     };
 
+
+    /**
+     * Poll playlist data
+     */
     var pollPlaylists = function () {
 
         $http.get(app.config.serverBaseUrl + "/playlist/played").then(
@@ -290,26 +333,8 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     igniteRadio();
-
-    // postNotification('error', 'wtf');
-
 });
 
 app.run(function () {
 
-    if (typeof(Storage) !== "undefined") {
-        // localStorage.removeItem('canooradio-userid');
-
-        app.config.userId = localStorage.getItem('canooradio-userid');
-
-        if (!app.config.userId) {
-            app.config.userId = chance.string({pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', length: 8});
-            localStorage.setItem('canooradio-userid', app.config.userId);
-        }
-
-        console.log('Hello ' + app.config.userId);
-
-    } else {
-        alert('Sorry no localstorage support, voting will be disabled');
-    }
 });
