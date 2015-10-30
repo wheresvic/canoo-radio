@@ -11,5 +11,14 @@ repositories {
 
 dependencies {
     compile project(':canooradio-server')
-    compile project(':canooradio-ui')
+}
+
+task buildUI(type: Exec) {
+    executable "sh"
+    args 'UI-browserify/build.sh'
+}
+
+task cleanUI(type: Exec) {
+    executable "sh"
+    args 'UI-browserify/clean.sh'
 }
