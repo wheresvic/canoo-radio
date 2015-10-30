@@ -39,7 +39,6 @@ class MusicBackendMpd implements MusicBackend {
 
     @Override
     public Song getCurrentSong() throws MPDPlayerException, MPDConnectionException, UnknownHostException {
-        initialize();
         return convertMpdSongToSong(mpd.getPlayer().getCurrentSong());
     }
 
