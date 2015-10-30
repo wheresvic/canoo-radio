@@ -137,11 +137,17 @@ app.controller('RadioController',
 
     $scope.isNotQueued = function (songId) {
         var isNotQueued = true;
+
         angular.forEach($scope.playlists.upcoming, function (value, index) {
             if (songId === value.id) {
                 isNotQueued = false;
             }
         });
+
+        if ($scope.current.id === songId) {
+            isNotQueued = false;
+        }
+
         return isNotQueued;
     };
 
