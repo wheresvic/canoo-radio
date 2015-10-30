@@ -1,8 +1,12 @@
+/*global require */
+'use strict';
+
 var angular = require('angular');
+
 var Chance = require('chance'),
     chance = new Chance();
 
-var app = angular.module('canooradio', []);
+var app = angular.module('canooradio', [require('ng-file-upload')]);
 
 app.config = {
     url: "/api",
@@ -10,7 +14,8 @@ app.config = {
 };
 
 
-app.controller('RadioController', function($scope, $http, $interval){
+app.controller('RadioController',
+    ['$scope', '$http', '$interval', 'Upload', function($scope, $http, $interval, Upload) {
 
     $scope.userId = '';
 
@@ -50,6 +55,24 @@ app.controller('RadioController', function($scope, $http, $interval){
 
         $scope.notification.message = '';
         $scope.notification.alertClass = '';
+    };
+
+    // upload on file select or drop
+    $scope.upload = function (file) {
+
+        Upload.upload({
+            url: app.config.serverBaseUrl + '/music/upload',
+            data: {file: file}
+        }).then(function (resp) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+            postNotification('error', resp.status);
+        }, function (evt) {
+            console.log(evt);
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });
     };
 
     $scope.searchKeyPress = function(keyEvent) {
@@ -333,7 +356,7 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     igniteRadio();
-});
+}]);
 
 app.run(function () {
 

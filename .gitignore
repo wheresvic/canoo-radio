@@ -11,7 +11,7 @@ build/
 *.db
 
 gradle.properties
-
+tmp
 canooradio-ui/node_modules/
 canooradio-ui/public/dist/
 
