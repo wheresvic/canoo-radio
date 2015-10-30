@@ -104,3 +104,72 @@ table.playlist {
   -o-animation: fa-blink 2s linear infinite;
   animation: fa-blink 2s linear infinite;
 }
+
+#mask{
+  position:fixed;
+  top:0;
+  left:0;
+  background:rgba(0,0,0,0.6);
+  z-index:500;
+  width:100%;
+  height:100%;
+  display:none;
+}
+/* use :target to look for a link to the overlay then we find are mask */
+#relax-overlay:target, #relax-overlay:target + #mask{
+  display:block;
+  opacity:1;
+}
+#relax-overlay {
+    height:500px;
+    width:80%;
+    margin-top: 200px;
+    display:none;
+    position:absolute;
+    color:black;
+    background:white;
+    top:5%;
+    left:10%;
+    z-index:1000;
+    /* CSS 3 */
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px;
+    -o-border-radius:10px;
+    border-radius:10px;
+    overflow: hidden;
+
+    $num: 15;
+    @for $i from 1 through $num{
+      .matter:nth-of-type(#{$i}){
+        border: 1px solid #222;
+        border-radius: $i*5*($i*1.01)+px;
+        height: $i*5*($i*1.01)+px;
+        width: $i*5*($i*1.01)+px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -$i*5*$i/2+px;
+        margin-left: -$i*5*$i/2+px;
+        animation: spin $i/2+s linear infinite;
+      }
+      .matter:nth-of-type(#{$i}):after{
+        content: '';
+        display: block;
+        width: $i*5px;
+        height: $i*5px;
+        background: hsla($i*36, 35, 45, 1);
+        border-radius: $i*5/2+px;
+        position: absolute;
+        right: 50%;
+        margin-right: -$i*5/2+px;
+        margin-top: -$i*5/2+px;
+        box-shadow: inset 1px 2px $i+px #000;
+      }
+    }
+    @keyframes spin{
+      to{
+        transform:rotate(360deg);
+      }
+    }
+
+}
