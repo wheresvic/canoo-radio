@@ -2,10 +2,10 @@ package com.canoo.radio.server.controller;
 
 import com.canoo.radio.server.voting.User;
 import com.canoo.radio.server.voting.UserRepository;
+import com.canoo.radio.server.voting.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,19 +16,17 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
-
-    private class UserTemp {
+    private class UiUser {
         private String userId;
         private Map<String, Integer> votes = new HashMap<>();
 
-        public UserTemp(String userId) {
-            this.userId = userId;
-        }
+        public UiUser(User user) {
+            this.userId = user.getId();
+            this.votes = new HashMap<>();
+            for (Vote vote : user.getVotes()) {
+                this.votes.put(vote.getSongFilename(), vote.getValue().getValue());
+            }
 
-        public void upVote(String fileName) {
-            votes.put(fileName, 1);
         }
 
         public String getUserId() {
@@ -40,23 +38,19 @@ public class UserController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping("/snoop")
-    public UserTemp getSnoop() {
-        UserTemp user = new UserTemp("snoop");
-        user.upVote("wtf");
-        return user;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
+    @ResponseBody
     @RequestMapping("/{id}")
-    public User getUser(@PathVariable("id") String userId) {
+    public UiUser getUser(@PathVariable("id") String userId) {
         User user = userRepository.findOne(userId);
         if (user != null) {
-            return user;
+            return new UiUser(user);
         } else {
             user = new User(userId, new ArrayList<>());
             userRepository.save(user);
-            return user;
+            return new UiUser(user);
         }
     }
 
