@@ -24,6 +24,5 @@ This will dist the combined `app.js` under the `public/dist/` folder and the `ca
 node canooradio.js
 ```
 
-to run a server which can serve the frontend.
-
+to run a server which can serve the frontend. Note that if you are developing locally then the api needs to be located at `localhost:8080`. This can be found under `app.config.serverBaseUrl`
 
