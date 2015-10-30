@@ -41,8 +41,7 @@ public class MusicController {
     public List<Song> getRandomSongs(@RequestParam("limit") int limit) throws Exception {
         final List<Song> randomSongs = musicBackend.getAllSongs();
         Collections.shuffle(randomSongs);
-
-        return randomSongs.subList(0, limit - 1);
+        return randomSongs.stream().limit(limit).collect(toList());
     }
 
     @RequestMapping("/charts")
@@ -80,6 +79,9 @@ public class MusicController {
                     && !Strings.isNullOrEmpty(id3v2Tag.getTitle())
                     && !Strings.isNullOrEmpty(id3v2Tag.getAlbum())
                     && !Strings.isNullOrEmpty(id3v2Tag.getArtist())) {
+
+                musicBackend.updateDatabase();
+
             } else {
                 tempFile.delete();
                 throw new RuntimeException("Uploaded File does not have valid Id3v2 Tags");
@@ -92,6 +94,8 @@ public class MusicController {
 
     @ExceptionHandler(Exception.class)
     void handleBadRequests(Exception e, HttpServletResponse response) throws IOException {
+        e.printStackTrace(System.err);
+
         response.sendError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 }

@@ -42,23 +42,42 @@ class MusicBackendMpd implements MusicBackend {
 
     @Override
     public Song getCurrentSong() throws MPDPlayerException {
-        return convertMpdSongToSong(mpd.getPlayer().getCurrentSong(), voteRepository);
+        MPDSong song = mpd.getPlayer().getCurrentSong();
+
+        if (song != null)
+            return convertMpdSongToSong(song, voteRepository);
+
+        return null;
     }
 
     @Override
     public List<Song> getPlayedSongs() throws Exception {
         final List<MPDSong> songList = mpd.getPlaylist().getSongList();
-        final int currentIndex = songList.indexOf(mpd.getPlaylist().getCurrentSong());
-        final List<MPDSong> playedSongs = songList.subList(0, currentIndex);
-        return convertMpdSongListToSongList(playedSongs, voteRepository);
+
+        MPDSong current = mpd.getPlaylist().getCurrentSong();
+
+        if (current != null) {
+            final int currentIndex = songList.indexOf(current);
+            final List<MPDSong> playedSongs = songList.subList(0, currentIndex);
+            return convertMpdSongListToSongList(playedSongs, voteRepository);
+        }
+
+        return convertMpdSongListToSongList(songList, voteRepository);
     }
 
     @Override
     public List<Song> getUpcomingSongs() throws MPDPlaylistException {
         final List<MPDSong> songList = mpd.getPlaylist().getSongList();
-        final int currentIndex = songList.indexOf(mpd.getPlaylist().getCurrentSong());
-        final List<MPDSong> upcomingSongs = songList.subList(currentIndex + 1, songList.size());
-        return convertMpdSongListToSongList(upcomingSongs, voteRepository);
+
+        MPDSong current = mpd.getPlaylist().getCurrentSong();
+
+        if (current != null) {
+            final int currentIndex = songList.indexOf(current);
+            final List<MPDSong> upcomingSongs = songList.subList(currentIndex + 1, songList.size());
+            return convertMpdSongListToSongList(upcomingSongs, voteRepository);
+        }
+
+        return convertMpdSongListToSongList(songList, voteRepository);
     }
 
     @Override

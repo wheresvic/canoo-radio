@@ -78,10 +78,6 @@ app.controller('RadioController',
             postNotification('error', "File is empty");
             return;
         }
-        if (file.type !=="audio/mp3") {
-            postNotification('error', "Only *.mp3 allowed");
-            return;
-        }
 
         Upload.upload({
             url: app.config.serverBaseUrl + '/music/upload',
