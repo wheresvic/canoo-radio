@@ -1,4 +1,3 @@
 rootProject.name = 'canooradio'
-rootProject.name = 'canooradio'
 include 'canooradio-server'
 

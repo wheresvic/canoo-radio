@@ -14,6 +14,11 @@
       "name": "mpd.folder",
       "type": "java.lang.String",
       "description": "Path to folder where mp3 files are stored by Music Player Daemon."
+    },
+    {
+      "name": "spring.jpa.hibernate.dialect",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.hibernate.dialect."
     }
   ]
 }

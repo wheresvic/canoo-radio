@@ -1,22 +1,14 @@
 group 'com.canoo.radio'
 version '1.0-SNAPSHOT'
 
-apply plugin: 'java'
+apply plugin: 'application'
 
-sourceCompatibility = 1.5
-
-repositories {
-    mavenCentral()
-}
-
-group 'com.canoo.radio'
-version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-
-sourceCompatibility = 1.5
+mainClassName = "com.canoo.radio.server.CanooRadioServer"
 
 repositories {
     mavenCentral()
 }
 
+dependencies {
+    compile project(':canooradio-server')
+}
