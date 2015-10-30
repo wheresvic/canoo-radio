@@ -49,7 +49,7 @@ public class MusicController {
     public List<Song> getCharts(@RequestParam("limit") long limit) throws Exception {
         return musicBackend.getAllSongs()
                 .stream()
-                .sorted((s1, s2) -> new Integer(s1.getVotes()).compareTo(new Integer(s2.getVotes())))
+                .sorted((s1, s2) -> new Integer(s2.getVotes()).compareTo(new Integer(s1.getVotes())))
                 .limit(limit)
                 .collect(toList());
     }
