@@ -198,12 +198,26 @@
                             </div>
 						</div>
 						<div id="chart-tab" class="tab-pane fade">
-							<h3>Section B</h3>
-							<p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
-						</div>
-						<div id="mostplayed-tab" class="tab-pane fade">
-							<h3>Section B</h3>
-							<p>Vestibulum nec erat eu nulla rhoncus fringilla ut non neque. Vivamus nibh urna, ornare id gravida ut, mollis a magna. Aliquam porttitor condimentum nisi, eu viverra ipsum porta ut. Nam hendrerit bibendum turpis, sed molestie mi fermentum id. Aenean volutpat velit sem. Sed consequat ante in rutrum convallis. Nunc facilisis leo at faucibus adipiscing.</p>
+							<div id="music-charts">
+								<table class="table table-hover">
+									<thead>
+									<tr>
+										<th></th>
+										<th>Artist</th>
+										<th>Song</th>
+										<th>Album</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="song in charts">
+										<td>{{song.votes}}</td>
+										<td>{{song.artist}}</td>
+										<td>{{song.song}}</td>
+										<td>{{song.album}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
