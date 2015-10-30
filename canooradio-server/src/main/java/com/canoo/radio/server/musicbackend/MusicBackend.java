@@ -2,9 +2,6 @@ package com.canoo.radio.server.musicbackend;
 
 import java.util.List;
 
-/**
- * ...
- */
 public interface MusicBackend {
     Song getCurrentSong() throws Exception;
 
