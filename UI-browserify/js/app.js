@@ -42,7 +42,6 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     $scope.closeNotification = function () {
-        console.log('clicked');
 
         if ($scope.notification.timeout) {
             clearTimeout($scope.notification.timeout);
@@ -222,7 +221,7 @@ app.controller('RadioController', function($scope, $http, $interval){
 
     var igniteRadio = function () {
         if (app.config.userId) {
-            $http.get(app.config.url + "/user/" + app.config.userId).then(successUserData, httpErrorCb);
+            $http.get(app.config.serverBaseUrl + "/user/" + app.config.userId).then(successUserData, httpErrorCb);
         } else {
             igniteRadioData();
         }

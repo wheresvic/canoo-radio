@@ -14,6 +14,10 @@ public class User {
     @OneToMany
     private List<Vote> votes;
 
+    public User() {
+
+    }
+
     public User(String id, List<Vote> votes) {
         this.id = id;
         this.votes = votes;
