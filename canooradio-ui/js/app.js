@@ -60,16 +60,24 @@ app.controller('RadioController',
 
     // upload on file select or drop
     $scope.upload = function (file) {
+        if (file.size === 0) {
+            postNotification('error', "File is empty");
+            return;
+        }
+        if (file.type !=="audio/mp3") {
+            postNotification('error', "Only *.mp3 allowed");
+            return;
+        }
 
         Upload.upload({
             url: app.config.serverBaseUrl + '/music/upload',
             data: {file: file}
         }).then(function (resp) {
-            // console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+            postNotification('success', "Successfully uploaded your songs");
             console.log(resp);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
-            postNotification('error', resp.status);
+            postNotification('error', "Error uploading file. Code: " + resp.status);
         }, function (evt) {
             console.log(evt);
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
@@ -262,6 +270,8 @@ app.controller('RadioController',
 
         if (type === 'error') {
             $scope.notification.alertClass += 'alert-danger';
+        } else if (type === 'success') {
+            $scope.notification.alertClass += 'alert-success';
         } else {
             $scope.notification.alertClass += 'alert-info';
         }
