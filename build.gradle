@@ -15,10 +15,10 @@ dependencies {
 
 task buildUI(type: Exec) {
     executable "sh"
-    args 'UI-browserify/build.sh'
+    args 'canooradio-ui/build.sh'
 }
 
 task cleanUI(type: Exec) {
     executable "sh"
-    args 'UI-browserify/clean.sh'
+    args 'canooradio-ui/clean.sh'
 }

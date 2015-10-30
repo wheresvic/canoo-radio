@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "--- Start UI build ---"
-cd UI-browserify
+cd canooradio-ui
 
 echo "-Npm-"
 npm install &&
