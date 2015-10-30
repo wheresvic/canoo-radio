@@ -51,6 +51,11 @@ app.controller('RadioController', function($scope, $http, $interval){
         );
     };
 
+    $scope.addToPlaylist = function (song) {
+        song.queued = true;
+        $scope.playlists.upcoming.push(song);
+    };
+
     $scope.votedCss = function (song, indication) {
 
         var cssClass = 'vote';

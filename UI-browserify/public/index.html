@@ -175,7 +175,7 @@
 								</thead>
 								<tbody>
 									<tr ng-repeat="song in music">
-										<td><i class="fa fa-play-circle"></i></td>
+										<td><i ng-class="{'fa fa-plus-circle' : !song.queued}" ng-click="addToPlaylist(song)"></i></td>
 										<td>{{song.artist}}</td>
 										<td>{{song.song}}</td>
 										<td>{{song.album}}</td>
