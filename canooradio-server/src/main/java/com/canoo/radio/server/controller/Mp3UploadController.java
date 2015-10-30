@@ -1,4 +1,4 @@
-package com.canoo.radio.server;
+package com.canoo.radio.server.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.File;

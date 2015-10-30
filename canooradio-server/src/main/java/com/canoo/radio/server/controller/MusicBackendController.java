@@ -1,4 +1,4 @@
-package com.canoo.radio.server;
+package com.canoo.radio.server.controller;
 
 import com.canoo.radio.server.musicbackend.MusicBackend;
 import com.canoo.radio.server.musicbackend.Song;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 public class MusicBackendController {
@@ -27,7 +29,7 @@ public class MusicBackendController {
 
     @RequestMapping("/playedSongs")
     public List<Song> getPlayedSongs() throws Exception {
-        return musicBackend.getPlayedSongs();
+        return musicBackend.getPlayedSongs().stream().limit(10).collect(toList());
     }
 
     @RequestMapping("/allSongs")
