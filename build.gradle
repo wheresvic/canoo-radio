@@ -22,3 +22,4 @@ task cleanUI(type: Exec) {
     executable "sh"
     args 'canooradio-ui/clean.sh'
 }
+run.dependsOn(buildUI)
