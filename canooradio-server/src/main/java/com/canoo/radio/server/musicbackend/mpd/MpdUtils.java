@@ -22,6 +22,6 @@ class MpdUtils {
     }
 
     public static MPDSong getMpdSong(String fileName, Collection<MPDSong> allSongs) {
-        return allSongs.stream().filter(s -> s.equals(fileName)).findFirst().orElseGet(null); //Get Lastone
+        return allSongs.stream().filter(s -> s.getFile().equals(fileName)).findFirst().orElseGet(null); //Get Lastone
     }
 }

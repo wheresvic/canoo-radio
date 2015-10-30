@@ -35,6 +35,11 @@ app.controller('RadioController', function($scope, $http, $interval){
 
     $scope.music = [];
 
+    $scope.notification = {
+        alertClass : 'alert-danger',
+        value: 'snoop'
+    };
+
     $scope.searchKeyPress = function(keyEvent) {
         if (keyEvent.which === 13) {
             $scope.searchSongs($scope.searchInput);
@@ -45,7 +50,7 @@ app.controller('RadioController', function($scope, $http, $interval){
 
         if (searchString === '') {
 
-            $http.get(app.config.serverBaseUrl + '/allSongs').then(
+            $http.get(app.config.serverBaseUrl + '/music/random?limit=25').then(
                 function successCB(response) {
                     $scope.music = response.data;
                 },
@@ -53,7 +58,7 @@ app.controller('RadioController', function($scope, $http, $interval){
             );
 
         } else {
-            $http.get(app.config.url + "/search?q=" + searchString +"&maxResults=" + maxResults).then(
+            $http.get(app.config.serverBaseUrl + "/music/search?query=" + searchString).then(
                 function successCB(response) {
                     $scope.music = response.data;
                 },
@@ -65,7 +70,7 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     $scope.addToPlaylist = function (song) {
-        $http.get(app.config.serverBaseUrl + "/addSong?fileName=" + song.id).then(
+        $http.get(app.config.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
             function successCB() {
                 $scope.playlists.upcoming.push(song);
             },
@@ -204,21 +209,21 @@ app.controller('RadioController', function($scope, $http, $interval){
 
     var pollPlaylists = function () {
 
-        $http.get(app.config.serverBaseUrl + "/playedSongs").then(
+        $http.get(app.config.serverBaseUrl + "/playlist/played").then(
             function successCB(response) {
                 $scope.playlists.played = response.data;
             },
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/upcomingSongs").then(
+        $http.get(app.config.serverBaseUrl + "/playlist/upcoming").then(
             function successCB(response) {
                 $scope.playlists.upcoming = response.data;
             },
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/currentSong").then(
+        $http.get(app.config.serverBaseUrl + "/playlist/current").then(
             function successCB(response) {
                 $scope.current = response.data;
             },

@@ -203,7 +203,7 @@ app.get('/api/search', function (req, res) {
         }
     ];
 
-    if(req.query.q !== "") {
+    if(req.query.query !== "") {
         res.send([songs[0]]);
     } else {
         res.send(songs);

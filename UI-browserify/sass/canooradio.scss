@@ -1,6 +1,16 @@
 $red1: #f6b8c5;
 $red2: #62494e;
 
+#alert-view-container {
+  position: fixed;
+  z-index: 10000;
+
+  top: 70px;
+  right: 10px;
+  max-width: 250px;
+  height: auto;
+}
+
 table.playlist {
 
   td {

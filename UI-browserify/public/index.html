@@ -20,6 +20,15 @@
     </head>
 
     <body ng-controller="RadioController">
+
+        <div id="alert-view-container">
+            <div class="alert alert-dismissible fade in" ng-class="[notification.alertClass]" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <span>{{notification.value}}</span>
+            </div>
+        </div>
+
 		<section id="header" class="appear">
 		<div class="navbar navbar-fixed-top" role="navigation" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,1);">
 			 <div class="container">
@@ -78,7 +87,7 @@
             </div>
 
             <div class="row align-center mar-bot40">
-                <audio controls="" preload="none" id="player" onloadedmetadata="app.displayData(event);">
+                <audio controls="" preload="none" id="player" onloadedmetadata="">
                     <!--<source src="http://stream.freshrock.net:8000/ogg" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>-->
                     <source src="http://10.0.1.24:1337" type="audio/ogg; codecs=&quot;opus&quot;"><p>Your browser doesn't support HTML audio. Sorry.</p>
                 </audio>
@@ -117,7 +126,7 @@
 						</td>
 						<td class="align-left"></td>
                         <td>{{current.artist}}</td>
-                        <td>{{current.name}}</td>
+                        <td>{{current.song}}</td>
                     </tr>
                     <tr ng-repeat="song in playlists.upcoming">
 						<td class="align-right voting"></td>
