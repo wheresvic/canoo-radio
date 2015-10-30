@@ -13,7 +13,7 @@ class MpdUtils {
 
     public static Song convertMpdSongToSong(MPDSong mpdSong, VoteRepository voteRepository) {
         final int votes = voteRepository.findBySongFilename(mpdSong.getFile()).stream().mapToInt(v -> v.getValue().getValue()).sum();
-        Song song = new Song(mpdSong.getFile(), mpdSong.getArtistName(), mpdSong.getTitle(), mpdSong.getArtistName(), votes);
+        Song song = new Song(mpdSong.getFile(), mpdSong.getArtistName(), mpdSong.getTitle(), mpdSong.getAlbumName(), votes);
         return song;
     }
 
