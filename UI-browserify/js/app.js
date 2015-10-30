@@ -52,7 +52,13 @@ app.controller('RadioController', function($scope, $http, $interval){
     };
 
     $scope.addToPlaylist = function (song) {
-        $scope.playlists.upcoming.push(song);
+        $http.get(app.config.url + "/addSong?fileName=" + song.id)
+            .then(
+            function successCB(response) {
+                $scope.playlists.upcoming.push(song);
+            },
+            httpErrorCb
+        );
     };
 
     $scope.isNotQueued = function (songId) {
@@ -62,7 +68,6 @@ app.controller('RadioController', function($scope, $http, $interval){
                 isNotQueued = false;
             }
         });
-        console.log(isNotQueued);
         return isNotQueued;
     };
 
