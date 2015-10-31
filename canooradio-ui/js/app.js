@@ -324,7 +324,14 @@ app.controller('RadioController',
     };
 
     var httpErrorCb = function (response) {
+        console.log(response);
         var message = response.data.path + ' ' + response.data.status + ' ' + response.data.error;
+
+        if (response.data.path === '/playlist/add' && response.data.status === 403) {
+            postNotification('error', 'User queue limit reached! Please allow your songs to be played before adding more to the queue.');
+            return;
+        }
+
         postNotification('error', message);
     };
 

@@ -12,6 +12,7 @@ import com.canoo.radio.server.voting.SongEntity;
 import com.canoo.radio.server.voting.User;
 import com.canoo.radio.server.voting.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,9 @@ import static java.util.stream.Collectors.toList;
 @RestController
 @RequestMapping("/playlist")
 public class PlaylistController {
+
+    @Value("${user.queue.limit}")
+    private int userQueueLimit;
 
     @Autowired
     private MusicBackend musicBackend;
@@ -61,7 +65,7 @@ public class PlaylistController {
         final List<SongEntity> songEntities = user.getQueuedSongEntities().stream().filter(s -> upcomingSongIds.contains(s.getId())).collect(toList());
         user.setQueuedSongEntities(songEntities);
 
-        if (user.getQueuedSongEntities().size() < 10) {
+        if (user.getQueuedSongEntities().size() < userQueueLimit) {
             musicBackend.addSongToQueue(fileName);
             user.getQueuedSongEntities().add(new SongEntity(fileName));
             userRepository.save(user);
