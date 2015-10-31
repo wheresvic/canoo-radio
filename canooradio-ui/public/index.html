@@ -178,7 +178,7 @@
             <div class="tab-content">
                 <div id="browser-tab" class="tab-pane fade in active">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for..." ng-model="searchInput" ng-keypress="searchKeyPress($event)">
+                        <input type="text" class="form-control" placeholder="Search for song or trigger empty search to get random set of songs..." ng-model="searchInput" ng-keypress="searchKeyPress($event)">
       							<span class="input-group-btn">
         							<button class="btn btn-theme" type="button" ng-click="searchSongs(searchInput)">Go!</button>
       							</span>
@@ -269,7 +269,7 @@
 
                     <div id="drop-files" ngf-drop="upload($file)" ngf-select="upload($file)"
                          ngf-validate-fn="validate($file)">
-                        <p>Drag&drop or click to upload MP3 Songs</p>
+                        <p>Drag&Drop or click to upload MP3 Songs</p>
                     </div>
                 </div>
             </div>
