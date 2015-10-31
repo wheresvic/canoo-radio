@@ -9,12 +9,13 @@ var Chance = require('chance'),
 var app =
     angular.module('canooradio', [require('ng-file-upload')])
         .config(function($locationProvider) {
-
+            /*
             // use the HTML5 History API
             $locationProvider.html5Mode({
                 enabled: false,
                 requireBase: false
             });
+            */
         });
 
 app.custom = {
