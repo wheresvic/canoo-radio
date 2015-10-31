@@ -173,6 +173,8 @@ app.controller('RadioController',
 
     /**
      * Re-implementing stackoverflow voting :)
+     * 
+     * TODO: update charts in realtime as well
      *
      * @param {String}  song        the song object
      * @param {Integer} indication  in the absence of an enum class, a +1 indicates and up vote and a -1 indicates a down vote
@@ -189,43 +191,22 @@ app.controller('RadioController',
             previousVote = $scope.user.votes[song.id];
         }
 
-        //
-        // if you click on your previous vote you want to clear it
-        //
+        var clearVoteInPlaylist = function (playlist, song) {
 
-        if (previousVote === indication) {
+            angular.forEach(playlist, function (value, index) {
+                if (song.id === value.id) {
+                    if (indication < 0) {
+                        value.votes += 1;
+                    } else if (indication > 0) {
+                        value.votes -= 1;
+                    }
+                }
+            });
+        };
 
-            $http.get(app.config.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + $scope.userId).then(
-                function successCB() {
-                    delete $scope.user.votes[song.id];
+        var updateVoteInPlaylist = function (playlist, song, indication, previousVote) {
 
-                    angular.forEach($scope.playlists.played, function (value, index) {
-                        if (song.id === value.id) {
-                            if (indication < 0) {
-                                value.votes += 1;
-                            } else if (indication > 0) {
-                                value.votes -= 1;
-                            }
-                        }
-                    });
-                },
-                httpErrorCb
-            );
-
-            return;
-        }
-
-        //
-        // this callback is run after voting
-        // - update user votes
-        // - loop through played songs and update their counts
-        //
-
-        var cb = function () {
-
-            $scope.user.votes[song.id] = indication;
-
-            angular.forEach($scope.playlists.played, function (value, index) {
+            angular.forEach(playlist, function (value, index) {
 
                 if (song.id === value.id) {
 
@@ -252,6 +233,38 @@ app.controller('RadioController',
                 }
 
             });
+        };
+
+        //
+        // if you click on your previous vote you want to clear it
+        //
+
+        if (previousVote === indication) {
+
+            $http.get(app.config.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + $scope.userId).then(
+                function successCB() {
+                    delete $scope.user.votes[song.id];
+                    clearVoteInPlaylist($scope.playlists.played, song);
+                    clearVoteInPlaylist($scope.playlists.upcoming, song);
+                },
+                httpErrorCb
+            );
+
+            return;
+        }
+
+        //
+        // this callback is run after voting
+        // - update user votes
+        // - loop through played songs and update their counts
+        //
+
+        var cb = function () {
+
+            $scope.user.votes[song.id] = indication;
+
+            updateVoteInPlaylist($scope.playlists.played, song, indication, previousVote);
+            updateVoteInPlaylist($scope.playlists.upcoming, song, indication, previousVote);
         };
 
         //
