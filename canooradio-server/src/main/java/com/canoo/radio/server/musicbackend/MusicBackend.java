@@ -2,6 +2,10 @@ package com.canoo.radio.server.musicbackend;
 
 import java.util.List;
 
+import org.bff.javampd.exception.MPDDatabaseException;
+import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.exception.MPDPlaylistException;
+
 public interface MusicBackend {
     Song getCurrentSong() throws Exception;
 
@@ -15,11 +19,11 @@ public interface MusicBackend {
 
     void removeSongFromQueue(Song song) throws Exception;
 
-    void addSongToQueue(Song song) throws Exception;
-
     void addSongToQueue(String fileName) throws Exception;
 
     void startPlayback() throws Exception;
+
+    void startPlaybackAtEnd() throws MPDDatabaseException, MPDPlayerException, MPDPlaylistException;
 
     void stopPlayback() throws Exception;
 

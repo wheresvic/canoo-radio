@@ -40,6 +40,9 @@ public class PlaylistController {
     @RequestMapping("/add")
     public void addSong(@RequestParam(value = "fileName") String fileName) throws Exception {
         musicBackend.addSongToQueue(fileName);
+        if (musicBackend.getCurrentSong() == null) {
+            musicBackend.startPlaybackAtEnd();
+        }
     }
 
     @RequestMapping("/clear")

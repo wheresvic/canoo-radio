@@ -28,28 +28,6 @@ public class MusicBackendMpdTest {
     }
 
     @Test
-    public void testAddSongToQueue() {
-        try {
-            MusicBackendMpd mpdBackend = new MusicBackendMpd();
-            mpdBackend.clearQueue();
-
-            final List<Song> allSongs = mpdBackend.getAllSongs();
-
-            for (int i = 0; i < 10; i++) {
-                mpdBackend.addSongToQueue(allSongs.get(i));
-            }
-
-            mpdBackend.startPlayback();
-
-            assertEquals(9, mpdBackend.getUpcomingSongs().size());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
     public void testCurrentSong() throws MPDConnectionException, UnknownHostException, MPDPlayerException {
         MusicBackendMpd mpdBackend = new MusicBackendMpd();
         String fileName = mpdBackend.getCurrentSong().getId();
