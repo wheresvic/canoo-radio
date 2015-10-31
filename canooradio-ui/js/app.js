@@ -86,7 +86,7 @@ app.controller('RadioController',
 
             postNotification('success', "Successfully uploaded your song");
             updateMusicBrowser();
-            
+
             console.log(resp);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
