@@ -305,7 +305,7 @@ app.controller('RadioController',
             clearTimeout($scope.notification.timeout);
         }
 
-        $scope.notification.alertClass = '';
+        $scope.notification.alertClass = 'animated flipInX ';
 
         if (type === 'error') {
             $scope.notification.alertClass += 'alert-danger';
@@ -325,11 +325,19 @@ app.controller('RadioController',
 
     var httpErrorCb = function (response) {
         console.log(response);
-        var message = response.data.path + ' ' + response.data.status + ' ' + response.data.error;
 
-        if (response.data.path === '/playlist/add' && response.data.status === 403) {
-            postNotification('error', 'User queue limit reached! Please allow your songs to be played before adding more to the queue.');
-            return;
+        var message = 'Something bad happened, please check your internet connection.';
+
+        if (response.data) {
+
+            message = response.data.path + ' ' + response.data.status + ' ' + response.data.error;
+
+            if (response.data.path === '/playlist/add' && response.data.status === 403) {
+                message = 'User queue limit reached! Please allow your songs to be played before adding more to the queue.';
+            }
+
+        } else {
+            message = 'Could not connect to ' + response.config.url;
         }
 
         postNotification('error', message);
@@ -379,7 +387,11 @@ app.controller('RadioController',
         }
 
         if ($scope.userId) {
-            $http.get(app.custom.serverBaseUrl + "/user/" + $scope.userId).then(successUserData, httpErrorCb);
+            $http.get(app.custom.serverBaseUrl + "/user/" + $scope.userId).then(successUserData,
+            function (response) {
+                httpErrorCb(response);
+                igniteRadioData();
+            });
         } else {
             igniteRadioData();
         }
