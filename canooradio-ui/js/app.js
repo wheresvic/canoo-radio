@@ -133,7 +133,7 @@ app.controller('RadioController',
     };
 
     $scope.addToPlaylist = function (song) {
-        $http.get(app.custom.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/add?userId="+$scope.userId+"&fileName=" + song.id).then(
             function successCB() {
                 $scope.songAdded = 'animated slideInDown';
                 song.isAdded = true;

@@ -18,6 +18,10 @@ public class User {
     @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
     private List<Vote> votes;
 
+    @OneToMany
+    @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
+    private List<SongEntity> queuedSongEntities;
+
     public User() {
 
     }
@@ -32,8 +36,15 @@ public class User {
     }
 
     public List<Vote> getVotes() {
-
         return votes;
+    }
+
+    public List<SongEntity> getQueuedSongEntities() {
+        return queuedSongEntities;
+    }
+
+    public void setQueuedSongEntities(List<SongEntity> queuedSongEntities) {
+        this.queuedSongEntities = queuedSongEntities;
     }
 
     public void upvoteSong(String songFileName) {

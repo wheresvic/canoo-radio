@@ -1,15 +1,24 @@
 package com.canoo.radio.server.controller;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import com.canoo.radio.server.Strings;
 import com.canoo.radio.server.musicbackend.MusicBackend;
 import com.canoo.radio.server.musicbackend.Song;
+import com.canoo.radio.server.voting.SongEntity;
+import com.canoo.radio.server.voting.User;
+import com.canoo.radio.server.voting.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/playlist")
@@ -17,6 +26,9 @@ public class PlaylistController {
 
     @Autowired
     private MusicBackend musicBackend;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping("/current")
     public Song getCurrentSong() throws Exception {
@@ -32,16 +44,32 @@ public class PlaylistController {
     public List<Song> getPlayedSongs() throws Exception {
         final List<Song> playedSongs = musicBackend.getPlayedSongs();
         Collections.reverse(playedSongs);
-        final List<Song> returnedList = playedSongs.stream().limit(10).collect(Collectors.toList());
+        final List<Song> returnedList = playedSongs.stream().limit(10).collect(toList());
         Collections.reverse(returnedList);
         return returnedList;
     }
 
     @RequestMapping("/add")
-    public void addSong(@RequestParam(value = "fileName") String fileName) throws Exception {
-        musicBackend.addSongToQueue(fileName);
-        if (musicBackend.getCurrentSong() == null) {
-            musicBackend.startPlaybackAtEnd();
+    public void addSong(@RequestParam(value = "userId") String userId, @RequestParam(value = "fileName") String fileName) throws Exception {
+
+        if (Strings.isNullOrEmpty(userId)) {
+            throw new UserQueueLimitException();
+        }
+
+        final List<String> upcomingSongIds = musicBackend.getUpcomingSongs().stream().map(Song::getId).collect(toList());
+        final User user = userRepository.findOne(userId);
+        final List<SongEntity> songEntities = user.getQueuedSongEntities().stream().filter(s -> upcomingSongIds.contains(s.getId())).collect(toList());
+        user.setQueuedSongEntities(songEntities);
+
+        if (user.getQueuedSongEntities().size() < 10) {
+            musicBackend.addSongToQueue(fileName);
+            user.getQueuedSongEntities().add(new SongEntity(fileName));
+            userRepository.save(user);
+            if (musicBackend.getCurrentSong() == null) {
+                musicBackend.startPlaybackAtEnd();
+            }
+        } else {
+            throw new UserQueueLimitException();
         }
     }
 
@@ -58,5 +86,13 @@ public class PlaylistController {
     @RequestMapping("/previous")
     public void previousSong() throws Exception {
         musicBackend.previousSong();
+    }
+
+    @ExceptionHandler(UserQueueLimitException.class)
+    void handleBadRequests(HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.FORBIDDEN.value());
+    }
+
+    private class UserQueueLimitException extends Exception {
     }
 }
