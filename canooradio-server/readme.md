@@ -49,4 +49,4 @@ sudo service icecast2 status
 
 mpd gui: `sudo apt-get install ario`
 
-Set the relevant variables in `application.properties`. Note that mpd is listening on `6600` and icecast is listening on `4710` in the current setup
+Set the relevant variables in `application.properties`. Note that mpd is listening on `6600` and icecast is listening on `4710` in the current setup. Can install `sonata` which is a gui that can connect to and manage(?) mpd.
