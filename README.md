@@ -1,1 +1,5 @@
-- gradle run
+
+```
+./gradlew buildUI
+./gradlew run
+```

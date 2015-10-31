@@ -386,7 +386,9 @@ app.controller('RadioController',
 
         $http.get(app.config.serverBaseUrl + "/playlist/current").then(
             function successCB(response) {
-                $scope.current = response.data;
+                if (response.data) {
+                    $scope.current = response.data;
+                }
             },
             httpErrorCb
         );
