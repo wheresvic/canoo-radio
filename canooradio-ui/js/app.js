@@ -6,9 +6,17 @@ var angular = require('angular');
 var Chance = require('chance'),
     chance = new Chance();
 
-var app = angular.module('canooradio', [require('ng-file-upload')]);
+var app =
+    angular.module('canooradio', [require('ng-file-upload')])
+        .config(function($locationProvider) {
+            // use the HTML5 History API
+            $locationProvider.html5Mode({
+                enabled: false,
+                requireBase: false
+            });
+        });
 
-app.config = {
+app.custom = {
     url: "/api",
     serverBaseUrl: (window.location.hostname === 'localhost' ? 'http://localhost:8080' : '')
 };
@@ -80,7 +88,7 @@ app.controller('RadioController',
         }
 
         Upload.upload({
-            url: app.config.serverBaseUrl + '/music/upload',
+            url: app.custom.serverBaseUrl + '/music/upload',
             data: {file: file}
         }).then(function (resp) {
 
@@ -111,7 +119,7 @@ app.controller('RadioController',
             updateMusicBrowser();
 
         } else {
-            $http.get(app.config.serverBaseUrl + "/music/search?query=" + searchString).then(
+            $http.get(app.custom.serverBaseUrl + "/music/search?query=" + searchString).then(
                 function successCB(response) {
                     $scope.music = response.data;
                 },
@@ -123,7 +131,7 @@ app.controller('RadioController',
     };
 
     $scope.addToPlaylist = function (song) {
-        $http.get(app.config.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/add?fileName=" + song.id).then(
             function successCB() {
                 $scope.songAdded = 'animated slideInDown';
                 song.isAdded = true;
@@ -173,7 +181,7 @@ app.controller('RadioController',
 
     /**
      * Re-implementing stackoverflow voting :)
-     * 
+     *
      * TODO: update charts in realtime as well
      *
      * @param {String}  song        the song object
@@ -241,7 +249,7 @@ app.controller('RadioController',
 
         if (previousVote === indication) {
 
-            $http.get(app.config.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + $scope.userId).then(
+            $http.get(app.custom.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + $scope.userId).then(
                 function successCB() {
                     delete $scope.user.votes[song.id];
                     clearVoteInPlaylist($scope.playlists.played, song);
@@ -274,9 +282,9 @@ app.controller('RadioController',
         var url = '';
 
         if (indication > 0) {
-            url = app.config.serverBaseUrl + "/vote/up";
+            url = app.custom.serverBaseUrl + "/vote/up";
         } else if (indication < 0) {
-            url = app.config.serverBaseUrl + "/vote/down";
+            url = app.custom.serverBaseUrl + "/vote/down";
         }
 
         url += "?filename=" + song.id + "&userId=" + $scope.userId;
@@ -327,7 +335,7 @@ app.controller('RadioController',
     };
 
     var updateMusicBrowser = function () {
-        $http.get(app.config.serverBaseUrl + '/music/random?limit=25').then(
+        $http.get(app.custom.serverBaseUrl + '/music/random?limit=25').then(
             function successCB(response) {
                 $scope.music = response.data;
             },
@@ -362,7 +370,7 @@ app.controller('RadioController',
         }
 
         if ($scope.userId) {
-            $http.get(app.config.serverBaseUrl + "/user/" + $scope.userId).then(successUserData, httpErrorCb);
+            $http.get(app.custom.serverBaseUrl + "/user/" + $scope.userId).then(successUserData, httpErrorCb);
         } else {
             igniteRadioData();
         }
@@ -383,21 +391,21 @@ app.controller('RadioController',
      */
     var pollData = function () {
 
-        $http.get(app.config.serverBaseUrl + "/playlist/played").then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/played").then(
             function successCB(response) {
                 $scope.playlists.played = response.data;
             },
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/playlist/upcoming").then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/upcoming").then(
             function successCB(response) {
                 $scope.playlists.upcoming = response.data;
             },
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/playlist/current").then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/current").then(
             function successCB(response) {
                 if (response.data) {
                     $scope.current = response.data;
@@ -406,7 +414,7 @@ app.controller('RadioController',
             httpErrorCb
         );
 
-        $http.get(app.config.serverBaseUrl + "/music/charts?limit=25").then(
+        $http.get(app.custom.serverBaseUrl + "/music/charts?limit=25").then(
             function successCB(response) {
                 $scope.charts = response.data;
             },
