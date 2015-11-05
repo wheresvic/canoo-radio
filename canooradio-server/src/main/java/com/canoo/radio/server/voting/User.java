@@ -20,7 +20,7 @@ public class User {
     @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
     private List<Vote> votes;
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER)
     @Cascade({CascadeType.PERSIST})
     private List<SongEntity> queuedSongEntities;
 

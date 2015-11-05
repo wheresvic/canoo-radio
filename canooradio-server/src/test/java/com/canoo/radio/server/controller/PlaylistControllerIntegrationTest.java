@@ -28,6 +28,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -64,7 +65,7 @@ public class PlaylistControllerIntegrationTest {
     }
 
     @Test
-    public void testAddSong() throws Exception {
+    public void testAddSongWhenAlreadyAdded() throws Exception {
 
         // given
         String songPath1 = "/coach.mp3";
@@ -116,6 +117,27 @@ public class PlaylistControllerIntegrationTest {
         // then
         List<Song> upcomingSongs = sut.getUpcomingSongs();
         assertTrue(upcomingSongs.size() > 0);
+
+    }
+
+    @Test
+    public void testAddSong() throws Exception {
+
+        // given
+        String songPath1 = "/coach.mp3";
+        String userId = "snoop";
+
+        when(musicBackend.getUpcomingSongs()).thenReturn(new ArrayList<>());
+
+        User user = new User(userId, new ArrayList<>());
+        userRepository.save(user);
+
+        // when
+        sut.addSong(userId, songPath1);
+
+        // then
+        User retrieved = userRepository.findOne(userId);
+        assertThat(retrieved.getQueuedSongEntities().size(), is(1));
 
     }
 }
