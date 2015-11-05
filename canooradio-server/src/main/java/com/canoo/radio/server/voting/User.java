@@ -17,7 +17,7 @@ public class User {
     @Id
     private String id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany()
     @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
     private List<Vote> votes;
 
