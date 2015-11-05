@@ -34,6 +34,18 @@ public class PlaylistController {
     @Autowired
     private UserRepository userRepository;
 
+    public void setMusicBackend(MusicBackend musicBackend) {
+        this.musicBackend = musicBackend;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void setUserQueueLimit(int userQueueLimit) {
+        this.userQueueLimit = userQueueLimit;
+    }
+
     @RequestMapping("/current")
     public Song getCurrentSong() throws Exception {
         return musicBackend.getCurrentSong();
@@ -67,8 +79,14 @@ public class PlaylistController {
 
         if (user.getQueuedSongEntities().size() < userQueueLimit) {
             musicBackend.addSongToQueue(fileName);
-            user.getQueuedSongEntities().add(new SongEntity(fileName));
+
+            SongEntity newSong = new SongEntity(fileName);
+
+            if (!songEntities.contains(newSong)) {
+                user.getQueuedSongEntities().add(new SongEntity(fileName));
+            }
             userRepository.save(user);
+
             if (musicBackend.getCurrentSong() == null) {
                 musicBackend.startPlaybackAtEnd();
             }

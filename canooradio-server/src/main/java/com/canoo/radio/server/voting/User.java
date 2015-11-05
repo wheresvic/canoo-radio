@@ -2,7 +2,9 @@ package com.canoo.radio.server.voting;
 
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -14,12 +16,12 @@ public class User {
     @Id
     private String id;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
     private List<Vote> votes;
 
-    @OneToMany(orphanRemoval = true)
-    @Cascade({CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @Cascade({CascadeType.PERSIST})
     private List<SongEntity> queuedSongEntities;
 
     public User() {
