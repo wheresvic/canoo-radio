@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.Cascade;
@@ -20,9 +21,9 @@ public class User {
     @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
     private List<Vote> votes;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @Cascade({CascadeType.PERSIST})
-    private List<SongEntity> queuedSongEntities;
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
+    private List<SongEntity> queuedSongEntities = new ArrayList<>();
 
     public User() {
 
@@ -46,7 +47,8 @@ public class User {
     }
 
     public void setQueuedSongEntities(List<SongEntity> queuedSongEntities) {
-        this.queuedSongEntities = queuedSongEntities;
+        this.queuedSongEntities.clear();
+        this.queuedSongEntities.addAll(queuedSongEntities);
     }
 
     public void upvoteSong(String songFileName) {

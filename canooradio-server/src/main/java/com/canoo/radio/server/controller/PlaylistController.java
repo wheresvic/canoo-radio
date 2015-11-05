@@ -80,9 +80,16 @@ public class PlaylistController {
         if (user.getQueuedSongEntities().size() < userQueueLimit) {
             musicBackend.addSongToQueue(fileName);
 
-            SongEntity newSong = new SongEntity(fileName);
+            boolean songAlreadyInQueue = false;
 
-            if (!songEntities.contains(newSong)) {
+            for (SongEntity songEntity : songEntities) {
+                if (songEntity.getId().equals(fileName)) {
+                    songAlreadyInQueue = true;
+                    break;
+                }
+            }
+
+            if (!songAlreadyInQueue) {
                 user.getQueuedSongEntities().add(new SongEntity(fileName));
             }
             userRepository.save(user);
