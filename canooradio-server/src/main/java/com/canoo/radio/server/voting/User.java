@@ -18,8 +18,8 @@ public class User {
     @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
     private List<Vote> votes;
 
-    @OneToMany
-    @Cascade({CascadeType.MERGE, CascadeType.SAVE_UPDATE})
+    @OneToMany(orphanRemoval = true)
+    @Cascade({CascadeType.ALL})
     private List<SongEntity> queuedSongEntities;
 
     public User() {
