@@ -1,3 +1,7 @@
+/**
+ * TODO: extract configuration and add pro/dev modes
+ */
+
 var express = require('express');
 var morgan = require('morgan');
 var Promise = require('bluebird');
@@ -13,7 +17,7 @@ var db = Promise.promisifyAll(dbWrapper);
 
 var app = express();
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use(cors.allowAll);
 
@@ -111,7 +115,7 @@ app.get('/api/playlist/add', function (req, res, next) {
   var data = req.query;
   console.log(data);
 
-  mpd.addSongToPlaylistAsync(data.songId)
+  mpd.addSongToPlaylistAsync(data.fileName)
     .then(function () {
       res.status(200).send();
     })
@@ -142,7 +146,7 @@ app.get('/api/user/:id', function (req, res, next) {
         db.getUserVotesAsync(user._id)
           .then(function (votes) {
             _.each(votes, function (vote) {
-              user.votes.vote.songId = value;
+              user.votes[vote.songId] = vote.value;
             })
 
             res.send(user);
@@ -269,11 +273,11 @@ app.get('/api/music/charts', function (req, res) {
 
       songs.sort(function (a, b) {
         if (a.votes > b.votes) {
-          return 1;
+          return -1;
         }
 
         if (a.votes < b.votes) {
-          return -1;
+          return 1;
         }
 
         return 0;

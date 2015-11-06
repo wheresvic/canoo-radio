@@ -20,7 +20,7 @@ var app =
 
 app.custom = {
     url: "/api",
-    serverBaseUrl: (window.location.hostname === 'localhost' ? 'http://localhost:8080' : '')
+    serverBaseUrl: (window.location.hostname === 'localhost' ? '/api' : '')
 };
 
 

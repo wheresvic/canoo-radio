@@ -79,7 +79,7 @@ describe("mpd", function() {
 
     mpdWrapper.getAllSongs(function (err, obj) {
       console.log(obj);
-      expect(obj.length).to.equal(3);
+      expect(obj.length).to.be.above(3);
       done();
     });
 

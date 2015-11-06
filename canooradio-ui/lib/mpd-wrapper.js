@@ -206,7 +206,7 @@ var mpdWrapper = function (host, port, logger) {
   };
 
   self.getAllSongs = function (cb) {
-    client.sendCommand(cmd("listall", []), function (err, msg) {
+    client.sendCommand(cmd("listallinfo", []), function (err, msg) {
       // console.log(msg);
       cb(err, getObjArrayFromMpdResponse(msg, 'file'));
     });
