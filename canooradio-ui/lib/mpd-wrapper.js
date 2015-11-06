@@ -16,13 +16,7 @@ var mpdWrapper = function (host, port, logger) {
   });
 
   client.on('ready', function() {
-
-    if (logger) {
-
-    } else {
-      console.log("mpd connected to " + host + ":" + port);
-    }
-
+    logger.info("mpd connected to " + host + ":" + port);
   });
 
   var getObjArrayFromMpdResponse = function (msg, key) {

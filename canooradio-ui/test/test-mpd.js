@@ -2,8 +2,12 @@
 var expect = require("chai").expect;
 var assert = require('chai').assert;
 
-var mpdWrapper = require('../lib/mpd-wrapper')('localhost', 6600);
+var logger = require('../lib/logger.js').logger;
+var mpdWrapper = require('../lib/mpd-wrapper')('localhost', 6600, logger);
 
+/**
+ * For the moment we just console.log to test that the mpd wrapper is working as expected
+ */
 describe("mpd", function() {
 
   it("should get mpd status", function(done) {

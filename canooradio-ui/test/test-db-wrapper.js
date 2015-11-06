@@ -2,7 +2,8 @@
 var expect = require("chai").expect;
 var assert = require('chai').assert;
 
-var dbWrapper = require('../lib/db-wrapper')();
+var logger = require('../lib/logger.js').logger;
+var dbWrapper = require('../lib/db-wrapper')(logger);
 
 describe("db-wrapper", function() {
 

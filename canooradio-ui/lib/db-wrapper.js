@@ -1,3 +1,4 @@
+// nedb is pretty sick as it maintains a mongodb like interface with sqlite type file db capabilities
 var Datastore = require('nedb');
 
 var dbWrapper = function (logger) {
@@ -12,7 +13,7 @@ var dbWrapper = function (logger) {
 
     db.users = new Datastore({ filename: 'users.db', autoload: true });
     db.users.loadDatabase(function (err) {
-      console.log('loaded users');
+      logger.info('loaded users');
     });
 
   };
