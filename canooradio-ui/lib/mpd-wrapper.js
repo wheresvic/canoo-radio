@@ -39,6 +39,15 @@ var mpdWrapper = function (host, port, logger) {
       var kv = part.split(':');
 
       if (kv[0] && kv[1]) {
+
+        // this is a new object
+        if (kv[0] === key) {
+          if (Object.keys(obj).length) {
+            result.push(obj);
+            obj = { };
+          }
+        }
+
         var value = kv[1].replace(' ', '');
 
         if (!isNaN(value)) {
@@ -46,16 +55,14 @@ var mpdWrapper = function (host, port, logger) {
         }
 
         obj[kv[0]] = value;
-
-        if (kv[0] === key) {
-          result.push(obj);
-          obj = {
-
-          };
-        }
       }
 
     });
+
+    if (Object.keys(obj).length) {
+      result.push(obj);
+      obj = { };
+    }
 
     return result;
 
@@ -158,7 +165,22 @@ var mpdWrapper = function (host, port, logger) {
 
   self.getCurrentPlaylistInfo = function (cb) {
     client.sendCommand(cmd("playlistinfo", []), function (err, msg) {
-      cb(err, getObjArrayFromMpdResponse(msg, 'Id'));
+      // console.log(msg);
+      cb(err, getObjArrayFromMpdResponse(msg, 'file'));
+    });
+  };
+
+  self.search = function (term, cb) {
+    client.sendCommand(cmd("search", ['any', term]), function (err, msg) {
+      // console.log(msg);
+      cb(err, getObjArrayFromMpdResponse(msg, 'file'));
+    });
+  };
+
+  self.getAllSongs = function (cb) {
+    client.sendCommand(cmd("listall", []), function (err, msg) {
+      // console.log(msg);
+      cb(err, getObjArrayFromMpdResponse(msg, 'file'));
     });
   };
 
@@ -190,10 +212,38 @@ var mpdWrapper = function (host, port, logger) {
           return;
         }
 
-        if (song) {
+        if (song && song.Pos) {
           cb(null, playlist.slice(song.Pos + 1));
         } else {
           cb(null, playlist);
+        }
+
+      });
+
+    });
+
+  };
+
+  self.getPlayedSongs = function (cb) {
+
+    self.getCurrentSong(function (err, song) {
+
+      if (err) {
+        cb(err);
+        return;
+      }
+
+      self.getCurrentPlaylistInfo(function (err, playlist) {
+
+        if (err) {
+          cb(err);
+          return;
+        }
+
+        if (song && song.Pos) {
+          cb(null, playlist.slice(0, song.Pos));
+        } else {
+          cb(null, []);
         }
 
       });

@@ -2,7 +2,7 @@
 var expect = require("chai").expect;
 var assert = require('chai').assert;
 
-var mpdWrapper = require('../lib/mpd')('localhost', 6600);
+var mpdWrapper = require('../lib/mpd-wrapper')('localhost', 6600);
 
 describe("mpd", function() {
 
@@ -10,7 +10,7 @@ describe("mpd", function() {
 
     mpdWrapper.getStatus(function (err, status) {
       console.log(status);
-      expect(status.volume).to.equals(-1);
+      expect(status.volume).to.equal(-1);
       done();
     });
 
@@ -47,6 +47,35 @@ describe("mpd", function() {
 
     mpdWrapper.getUpcomingSongs(function (err, obj) {
       console.log(obj);
+      done();
+    });
+
+  });
+
+  it("should find music", function(done) {
+
+    mpdWrapper.search('tina', function (err, obj) {
+      console.log(obj);
+      expect(obj.length).to.equal(1);
+      done();
+    });
+
+  });
+
+  it("should get played songs", function(done) {
+
+    mpdWrapper.getPlayedSongs(function (err, obj) {
+      console.log(obj);
+      done();
+    });
+
+  });
+
+  it("should get all songs in the db", function(done) {
+
+    mpdWrapper.getAllSongs(function (err, obj) {
+      console.log(obj);
+      expect(obj.length).to.equal(3);
       done();
     });
 
