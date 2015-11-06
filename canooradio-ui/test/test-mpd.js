@@ -68,7 +68,7 @@ describe("mpd", function() {
 
   it("should get played songs", function(done) {
 
-    mpdWrapper.getPlayedSongs(function (err, obj) {
+    mpdWrapper.getPlayedSongs(10, function (err, obj) {
       console.log(obj);
       done();
     });

@@ -12,8 +12,15 @@ var dbWrapper = function (logger) {
   self.initialize = function () {
 
     db.users = new Datastore({ filename: 'users.db', autoload: true });
+
+    db.votes = new Datastore({ filename: 'votes.db', autoload: true });
+
     db.users.loadDatabase(function (err) {
       logger.info('loaded users');
+    });
+
+    db.votes.loadDatabase(function (err) {
+      logger.info('loaded votes');
     });
 
   };
@@ -31,9 +38,55 @@ var dbWrapper = function (logger) {
     db.users.update({_id: user._id}, user, {}, cb);
   };
 
+  self.getUserVotes = function (userId, cb) {
+    db.votes.find({userId: userId}, cb);
+  };
+
+  var createVoteId = function (userId, songId) {
+
+    if (userId && songId)
+      return userId + '-' + songId;
+
+    throw new Error('userId and/or songId cannot be null');
+  }
+
+  var voteUpsert = function (userId, songId, value, cb) {
+
+    try {
+      var vote = {
+        _id: createVoteId(userId, songId),
+        userId: userId,
+        songId: songId,
+        value: value
+      }
+
+      db.votes.update({_id: vote._id}, vote, {upsert: true}, cb);
+    } catch (err) {
+      cb(err);
+    }
+
+  }
+
+  self.voteUp = function (userId, songId, cb) {
+    voteUpsert(userId, songId, 1, cb);
+  };
+
+  self.voteDown = function (userId, songId, cb) {
+    voteUpsert(userId, songId, -1, cb);
+  };
+
+  self.voteClear = function (userId, songId, cb) {
+    try {
+      db.votes.remove({_id: createVoteId(userId, songId)}, {}, cb);
+    } catch (err) {
+      cb(err);
+    }
+  };
+
   self.initialize();
 
   return self;
+
 };
 
 module.exports = dbWrapper;

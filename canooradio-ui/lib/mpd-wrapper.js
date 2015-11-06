@@ -19,6 +19,22 @@ var mpdWrapper = function (host, port, logger) {
     logger.info("mpd connected to " + host + ":" + port);
   });
 
+  /**
+   * Standardize object interface
+   */
+  var processKey = function (key) {
+
+    if (key === 'file') {
+      return 'id';
+    } else if (key === 'Artist') {
+      return 'artist';
+    } else if (key === 'Title') {
+      return 'song';
+    }
+
+    return null;
+  };
+
   var getObjArrayFromMpdResponse = function (msg, key) {
 
     var result = [];
@@ -49,6 +65,12 @@ var mpdWrapper = function (host, port, logger) {
         }
 
         obj[kv[0]] = value;
+
+        var processed = processKey(kv[0]);
+        if (processed) {
+          obj[processed] = value;
+        }
+
       }
 
     });
@@ -83,6 +105,11 @@ var mpdWrapper = function (host, port, logger) {
         }
 
         obj[kv[0]] = value;
+
+        var processed = processKey(kv[0]);
+        if (processed) {
+          obj[processed] = value;
+        }
       }
 
     });
@@ -218,7 +245,7 @@ var mpdWrapper = function (host, port, logger) {
 
   };
 
-  self.getPlayedSongs = function (cb) {
+  self.getPlayedSongs = function (num, cb) {
 
     self.getCurrentSong(function (err, song) {
 

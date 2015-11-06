@@ -16,25 +16,52 @@ describe("server", function() {
 
   describe(routePlaylist, function () {
 
-    var route = '/played';
+    it('should get the current song', function (done) {
 
-    describe('GET ' + route, function () {
+      request(app_url)
+        .get(routePlaylist + '/current')
+        .end(function (err, res) {
 
-      it('should return 200', function (done) {
+          if (err) {
+            return done(err);
+          }
 
-        request(app_url)
-          .get(routePlaylist + route)
-          .end(function (err, res) {
+          console.log(res.body);
+          expect(res.status).to.equal(200);
+          return done();
+        });
+    });
 
-            if (err) {
-              return done(err);
-            }
+    it('should get played songs', function (done) {
 
-            expect(res.status).to.equal(200);
-            return done();
-          });
-      });
+      request(app_url)
+        .get(routePlaylist + '/played')
+        .end(function (err, res) {
 
+          if (err) {
+            return done(err);
+          }
+
+          console.log(res.body);
+          expect(res.status).to.equal(200);
+          return done();
+        });
+    });
+
+    it('should get upcoming songs', function (done) {
+
+      request(app_url)
+        .get(routePlaylist + '/upcoming')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          console.log(res.body);
+          expect(res.status).to.equal(200);
+          return done();
+        });
     });
 
   });
