@@ -18,27 +18,40 @@ app.use(morgan('dev'));
 app.use(cors.allowAll);
 
 //
+// common
+//
+
+var enhanceSongsWithVotes = function (songs) {
+
+  return Promise.map(songs, function (song) {
+
+    return db.getVotesForSongAsync(song.id)
+      .then(function (sum) {
+        song.votes = sum;
+      });
+
+  }).then(function () { // waits for the mapped promises to finish
+    return songs;
+  });
+
+};
+
+//
 // playlist
 //
 
 app.get('/api/playlist/played', function (req, res, next) {
 
+  /*
+   * get the playlist and then enhance it with voting data
+   */
+
   mpd.getPlayedSongsAsync(10)
     .then(function (playlist) {
-
-      // console.log(playlist);
-
-      Promise.map(playlist, function (song) {
-
-        return db.getVotesForSongAsync(song.id)
-          .then(function (sum) {
-            song.votes = sum;
-          });
-
-      }).then(function () {
-        res.send(playlist);
-      });
-
+      return enhanceSongsWithVotes(playlist);
+    })
+    .then(function (songs) {
+      res.send(songs);
     })
     .catch(function (err) {
       next(err);
@@ -48,26 +61,22 @@ app.get('/api/playlist/played', function (req, res, next) {
 
 app.get('/api/playlist/upcoming', function (req, res, next) {
 
+  /*
+   * get the playlist and then enhance it with voting data
+   */
+
   mpd.getUpcomingSongsAsync()
     .then(function (playlist) {
-
-      Promise.map(playlist, function (song) {
-
-        return db.getVotesForSongAsync(song.id)
-          .then(function (sum) {
-            song.votes = sum;
-          });
-
-      }).then(function () {
-        res.send(playlist);
-      });
-
+      return enhanceSongsWithVotes(playlist);
+    })
+    .then(function (songs) {
+      res.send(songs);
     })
     .catch(function (err) {
       next(err);
     });
 
-})
+});
 
 app.get('/api/playlist/current', function (req, res, next) {
 
@@ -83,12 +92,10 @@ app.get('/api/playlist/current', function (req, res, next) {
 
   mpd.getCurrentSongAsync()
     .then(function (song) {
-
-      return db.getVotesForSongAsync(song.id)
-        .then(function (sum) {
-          song.votes = sum;
-          res.send(song);
-        });
+      return enhanceSongsWithVotes([song]);
+    })
+    .then(function (songs) {
+      res.send(songs[0]);
     })
     .catch(function (err) {
       next(err);
@@ -121,6 +128,10 @@ app.get('/api/playlist/add', function (req, res, next) {
 
 app.get('/api/user/:id', function (req, res, next) {
 
+  /*
+   * get the user, if one found then enhance with their votes before sending it
+   * otherwise, create one, save it and send it
+   */
   db.getUserAsync(req.params.id)
     .then(function (user) {
 
@@ -176,32 +187,40 @@ app.get('/api/user/:id', function (req, res, next) {
 
 app.get('/api/vote/up', function (req, res, next) {
 
-    var data = req.body;
-
-    console.log(data);
-
-    res.status(200).send();
-
+  db.voteUpAsync(req.query.userId, req.query.filename)
+    .then(function (results) {
+      console.log(results);
+      res.status(200).send();
+    })
+    .catch(function (err) {
+      next(err);
+    });
 });
 
 
 app.get('/api/vote/down', function (req, res, next) {
 
-    var data = req.body;
-
-    console.log(data);
-
-    res.status(200).send();
+  db.voteDownAsync(req.query.userId, req.query.filename)
+    .then(function (results) {
+      console.log(results);
+      res.status(200).send();
+    })
+    .catch(function (err) {
+      next(err);
+    });
 
 });
 
 app.get('/api/vote/clear', function (req, res, next) {
 
-    var data = req.body;
-
-    console.log(data);
-
-    res.status(200).send();
+  db.voteClearAsync(req.query.userId, req.query.filename)
+    .then(function (results) {
+      console.log(results);
+      res.status(200).send();
+    })
+    .catch(function (err) {
+      next(err);
+    });
 
 });
 
@@ -211,18 +230,60 @@ app.get('/api/vote/clear', function (req, res, next) {
 
 app.get('/api/db/search', function (req, res) {
 
-    console.log(req.query);
+  var term = req.query.query;
 
-    /*
-    if(req.query.query !== "") {
-        res.send([songs[0]]);
-    } else {
-        res.send(songs);
-    }
-    */
+  mpd.searchAsync(term)
+    .then(function (songs) {
+      res.send(songs);
+    })
+    .catch(function (err) {
+      next(err);
+    });
+});
 
-    res.status(200).send();
+app.get('/api/db/random', function (req, res) {
 
+  var limit = parseInt(req.query.limit);
+
+  mpd.getAllSongsAsync()
+    .then(function (songs) {
+      return enhanceSongsWithVotes(songs.slice(0, limit));
+    })
+    .then(function (songs) {
+      res.send(songs);
+    })
+    .catch(function (err) {
+      next(err);
+    });
+});
+
+app.get('/api/db/charts', function (req, res) {
+
+  var limit = parseInt(req.query.limit);
+
+  mpd.getAllSongsAsync()
+    .then(function (songs) {
+      return enhanceSongsWithVotes(songs);
+    })
+    .then(function (songs) {
+
+      songs.sort(function (a, b) {
+        if (a.votes > b.votes) {
+          return 1;
+        }
+
+        if (a.votes < b.votes) {
+          return -1;
+        }
+
+        return 0;
+      });
+
+      res.send(songs.slice(0, limit));
+    })
+    .catch(function (err) {
+      next(err);
+    });
 });
 
 //

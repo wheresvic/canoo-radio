@@ -15,6 +15,8 @@ describe("server", function() {
   var routePlaylist = '/api/playlist';
   var routeUser = '/api/user';
   var routePlayer = '/api/player';
+  var routeVote = '/api/vote';
+  var routeMusicDb = '/api/db';
 
   describe(routePlaylist, function () {
 
@@ -99,6 +101,67 @@ describe("server", function() {
 
       request(app_url)
         .get(routeUser + '/next')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).to.equal(200);
+          return done();
+        });
+    });
+
+  });
+
+  describe(routeMusicDb, function () {
+
+    it('should get a random selection of songs', function (done) {
+
+      request(app_url)
+        .get(routeMusicDb + '/random?limit=2')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).to.equal(200);
+
+          var songs = res.body;
+          expect(songs.length).to.equal(2);
+
+          return done();
+        });
+    });
+
+    it('should get top charts', function (done) {
+
+      request(app_url)
+        .get(routeMusicDb + '/charts?limit=2')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).to.equal(200);
+
+          var songs = res.body;
+          expect(songs.length).to.equal(2);
+
+          return done();
+        });
+    });
+
+  });
+
+  describe(routeVote, function () {
+
+    it('should upvote for a song', function (done) {
+
+      request(app_url)
+        .get(routeVote + '/up?filename=snoop.mp3&userId=ignoramus')
         .end(function (err, res) {
 
           if (err) {

@@ -4,6 +4,9 @@ var _ = require('underscore');
 var mpd = require('mpd'),
     cmd = mpd.cmd;
 
+/**
+ * A wrapper over mpd that returns domain specific json objects rather than plain text command ouput
+ */
 var mpdWrapper = function (host, port, logger) {
 
   var self = {
