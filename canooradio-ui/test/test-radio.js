@@ -13,6 +13,8 @@ describe("server", function() {
   });
 
   var routePlaylist = '/api/playlist';
+  var routeUser = '/api/user';
+  var routePlayer = '/api/player';
 
   describe(routePlaylist, function () {
 
@@ -60,6 +62,77 @@ describe("server", function() {
 
           console.log(res.body);
           expect(res.status).to.equal(200);
+          return done();
+        });
+    });
+
+  });
+
+  describe(routeUser, function () {
+
+    it('should get a user', function (done) {
+
+      request(app_url)
+        .get(routeUser + '/random')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).to.equal(200);
+
+          var user = res.body;
+          expect(user._id).to.equal('random');
+          expect(user.id).to.equal('random');
+          expect(user.votes).not.to.be.null;
+
+          return done();
+        });
+    });
+
+  });
+
+  describe(routePlayer, function () {
+
+    it('should play the next song', function (done) {
+
+      request(app_url)
+        .get(routeUser + '/next')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).to.equal(200);
+          return done();
+        });
+    });
+
+  });
+
+
+  describe("scenario: adding a vote and getting a user", function () {
+
+    it('should add a vote and get a user', function (done) {
+
+      // TODO:
+      request(app_url)
+        .get(routeUser + '/random')
+        .end(function (err, res) {
+
+          if (err) {
+            return done(err);
+          }
+
+          expect(res.status).to.equal(200);
+
+          var user = res.body;
+          expect(user._id).to.equal('random');
+          expect(user.id).to.equal('random');
+          expect(user.votes).not.to.be.null;
+
           return done();
         });
     });

@@ -184,6 +184,10 @@ var mpdWrapper = function (host, port, logger) {
     executeObjCmd('stop', cb);
   };
 
+  self.next = function (cb) {
+    executeObjCmd('next', cb);
+  };
+
   self.getCurrentPlaylistInfo = function (cb) {
     client.sendCommand(cmd("playlistinfo", []), function (err, msg) {
       // console.log(msg);
@@ -260,6 +264,8 @@ var mpdWrapper = function (host, port, logger) {
           cb(err);
           return;
         }
+
+        // console.log(playlist);
 
         if (song && song.Pos) {
           cb(null, playlist.slice(0, song.Pos));

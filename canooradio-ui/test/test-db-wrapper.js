@@ -72,7 +72,6 @@ describe("db-wrapper", function() {
         if (err) {
           return done();
         }
-
         throw new Error('should have thrown a userId missing error :(');
       });
 
@@ -84,10 +83,25 @@ describe("db-wrapper", function() {
         if (err) {
           return done();
         }
-
         throw new Error('should have thrown a userId missing error :(');
       });
 
+    });
+
+    it("should get votes for a song", function(done) {
+
+      var songId = 'song.mp3';
+
+      dbWrapper.voteUp('a', songId, function (err, num1) {
+        expect(err).to.be.null;
+        dbWrapper.voteUp('b', songId, function (err, num2) {
+          expect(err).to.be.null;
+          dbWrapper.getVotesForSong(songId, function (err, sum) {
+            expect(sum).to.equal(2);
+            done();
+          });
+        });
+      });
     });
 
   });
