@@ -16,7 +16,7 @@ describe("server", function() {
   var routeUser = '/api/user';
   var routePlayer = '/api/player';
   var routeVote = '/api/vote';
-  var routeMusicDb = '/api/db';
+  var routeMusicDb = '/api/music';
 
   describe(routePlaylist, function () {
 

@@ -228,7 +228,7 @@ app.get('/api/vote/clear', function (req, res, next) {
 // music db
 //
 
-app.get('/api/db/search', function (req, res) {
+app.get('/api/music/search', function (req, res) {
 
   var term = req.query.query;
 
@@ -241,7 +241,7 @@ app.get('/api/db/search', function (req, res) {
     });
 });
 
-app.get('/api/db/random', function (req, res) {
+app.get('/api/music/random', function (req, res) {
 
   var limit = parseInt(req.query.limit);
 
@@ -257,7 +257,7 @@ app.get('/api/db/random', function (req, res) {
     });
 });
 
-app.get('/api/db/charts', function (req, res) {
+app.get('/api/music/charts', function (req, res) {
 
   var limit = parseInt(req.query.limit);
 
@@ -339,7 +339,9 @@ app.use(function (err, req, res, next) {
 });
 
 var init = function () {
-  var app_http = app.listen(8000);
+  var port = 8000;
+  var app_http = app.listen(port);
+  logger.info('listening on ' + port);
 }
 
 exports.init = init;
