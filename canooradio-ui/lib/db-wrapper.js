@@ -71,6 +71,7 @@ var dbWrapper = function (logger) {
     }
 
     user.id = user._id;
+    user.queue = [];
     db.users.insert(user, cb);
   };
 
@@ -89,6 +90,11 @@ var dbWrapper = function (logger) {
     }
 
     user.id = user._id;
+
+    if (!user.hasOwnProperty('queue')) {
+      user.queue = [];
+    }
+
     db.users.update({_id: user._id}, user, {}, cb);
   };
 

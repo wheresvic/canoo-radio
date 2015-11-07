@@ -7,11 +7,18 @@ var morgan = require('morgan');
 var Promise = require('bluebird');
 var _ = require('underscore');
 
+var env = process.env.ENV;
+
 var cors = require('./lib/cors.js');
 var logger = require('./lib/logger.js').logger;
-var mpdWrapper = require('./lib/mpd-wrapper')('localhost', 6600, logger);
+var mpdWrapper = require('./lib/mpd-wrapper')(env, 'localhost', 6600, logger);
 var dbWrapper = require('./lib/db-wrapper')(logger);
 
+//
+// promisify expects functions that take arguments with a callback as the last parameter
+// the callback must pass the error as it's first parameter and a result as the second
+// in case there are multiple results then they are converted into an array
+//
 var mpd = Promise.promisifyAll(mpdWrapper);
 var db = Promise.promisifyAll(dbWrapper);
 
@@ -38,6 +45,25 @@ var enhanceSongsWithVotes = function (songs) {
     return songs;
   });
 
+};
+
+var updateUserQueue = function (user, songs) {
+
+  if (!user.hasOwnProperty('queue')) {
+    user.queue = [];
+  }
+
+  var newQueue = [];
+
+  _.each(songs, function (song) {
+    if (user.queue.indexOf(song.id) >= 0) {
+      newQueue.push(song.id);
+    }
+  });
+
+  user.queue = newQueue;
+
+  return user;
 };
 
 //
@@ -107,17 +133,35 @@ app.get('/api/playlist/current', function (req, res, next) {
 
 });
 
-/**
- * TODO: add user checks
- */
 app.get('/api/playlist/add', function (req, res, next) {
 
   var data = req.query;
   console.log(data);
 
-  mpd.addSongToPlaylistAsync(data.fileName)
-    .then(function () {
-      res.status(200).send();
+  db.getUserAsync(data.userId)
+    .then(function (user) {
+
+      if (user) {
+
+        mpd.getUpcomingSongsAsync()
+          .then(function (songs) {
+
+            user = updateUserQueue(user, songs);
+
+            if (user.queue.length > 3) {
+              res.status(403).send();
+            } else {
+              mpd.addSongToPlaylistAsync(data.fileName)
+                .then(function () {
+                  res.status(200).send();
+                });
+            }
+          });
+
+      } else {
+        res.status(401).send();
+      }
+
     })
     .catch(function (err) {
       next(err);
@@ -169,19 +213,6 @@ app.get('/api/user/:id', function (req, res, next) {
     .catch(function (err) {
       next(err);
     });
-
-  /*
-  var user = {
-    id: req.params.id,
-    votes : {
-      "01 Welcome.mp3" : 1,
-      "04 Pretty Fly (For a White Guy).mp3" : 1,
-      "05 The Kids Aren't Alright.mp3" : -1
-    }
-  };
-
-  res.send(user);
-  */
 
 });
 

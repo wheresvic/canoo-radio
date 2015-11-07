@@ -1,9 +1,12 @@
-var request = require('supertest');
+// var request = require('supertest');
+var request = require("supertest-as-promised");
 var expect = require("chai").expect;
+var Chance = require('chance'),
+    chance = new Chance();
 
 var radio = require('../radio');
 
-describe("server", function() {
+describe("radio", function() {
 
   var app_url = 'http://localhost:8000';
 
@@ -20,51 +23,33 @@ describe("server", function() {
 
   describe(routePlaylist, function () {
 
-    it('should get the current song', function (done) {
+    it('should get the current song', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routePlaylist + '/current')
-        .end(function (err, res) {
-
-          if (err) {
-            return done(err);
-          }
-
+        .expect(200)
+        .then(function (res) {
           console.log(res.body);
-          expect(res.status).to.equal(200);
-          return done();
         });
     });
 
-    it('should get played songs', function (done) {
+    it('should get played songs', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routePlaylist + '/played')
-        .end(function (err, res) {
-
-          if (err) {
-            return done(err);
-          }
-
+        .expect(200)
+        .then(function (res) {
           console.log(res.body);
-          expect(res.status).to.equal(200);
-          return done();
         });
     });
 
-    it('should get upcoming songs', function (done) {
+    it('should get upcoming songs', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routePlaylist + '/upcoming')
-        .end(function (err, res) {
-
-          if (err) {
-            return done(err);
-          }
-
+        .expect(200)
+        .then(function (res) {
           console.log(res.body);
-          expect(res.status).to.equal(200);
-          return done();
         });
     });
 
@@ -72,24 +57,16 @@ describe("server", function() {
 
   describe(routeUser, function () {
 
-    it('should get a user', function (done) {
+    it('should get a user', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routeUser + '/random')
-        .end(function (err, res) {
-
-          if (err) {
-            return done(err);
-          }
-
-          expect(res.status).to.equal(200);
-
+        .expect(200)
+        .then(function (res) {
           var user = res.body;
           expect(user._id).to.equal('random');
           expect(user.id).to.equal('random');
           expect(user.votes).not.to.be.null;
-
-          return done();
         });
     });
 
@@ -97,60 +74,40 @@ describe("server", function() {
 
   describe(routePlayer, function () {
 
-    it('should play the next song', function (done) {
+    it('should play the next song', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routeUser + '/next')
-        .end(function (err, res) {
+        .expect(200)
+        .then(function (res) {
 
-          if (err) {
-            return done(err);
-          }
-
-          expect(res.status).to.equal(200);
-          return done();
         });
+
     });
 
   });
 
   describe(routeMusicDb, function () {
 
-    it('should get a random selection of songs', function (done) {
+    it('should get a random selection of songs', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routeMusicDb + '/random?limit=2')
-        .end(function (err, res) {
-
-          if (err) {
-            return done(err);
-          }
-
-          expect(res.status).to.equal(200);
-
+        .expect(200)
+        .then(function (res) {
           var songs = res.body;
           expect(songs.length).to.equal(2);
-
-          return done();
         });
     });
 
-    it('should get top charts', function (done) {
+    it('should get top charts', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routeMusicDb + '/charts?limit=2')
-        .end(function (err, res) {
-
-          if (err) {
-            return done(err);
-          }
-
-          expect(res.status).to.equal(200);
-
+        .expect(200)
+        .then(function (res) {
           var songs = res.body;
           expect(songs.length).to.equal(2);
-
-          return done();
         });
     });
 
@@ -158,19 +115,15 @@ describe("server", function() {
 
   describe(routeVote, function () {
 
-    it('should upvote for a song', function (done) {
+    it('should upvote for a song', function () {
 
-      request(app_url)
+      return request(app_url)
         .get(routeVote + '/up?filename=snoop.mp3&userId=ignoramus')
-        .end(function (err, res) {
+        .expect(200)
+        .then(function (res) {
 
-          if (err) {
-            return done(err);
-          }
-
-          expect(res.status).to.equal(200);
-          return done();
         });
+
     });
 
   });
@@ -178,26 +131,20 @@ describe("server", function() {
 
   describe("scenario: adding a vote and getting a user", function () {
 
-    it('should add a vote and get a user', function (done) {
+    it('should add a vote and get a user', function () {
 
-      // TODO:
-      request(app_url)
-        .get(routeUser + '/random')
-        .end(function (err, res) {
+      var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
 
-          if (err) {
-            return done(err);
-          }
-
-          expect(res.status).to.equal(200);
-
-          var user = res.body;
-          expect(user._id).to.equal('random');
-          expect(user.id).to.equal('random');
-          expect(user.votes).not.to.be.null;
-
-          return done();
+      return request(app_url)
+        .get(routeUser + '/' + userId)
+        .expect(200)
+        .then(function (res) {
+          return res.body;
+        })
+        .then(function (user) {
+          console.log(user);
         });
+
     });
 
   });
