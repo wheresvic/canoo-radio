@@ -140,7 +140,13 @@ app.get('/api/playlist/current', function (req, res, next) {
 app.get('/api/playlist/add', function (req, res, next) {
 
   var data = req.query;
-  console.log(data);
+
+  // api fix
+  if (data.fileName) {
+    data.filename = data.fileName;
+  }
+
+  logger.debug('adding ' + data.filename + ' by ' + data.userId);
 
   //
   // if user not found then cannot add song
@@ -158,13 +164,13 @@ app.get('/api/playlist/add', function (req, res, next) {
 
       if (user) {
 
-        mpd.getUpcomingSongsAsync()
+        return mpd.getUpcomingSongsAsync()
           .then(function (songs) {
 
             user = updateUserQueue(user, songs);
 
             if (user.queue.length >= 3) {
-              res.status(403).send();
+              return 403;
             } else { // user queue has space, so add it to the queue
 
               user.queue.push(data.filename);
@@ -174,28 +180,48 @@ app.get('/api/playlist/add', function (req, res, next) {
               // console.log([songs, user.queue, data.filename]);
 
               if (exists) { // song already exists in the upcoming list, so save the user and return
-                db.updateUserAsync(user)
+
+                return db.updateUserAsync(user)
                   .then(function (results) {
-                    res.status(200).send();
+                    return 200;
                   });
+
               } else { // add it to the playlist, save the user and return
 
-                mpd.addSongToPlaylistAsync(data.filename)
+                return mpd.addSongToPlaylistAsync(data.filename)
                   .then(function () {
                     // logger.debug('updating user ' + user.queue.length);
                     return db.updateUserAsync(user);
                   })
                   .then(function (results) {
-                    res.status(200).send();
+                    return 200;
                   });
               }
             }
           });
-
-      } else { // no user found
-        res.status(401).send();
       }
 
+      // no user found
+      return 401;
+
+    })
+    .then(function (status) {
+
+      return mpd.getStatusAsync()
+        .then(function (playerStatus) {
+
+          if (playerStatus.state === 'play') {
+            return status;
+          }
+
+          return mpd.startPlaybackAtEndAsync()
+            .then(function (result) {
+              return status;
+            });
+        });
+    })
+    .then(function (status) {
+      res.status(status).send();
     })
     .catch(function (err) {
       next(err);

@@ -7,10 +7,7 @@ var env = process.env.ENV;
 var logger = require('../lib/logger.js').logger;
 var mpdWrapper = require('../lib/mpd-wrapper')(env, 'localhost', 6600, logger);
 
-/**
- * For the moment we just console.log to test that the mpd wrapper is working as expected
- */
-describe("mpd", function() {
+describe("mpd test", function() {
 
   it("should get mpd status", function(done) {
 

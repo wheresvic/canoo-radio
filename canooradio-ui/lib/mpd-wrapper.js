@@ -187,6 +187,19 @@ var mpdWrapper = function (env, host, port, logger) {
     executeObjCmd('play', cb);
   };
 
+  self.playPosition = function (position, cb) {
+
+    if (isMock) {
+      return cb(null, null);
+    }
+
+    client.sendCommand(cmd('play', [position]), function (err, msg) {
+      var obj = getObjFromMpdResponse(msg);
+      cb(err, obj);
+    });
+
+  };
+
   self.stop = function (cb) {
 
     if (isMock) {
@@ -310,7 +323,9 @@ var mpdWrapper = function (env, host, port, logger) {
         // console.log(playlist);
 
         if (song && song.Pos) {
-          cb(null, playlist.slice(0, song.Pos));
+          var playedSongs = playlist.slice(0, song.Pos);
+          var limited = playedSongs.slice(-num);
+          cb(null, limited);
         } else {
           cb(null, []);
         }
@@ -320,6 +335,24 @@ var mpdWrapper = function (env, host, port, logger) {
     });
 
   };
+
+  self.startPlaybackAtEnd = function (cb) {
+
+    self.getCurrentPlaylistInfo(function (err, playlist) {
+
+      if (err) {
+        cb(err);
+        return;
+      }
+
+      if (playlist.length > 0) {
+        self.playPosition(playlist[playlist.length - 1].Pos, cb);
+      } else {
+        cb(null, null);
+      }
+
+    });
+  }
 
   var initialize = function () {
 

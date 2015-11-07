@@ -328,16 +328,14 @@ app.controller('RadioController',
 
         var message = 'Something bad happened, please check your internet connection.';
 
-        if (response.data) {
+        message = response.config.url + ' ' + response.status;
 
-            message = response.data.path + ' ' + response.data.status + ' ' + response.data.error;
+        if (response.data && response.data.error) {
+            message += ' ' + response.data.error;
+        }
 
-            if (response.data.path === '/playlist/add' && response.data.status === 403) {
-                message = 'User queue limit reached! Please allow your songs to be played before adding more to the queue.';
-            }
-
-        } else {
-            message = 'Could not connect to ' + response.config.url;
+        if ((response.config.url.indexOf('/playlist/add') > -1) && response.status === 403) {
+            message = 'User queue limit reached! Please allow your songs to be played before adding more to the queue.';
         }
 
         postNotification('error', message);

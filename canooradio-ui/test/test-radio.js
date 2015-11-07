@@ -80,6 +80,10 @@ describe("radio", function() {
   };
 
 
+  var getRandomUserId = function () {
+    return chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+  };
+
   //
   // tests
   //
@@ -116,10 +120,12 @@ describe("radio", function() {
 
     it('should get a user', function () {
 
-      return getUser('random', 200)
+      var userId = getRandomUserId();
+
+      return getUser(userId, 200)
         .then(function (user) {
-          expect(user._id).to.equal('random');
-          expect(user.id).to.equal('random');
+          expect(user._id).to.equal(userId);
+          expect(user.id).to.equal(userId);
           expect(user.votes).not.to.be.null;
         });
     });
@@ -187,7 +193,7 @@ describe("radio", function() {
 
     it('should add a vote and get a user', function () {
 
-      var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+      var userId = getRandomUserId();
       var filename = 'file.mp3';
 
       return getUser(userId, 200)
@@ -211,7 +217,7 @@ describe("radio", function() {
 
     it('should add a song when there is nothing in the queue', function () {
 
-      var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+      var userId = getRandomUserId();
       var filename = 'file.mp3';
 
       return getUser(userId, 200)
@@ -237,7 +243,7 @@ describe("radio", function() {
 
     it('should not add a song to the playlist when it is already in there', function () {
 
-      var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+      var userId = getRandomUserId();
       var filename = 'e.mp3';
 
       return getUser(userId, 200)
@@ -263,7 +269,7 @@ describe("radio", function() {
 
     it('should return 403 if user queue limit reached', function () {
 
-      var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+      var userId = getRandomUserId();
       var files = ['1.mp3', '2.mp3', '3.mp3', '4.mp3'];
 
       return getUser(userId, 200)
