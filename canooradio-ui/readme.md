@@ -56,6 +56,8 @@ Set the relevant variables in `application.properties`. Note that mpd is listeni
 
 ## Project
 
+Install global dependencies:
+
 ```
 sudo npm install -g browserify
 sudo npm install -g clean-css
@@ -66,7 +68,7 @@ sudo npm install -g node-sass
 sudo npm install -g mocha
 ```
 
-npm install
+Install project dependencies via `npm install`.
 
 ### running
 
@@ -74,19 +76,19 @@ npm install
 npm run all
 ```
 
-This will dist the combined `app.js` under the `public/dist/` folder and the `canooradio.css` to the dist folder as well. Changes to the `js` folder and the `sass` folder are watched via nodemon
+This will dist the combined `app.js` under the `public/dist/` folder and the `canooradio.css` to the dist folder as well. You might need to create the `dist` folder as it is not checked in. Changes to the `js` folder and the `sass` folder are watched via nodemon
 
 ```
 node radio.js
 ```
 
-to run a server which can serve the frontend. Note that if you are developing locally then the api needs to be located at `localhost:8080`. This can be found under `app.config.serverBaseUrl`
+to run the app
 
 ### Testing
 
 ```
-mocha
+env ENV=test mocha
 ```
 
-to run tests located under the `tests` folder. Note that the mpd service needs to be running for the tests to pass!
+to run tests located under the `tests` folder. Note that the `test` environment uses mock mpd data and if you'd like to test with the mpd service running then exclude the environment variable but then the expectations on tests will likely not pass :)
 

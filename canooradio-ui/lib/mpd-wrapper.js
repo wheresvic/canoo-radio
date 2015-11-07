@@ -4,23 +4,6 @@ var _ = require('underscore');
 var mpd = require('mpd'),
     cmd = mpd.cmd;
 
-/**
- * A wrapper over mpd that returns domain specific json objects rather than plain text command ouput
- */
-var mpdWrapper = function (host, port, logger) {
-
-  var self = {
-
-  };
-
-  var client = mpd.connect({
-    port: 6600,
-    host: 'localhost',
-  });
-
-  client.on('ready', function() {
-    logger.info("mpd connected to " + host + ":" + port);
-  });
 
   /**
    * Standardize object interface
@@ -33,6 +16,8 @@ var mpdWrapper = function (host, port, logger) {
       return 'artist';
     } else if (key === 'Title') {
       return 'song';
+    } else if (key === 'Album') {
+      return 'album';
     }
 
     return null;
@@ -120,6 +105,30 @@ var mpdWrapper = function (host, port, logger) {
     return obj;
   };
 
+  var mockDb = [
+    { id: 'a.mp3', artist: 'a', song: 'a1' },
+    { id: 'b.mp3', artist: 'b', song: 'b1' },
+    { id: 'c.mp3', artist: 'c', song: 'c1' },
+    { id: 'd.mp3', artist: 'd', song: 'd1' },
+    { id: 'current.mp3', artist: 'current', song: 'current1', Pos: 4 },
+    { id: 'e.mp3', artist: 'e', song: 'e1' },
+    { id: 'f.mp3', artist: 'f', song: 'f1' },
+    { id: 'g.mp3', artist: 'g', song: 'g1' },
+    { id: 'h.mp3', artist: 'h', song: 'h1' },
+    { id: 'i.mp3', artist: 'i', song: 'i1' }
+  ];
+
+/**
+ * A wrapper over mpd that returns domain specific json objects rather than plain text command ouput
+ */
+var mpdWrapper = function (env, host, port, logger) {
+
+  var self = {
+
+  };
+
+  var client = null;
+  var isMock = false;
 
   var executeObjCmd = function (command, cb) {
 
@@ -132,23 +141,28 @@ var mpdWrapper = function (host, port, logger) {
 
   self.getStatus = function (cb) {
 
-    /*
-    { volume: -1,
-    repeat: 0,
-    random: 0,
-    single: 0,
-    consume: 0,
-    playlist: 2,
-    playlistlength: 1,
-    mixrampdb: 0,
-    state: 'play',
-    song: 0,
-    songid: 1,
-    time: 5,
-    elapsed: 4.748,
-    bitrate: 192,
-    audio: 44100 }
-    */
+    if (isMock) {
+
+      cb(null, {
+        volume: -1,
+        repeat: 0,
+        random: 0,
+        single: 0,
+        consume: 0,
+        playlist: 2,
+        playlistlength: 1,
+        mixrampdb: 0,
+        state: 'play',
+        song: 0,
+        songid: 1,
+        time: 5,
+        elapsed: 4.748,
+        bitrate: 192,
+        audio: 44100
+      });
+
+      return;
+    }
 
     executeObjCmd('status', cb);
 
@@ -156,42 +170,47 @@ var mpdWrapper = function (host, port, logger) {
 
   self.getCurrentSong = function (cb) {
 
-    /*
-    { file: 'tina-malia-gayatri-mantra.mp3',
-    'Last-Modified': '2015-09-26T09',
-    Time: 457,
-    Artist: 'Tina Malia',
-    Title: 'Gayatri mantra',
-    Track: -1,
-    Date: -1,
-    Pos: 0,
-    Id: 1 }{ file: 'tina-malia-gayatri-mantra.mp3',
-    'Last-Modified': '2015-09-26T09',
-    Time: 457,
-    Artist: 'Tina Malia',
-    Title: 'Gayatri mantra',
-    Track: -1,
-    Date: -1,
-    Pos: 0,
-    Id: 1 }
-    */
+    if (isMock) {
+      cb(null, mockDb[4]);
+      return;
+    }
 
     executeObjCmd('currentsong', cb);
   };
 
   self.play = function (cb) {
+
+    if (isMock) {
+      return cb(null, null);
+    }
+
     executeObjCmd('play', cb);
   };
 
   self.stop = function (cb) {
+
+    if (isMock) {
+      return cb(null, null);
+    }
+
     executeObjCmd('stop', cb);
   };
 
   self.next = function (cb) {
+
+    if (isMock) {
+      return cb(null, null);
+    }
+
     executeObjCmd('next', cb);
   };
 
   self.getCurrentPlaylistInfo = function (cb) {
+
+    if (isMock) {
+      return cb(null, mockDb);
+    }
+
     client.sendCommand(cmd("playlistinfo", []), function (err, msg) {
       // console.log(msg);
       cb(err, getObjArrayFromMpdResponse(msg, 'file'));
@@ -199,6 +218,11 @@ var mpdWrapper = function (host, port, logger) {
   };
 
   self.search = function (term, cb) {
+
+    if (isMock) {
+      return cb(null, [mockDb[0], mockDb[1]]);
+    }
+
     client.sendCommand(cmd("search", ['any', term]), function (err, msg) {
       // console.log(msg);
       cb(err, getObjArrayFromMpdResponse(msg, 'file'));
@@ -206,6 +230,11 @@ var mpdWrapper = function (host, port, logger) {
   };
 
   self.getAllSongs = function (cb) {
+
+    if (isMock) {
+      return cb(null, mockDb);
+    }
+
     client.sendCommand(cmd("listallinfo", []), function (err, msg) {
       // console.log(msg);
       cb(err, getObjArrayFromMpdResponse(msg, 'file'));
@@ -213,10 +242,19 @@ var mpdWrapper = function (host, port, logger) {
   };
 
   self.updateDb = function (cb) {
+
+    if (isMock) {
+      return cb(null, {updating_db: 42});
+    }
+
     executeObjCmd('update', cb);
   };
 
   self.addSongToPlaylist = function (filePath, cb) {
+
+    if (isMock) {
+      return cb(null, null);
+    }
 
     client.sendCommand(cmd("add", [filePath]), function (err, msg) {
       cb(err, getObjFromMpdResponse(msg));
@@ -282,9 +320,30 @@ var mpdWrapper = function (host, port, logger) {
 
   };
 
+  var initialize = function () {
+
+    if (env === 'test') {
+      isMock = true;
+    } else {
+
+      client = mpd.connect({
+        port: port,
+        host: host,
+      });
+
+      client.on('ready', function() {
+        logger.info("mpd connected to " + host + ":" + port);
+      });
+
+    }
+  };
+
+  initialize();
+
   return self;
 
 };
+
 
 
 /*
@@ -299,5 +358,7 @@ client.on('system-player', function() {
   });
 });
 */
+
+
 
 module.exports = mpdWrapper;

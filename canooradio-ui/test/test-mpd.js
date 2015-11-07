@@ -2,8 +2,10 @@
 var expect = require("chai").expect;
 var assert = require('chai').assert;
 
+var env = process.env.ENV;
+
 var logger = require('../lib/logger.js').logger;
-var mpdWrapper = require('../lib/mpd-wrapper')('localhost', 6600, logger);
+var mpdWrapper = require('../lib/mpd-wrapper')(env, 'localhost', 6600, logger);
 
 /**
  * For the moment we just console.log to test that the mpd wrapper is working as expected
@@ -24,6 +26,11 @@ describe("mpd", function() {
 
     mpdWrapper.getCurrentSong(function (err, song) {
       console.log(song);
+
+      if (env === 'test') {
+        expect(song.artist).to.equal('current');
+      }
+
       done();
     });
 
@@ -42,6 +49,11 @@ describe("mpd", function() {
 
     mpdWrapper.getCurrentPlaylistInfo(function (err, obj) {
       console.log(obj);
+
+      if (env === 'test') {
+        expect(obj.length).to.equal(10);
+      }
+
       done();
     });
 
@@ -51,6 +63,11 @@ describe("mpd", function() {
 
     mpdWrapper.getUpcomingSongs(function (err, obj) {
       console.log(obj);
+
+      if (env === 'test') {
+        expect(obj.length).to.equal(5);
+      }
+
       done();
     });
 
@@ -60,7 +77,11 @@ describe("mpd", function() {
 
     mpdWrapper.search('tina', function (err, obj) {
       console.log(obj);
-      expect(obj.length).to.equal(1);
+
+      if (env === 'test') {
+        expect(obj.length).to.equal(2);
+      }
+
       done();
     });
 
@@ -70,6 +91,11 @@ describe("mpd", function() {
 
     mpdWrapper.getPlayedSongs(10, function (err, obj) {
       console.log(obj);
+
+      if (env === 'test') {
+        expect(obj.length).to.equal(4);
+      }
+
       done();
     });
 
@@ -78,7 +104,7 @@ describe("mpd", function() {
   it("should get all songs in the db", function(done) {
 
     mpdWrapper.getAllSongs(function (err, obj) {
-      console.log(obj);
+      // console.log(obj);
       expect(obj.length).to.be.above(3);
       done();
     });
