@@ -129,11 +129,12 @@ describe("radio", function() {
   });
 
 
-  describe("scenario: adding a vote and getting a user", function () {
+  describe("scenarios", function () {
 
     it('should add a vote and get a user', function () {
 
       var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+      var filename = 'file.mp3';
 
       return request(app_url)
         .get(routeUser + '/' + userId)
@@ -142,7 +143,58 @@ describe("radio", function() {
           return res.body;
         })
         .then(function (user) {
+          return request(app_url)
+            .get(routeVote + '/up?filename=' + filename + '&userId=' + userId)
+            .expect(200)
+            .then(function (res) {
+              return res.body;
+            });
+        })
+        .then(function () {
+          return request(app_url)
+            .get(routeUser + '/' + userId)
+            .expect(200)
+            .then(function (res) {
+              return res.body;
+            })
+        })
+        .then(function (user) {
           console.log(user);
+          expect(user.votes[filename]).to.equal(1);
+        });
+
+    });
+
+    it('should add a song when there is nothing in the queue', function () {
+
+      var userId = chance.string({length: 8, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'});
+      var filename = 'file.mp3';
+
+      return request(app_url)
+        .get(routeUser + '/' + userId)
+        .expect(200)
+        .then(function (res) {
+          return res.body;
+        })
+        .then(function (user) {
+          return request(app_url)
+            .get(routePlaylist + '/add?filename=' + filename + '&userId=' + userId)
+            .expect(200)
+            .then(function (res) {
+              return res.body;
+            });
+        })
+        .then(function () {
+          return request(app_url)
+            .get(routeUser + '/' + userId)
+            .expect(200)
+            .then(function (res) {
+              return res.body;
+            })
+        })
+        .then(function (user) {
+          console.log(user);
+          expect(user.queue.length).to.equal(1);
         });
 
     });

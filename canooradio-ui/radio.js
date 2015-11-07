@@ -1,5 +1,5 @@
 /**
- * TODO: extract configuration and add pro/dev modes
+ * TODO: extract configuration
  */
 
 var express = require('express');
@@ -32,6 +32,10 @@ app.use(cors.allowAll);
 // common
 //
 
+/**
+ * Given a list of songs, return a promise that adds the votes property to each of them
+ * The promise is fulfilled when all songs have their votes calculated
+ */
 var enhanceSongsWithVotes = function (songs) {
 
   return Promise.map(songs, function (song) {
@@ -47,6 +51,10 @@ var enhanceSongsWithVotes = function (songs) {
 
 };
 
+/**
+ * Given a user a list of upcoming songs
+ * check which song is already in the users queue and refresh the user queue
+ */
 var updateUserQueue = function (user, songs) {
 
   if (!user.hasOwnProperty('queue')) {
@@ -67,14 +75,10 @@ var updateUserQueue = function (user, songs) {
 };
 
 //
-// playlist
+// playlist routes
 //
 
 app.get('/api/playlist/played', function (req, res, next) {
-
-  /*
-   * get the playlist and then enhance it with voting data
-   */
 
   mpd.getPlayedSongsAsync(10)
     .then(function (playlist) {
@@ -91,10 +95,6 @@ app.get('/api/playlist/played', function (req, res, next) {
 
 app.get('/api/playlist/upcoming', function (req, res, next) {
 
-  /*
-   * get the playlist and then enhance it with voting data
-   */
-
   mpd.getUpcomingSongsAsync()
     .then(function (playlist) {
       return enhanceSongsWithVotes(playlist);
@@ -109,16 +109,6 @@ app.get('/api/playlist/upcoming', function (req, res, next) {
 });
 
 app.get('/api/playlist/current', function (req, res, next) {
-
-  /*
-  var playlist = {
-      id : '/var/mp3/current.mp3',
-      artist : 'Current',
-      song: 'current',
-      album: 'album',
-      votes: 2
-  };
-  */
 
   mpd.getCurrentSongAsync()
     .then(function (song) {
@@ -138,6 +128,17 @@ app.get('/api/playlist/add', function (req, res, next) {
   var data = req.query;
   console.log(data);
 
+  //
+  // if user not found then cannot add song
+  //
+  // get the user, get the upcoming song list
+  // refresh the user queue with what is in the upcoming song list
+  // if the queue has space then
+  //   check if the song is not already on the queue
+  //   if yes, then save user and return
+  //   if no, then add song to the playlist, update the user queue, save user and return
+  //
+
   db.getUserAsync(data.userId)
     .then(function (user) {
 
@@ -150,15 +151,34 @@ app.get('/api/playlist/add', function (req, res, next) {
 
             if (user.queue.length > 3) {
               res.status(403).send();
-            } else {
-              mpd.addSongToPlaylistAsync(data.fileName)
-                .then(function () {
-                  res.status(200).send();
-                });
+            } else { // user queue has space
+
+              if (user.queue.indexOf(data.filename) > -1) {
+                db.updateUserAsync(user)
+                  .then(function (results) {
+                    res.status(200).send();
+                  });
+              } else { // user queue does not contain this song
+
+                //
+                // update queue with new song, add it to the playlist, save the user and return
+                //
+
+                user.queue.push(data.filename);
+
+                mpd.addSongToPlaylistAsync(data.filename)
+                  .then(function () {
+                    logger.debug('updating user ' + user.queue.length);
+                    return db.updateUserAsync(user);
+                  })
+                  .then(function (results) {
+                    res.status(200).send();
+                  });
+              }
             }
           });
 
-      } else {
+      } else { // no user found
         res.status(401).send();
       }
 
@@ -171,87 +191,44 @@ app.get('/api/playlist/add', function (req, res, next) {
 
 
 //
-// user
+// user routes
 //
 
 app.get('/api/user/:id', function (req, res, next) {
 
-  /*
-   * get the user, if one found then enhance with their votes before sending it
-   * otherwise, create one, save it and send it
-   */
   db.getUserAsync(req.params.id)
     .then(function (user) {
 
-      if (user) {
+      if (user) { // user found, get their votes and return it
 
         user.votes = {};
 
-        db.getUserVotesAsync(user._id)
+        return db.getUserVotesAsync(user._id)
           .then(function (votes) {
+
             _.each(votes, function (vote) {
               user.votes[vote.songId] = vote.value;
             })
 
-            res.send(user);
+            return user;
           });
 
-      } else {
+      } else { // no user found, we create one, add it to the db and return it
 
         var u = {
           _id: req.params.id
         }
 
-        db.addUserAsync(u)
+        return db.addUserAsync(u)
           .then(function (inserted) {
             inserted.votes = {};
-            res.send(inserted);
+            return inserted;
           });
       }
 
     })
-    .catch(function (err) {
-      next(err);
-    });
-
-});
-
-//
-// vote
-//
-
-app.get('/api/vote/up', function (req, res, next) {
-
-  db.voteUpAsync(req.query.userId, req.query.filename)
-    .then(function (results) {
-      console.log(results);
-      res.status(200).send();
-    })
-    .catch(function (err) {
-      next(err);
-    });
-});
-
-
-app.get('/api/vote/down', function (req, res, next) {
-
-  db.voteDownAsync(req.query.userId, req.query.filename)
-    .then(function (results) {
-      console.log(results);
-      res.status(200).send();
-    })
-    .catch(function (err) {
-      next(err);
-    });
-
-});
-
-app.get('/api/vote/clear', function (req, res, next) {
-
-  db.voteClearAsync(req.query.userId, req.query.filename)
-    .then(function (results) {
-      console.log(results);
-      res.status(200).send();
+    .then(function (user) {
+      res.send(user);
     })
     .catch(function (err) {
       next(err);
@@ -260,7 +237,13 @@ app.get('/api/vote/clear', function (req, res, next) {
 });
 
 //
-// music db
+// vote routes
+//
+
+require('./lib/routes/vote')(app, db, logger);
+
+//
+// music db routes
 //
 
 app.get('/api/music/search', function (req, res) {
@@ -322,45 +305,10 @@ app.get('/api/music/charts', function (req, res) {
 });
 
 //
-// player
+// player routes
 //
 
-app.get('/api/player/play', function (req, res) {
-
-  mpd.playAsync()
-    .then(function () {
-      res.status(200).send();
-    })
-    .catch(function (err) {
-      next(err);
-    });
-
-});
-
-app.get('/api/player/stop', function (req, res) {
-
-  mpd.stopAsync()
-    .then(function () {
-      res.status(200).send();
-    })
-    .catch(function (err) {
-      next(err);
-    });
-
-});
-
-app.get('/api/player/next', function (req, res) {
-
-  mpd.nextAsync()
-    .then(function () {
-      res.status(200).send();
-    })
-    .catch(function (err) {
-      next(err);
-    });
-
-});
-
+require('./lib/routes/player')(app, mpd, logger);
 
 // api takes top precedence
 app.use(express.static(__dirname + '/public'));
