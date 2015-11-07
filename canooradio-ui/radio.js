@@ -6,6 +6,7 @@ var express = require('express');
 var morgan = require('morgan');
 var Promise = require('bluebird');
 var _ = require('underscore');
+var http = require('http');
 
 var env = process.env.ENV;
 
@@ -23,6 +24,7 @@ var mpd = Promise.promisifyAll(mpdWrapper);
 var db = Promise.promisifyAll(dbWrapper);
 
 var app = express();
+var server = null;
 
 // app.use(morgan('dev'));
 
@@ -72,6 +74,18 @@ var updateUserQueue = function (user, songs) {
   user.queue = newQueue;
 
   return user;
+};
+
+var songExists = function (path, songs) {
+
+  for (var i = 0; i < songs.length; ++i) {
+    if (path === songs[i].id) {
+      return true;
+    }
+  }
+
+  return false;
+
 };
 
 //
@@ -149,26 +163,26 @@ app.get('/api/playlist/add', function (req, res, next) {
 
             user = updateUserQueue(user, songs);
 
-            if (user.queue.length > 3) {
+            if (user.queue.length >= 3) {
               res.status(403).send();
-            } else { // user queue has space
+            } else { // user queue has space, so add it to the queue
 
-              if (user.queue.indexOf(data.filename) > -1) {
+              user.queue.push(data.filename);
+
+              var exists = songExists(data.filename, songs);
+
+              // console.log([songs, user.queue, data.filename]);
+
+              if (exists) { // song already exists in the upcoming list, so save the user and return
                 db.updateUserAsync(user)
                   .then(function (results) {
                     res.status(200).send();
                   });
-              } else { // user queue does not contain this song
-
-                //
-                // update queue with new song, add it to the playlist, save the user and return
-                //
-
-                user.queue.push(data.filename);
+              } else { // add it to the playlist, save the user and return
 
                 mpd.addSongToPlaylistAsync(data.filename)
                   .then(function () {
-                    logger.debug('updating user ' + user.queue.length);
+                    // logger.debug('updating user ' + user.queue.length);
                     return db.updateUserAsync(user);
                   })
                   .then(function (results) {
@@ -323,11 +337,18 @@ app.use(function (err, req, res, next) {
 
 var init = function () {
   var port = 8000;
-  var app_http = app.listen(port);
+  server = http.createServer(app).listen(port);
   logger.info('listening on ' + port);
-}
+};
+
+var destroy = function () {
+  server.close(function () {
+    logger.info('shutdown app');
+  });
+};
 
 exports.init = init;
+exports.destroy = destroy;
 
 if (!module.parent)
 {

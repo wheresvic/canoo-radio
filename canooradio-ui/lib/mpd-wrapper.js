@@ -253,6 +253,7 @@ var mpdWrapper = function (env, host, port, logger) {
   self.addSongToPlaylist = function (filePath, cb) {
 
     if (isMock) {
+      mockDb.push({id: filePath});
       return cb(null, null);
     }
 
