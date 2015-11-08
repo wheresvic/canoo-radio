@@ -187,6 +187,15 @@ var mpdWrapper = function (env, host, port, logger) {
     executeObjCmd('play', cb);
   };
 
+  self.clear = function (cb) {
+
+    if (isMock) {
+      return cb(null, null);
+    }
+
+    executeObjCmd('clear', cb);
+  };
+
   self.playPosition = function (position, cb) {
 
     if (isMock) {

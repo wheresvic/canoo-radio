@@ -126,10 +126,18 @@ app.get('/api/playlist/current', function (req, res, next) {
 
   mpd.getCurrentSongAsync()
     .then(function (song) {
-      return enhanceSongsWithVotes([song]);
-    })
-    .then(function (songs) {
-      res.send(songs[0]);
+      if (song.id) {
+        return enhanceSongsWithVotes([song])
+          .then(function (songs) {
+            res.send(songs[0]);
+          })
+      }
+
+      return mpd.clearAsync()
+        .then(function () {
+          res.status(200).send();
+        });
+
     })
     .catch(function (err) {
       next(err);
