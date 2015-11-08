@@ -122,6 +122,9 @@ app.get('/api/playlist/upcoming', function (req, res, next) {
 
 });
 
+/**
+ * if the current song is empty then we simply clear the playlist :)
+ */
 app.get('/api/playlist/current', function (req, res, next) {
 
   mpd.getCurrentSongAsync()
@@ -145,6 +148,9 @@ app.get('/api/playlist/current', function (req, res, next) {
 
 });
 
+/**
+ * TODO: check if the added song is equal to the current song and bail if it is
+ */
 app.get('/api/playlist/add', function (req, res, next) {
 
   var data = req.query;

@@ -301,8 +301,13 @@ var mpdWrapper = function (env, host, port, logger) {
           return;
         }
 
-        if (song && song.Pos) {
-          cb(null, playlist.slice(song.Pos + 1));
+        if (song && song.hasOwnProperty('Pos')) {
+
+          if (playlist.length === 1) {
+            cb(null, []);
+          } else {
+            cb(null, playlist.slice(song.Pos + 1));
+          }
         } else {
           cb(null, playlist);
         }
