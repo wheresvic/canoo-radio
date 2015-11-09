@@ -87,8 +87,11 @@ to run the app
 ### Testing
 
 ```
-env ENV=test mocha
+env ENV=test mocha test/test-mpd.js
+env ENV=test mocha test/test-radio.js
+env ENV=test mocha test/test-db-wrapper.js
 ```
 
 to run tests located under the `tests` folder. Note that the `test` environment uses mock mpd data and if you'd like to test with the mpd service running then exclude the environment variable but then the expectations on tests will likely not pass :)
 
+Note that the tests need to be run individually due to the file-based db
