@@ -100,7 +100,16 @@ app.controller('RadioController',
             console.log(resp);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
-            postNotification('error', "Error uploading file. Code: " + resp.status);
+
+            var msg = "Error uploading file. Code: " + resp.status;
+
+            if (resp.status === 400) {
+                msg = "Could not upload file. Please ensure that it is a mp3 file with valid artist, title and album idv3 tags!";
+            } else if (resp.status === 413) {
+                msg = "File too big, please ensure that it is under 20Mb";
+            }
+
+            postNotification('error', msg);
         }, function (evt) {
             console.log(evt);
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);

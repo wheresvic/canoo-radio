@@ -7,9 +7,12 @@ var morgan = require('morgan');
 var Promise = require('bluebird');
 var _ = require('underscore');
 var http = require('http');
+var fs = require('fs');
+var mm = require('musicmetadata');
 
 var env = process.env.ENV;
 
+var util = require('./lib/util');
 var cors = require('./lib/cors.js');
 var logger = require('./lib/logger.js').logger;
 var mpdWrapper = require('./lib/mpd-wrapper')(env, 'localhost', 6600, logger);
@@ -23,6 +26,8 @@ var dbWrapper = require('./lib/db-wrapper')(logger);
 var mpd = Promise.promisifyAll(mpdWrapper);
 var db = Promise.promisifyAll(dbWrapper);
 
+var routeUtil = require('./lib/routes/route-util')(db, mpd, logger);
+
 var app = express();
 var server = null;
 
@@ -30,63 +35,6 @@ var server = null;
 
 app.use(cors.allowAll);
 
-//
-// common
-//
-
-/**
- * Given a list of songs, return a promise that adds the votes property to each of them
- * The promise is fulfilled when all songs have their votes calculated
- */
-var enhanceSongsWithVotes = function (songs) {
-
-  return Promise.map(songs, function (song) {
-
-    return db.getVotesForSongAsync(song.id)
-      .then(function (sum) {
-        song.votes = sum;
-      });
-
-  }).then(function () { // waits for the mapped promises to finish
-    return songs;
-  });
-
-};
-
-/**
- * Given a user a list of upcoming songs
- * check which song is already in the users queue and refresh the user queue
- */
-var updateUserQueue = function (user, songs) {
-
-  if (!user.hasOwnProperty('queue')) {
-    user.queue = [];
-  }
-
-  var newQueue = [];
-
-  _.each(songs, function (song) {
-    if (user.queue.indexOf(song.id) >= 0) {
-      newQueue.push(song.id);
-    }
-  });
-
-  user.queue = newQueue;
-
-  return user;
-};
-
-var songExists = function (path, songs) {
-
-  for (var i = 0; i < songs.length; ++i) {
-    if (path === songs[i].id) {
-      return true;
-    }
-  }
-
-  return false;
-
-};
 
 //
 // playlist routes
@@ -96,7 +44,7 @@ app.get('/api/playlist/played', function (req, res, next) {
 
   mpd.getPlayedSongsAsync(10)
     .then(function (playlist) {
-      return enhanceSongsWithVotes(playlist);
+      return routeUtil.enhanceSongsWithVotes(playlist);
     })
     .then(function (songs) {
       res.send(songs);
@@ -111,7 +59,7 @@ app.get('/api/playlist/upcoming', function (req, res, next) {
 
   mpd.getUpcomingSongsAsync()
     .then(function (playlist) {
-      return enhanceSongsWithVotes(playlist);
+      return routeUtil.enhanceSongsWithVotes(playlist);
     })
     .then(function (songs) {
       res.send(songs);
@@ -130,7 +78,7 @@ app.get('/api/playlist/current', function (req, res, next) {
   mpd.getCurrentSongAsync()
     .then(function (song) {
       if (song.id) {
-        return enhanceSongsWithVotes([song])
+        return routeUtil.enhanceSongsWithVotes([song])
           .then(function (songs) {
             res.send(songs[0]);
           })
@@ -181,7 +129,7 @@ app.get('/api/playlist/add', function (req, res, next) {
         return mpd.getUpcomingSongsAsync()
           .then(function (songs) {
 
-            user = updateUserQueue(user, songs);
+            user = routeUtil.updateUserQueue(user, songs);
 
             if (user.queue.length >= 3) {
               return 403;
@@ -189,7 +137,7 @@ app.get('/api/playlist/add', function (req, res, next) {
 
               user.queue.push(data.filename);
 
-              var exists = songExists(data.filename, songs);
+              var exists = routeUtil.songExists(data.filename, songs);
 
               // console.log([songs, user.queue, data.filename]);
 
@@ -319,10 +267,10 @@ app.get('/api/music/random', function (req, res) {
 
   mpd.getAllSongsAsync()
     .then(function (songs) {
-      return enhanceSongsWithVotes(songs.slice(0, limit));
+      return routeUtil.enhanceSongsWithVotes(songs.slice(0, limit));
     })
     .then(function (songs) {
-      res.send(songs);
+      res.send(util.shuffleArray(songs));
     })
     .catch(function (err) {
       next(err);
@@ -335,7 +283,7 @@ app.get('/api/music/charts', function (req, res) {
 
   mpd.getAllSongsAsync()
     .then(function (songs) {
-      return enhanceSongsWithVotes(songs);
+      return routeUtil.enhanceSongsWithVotes(songs);
     })
     .then(function (songs) {
 
@@ -356,6 +304,47 @@ app.get('/api/music/charts', function (req, res) {
     .catch(function (err) {
       next(err);
     });
+});
+
+app.post('/api/music/upload', routeUtil.upload.single('file'), function (request, response) {
+
+  // console.log(request);
+
+  if (!request.hasOwnProperty("file")) {
+      // 400 Bad Request
+      return response.status(400).send();
+  }
+
+  var file = request.file;
+
+  if (file.truncated) {
+      // 413 Request Entity Too Large
+      logger.info("Request aborted.");
+      return response.status(413).send();
+  }
+
+  // do stuff with file
+  console.log(file);
+
+  var parser = mm(fs.createReadStream(file.path), function (err, metadata) {
+    if (err) throw err;
+    console.log(metadata);
+
+    if (!metadata.title || metadata.artist.length === 0) {
+      response.status(400).send();
+      return;
+    }
+
+    mpd.updateDbAsync()
+      .then(function (obj) {
+        logger.info(file.path + ' uploaded');
+        response.status(200).send();
+      })
+      .catch(function (err) {
+        next(err);
+      });
+
+  });
 });
 
 //
