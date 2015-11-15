@@ -101,10 +101,7 @@
         </div>
 
         <div class="row align-center mar-bot40">
-            <audio controls="" preload="none" id="player" onloadedmetadata="">
-                <source src="http://10.0.1.17:4710/stream" type="audio/mpeg">
-                <p>Your browser doesn't support HTML audio. Sorry.</p>
-            </audio>
+            <audio controls id="player" ng-src="{{streamSrc | trusted}}"></audio>
         </div>
 
         <div class="row mar-bot40 col-md-10 col-md-offset-1">
@@ -269,7 +266,7 @@
                     <h2 class="section-heading">Upload MP3 Files</h2>
 
                     <p>Share your music with the Canoo Community!</p>
-                    <p>The mp3 file needs to have an ID3 tag!</p>
+                    <p>The mp3 file needs to have an ID3 tag with valid artist, title and album fields filled in!</p>
 
                     <div id="drop-files" ngf-drop="upload($file)" ngf-select="upload($file)"
                          ngf-validate-fn="validate($file)">

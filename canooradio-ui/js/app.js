@@ -20,12 +20,15 @@ var app =
 
 app.custom = {
     url: "/api",
-    serverBaseUrl: (window.location.hostname === 'localhost' ? '/api' : '')
+    serverBaseUrl: '/api', // (window.location.hostname === 'localhost' ? '/api' : '')
+    streamSrc: (window.location.hostname === 'localhost' ? 'http://192.168.111.11:4710/stream' : 'http://radio.canoo.com:4710/stream')
 };
 
 
 app.controller('RadioController',
     ['$scope', '$http', '$interval', 'Upload', function($scope, $http, $interval, Upload) {
+
+    $scope.streamSrc = app.custom.streamSrc;
 
     $scope.userId = '';
 
@@ -452,6 +455,13 @@ app.controller('RadioController',
 
     igniteRadio();
 }]);
+
+app.filter('trusted', ['$sce', function ($sce) {
+    return function(url) {
+        return $sce.trustAsResourceUrl(url);
+    };
+}]);
+
 
 app.run(function () {
 
