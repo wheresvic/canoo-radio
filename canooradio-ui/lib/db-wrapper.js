@@ -54,6 +54,9 @@ var dbWrapper = function (logger) {
 
     });
 
+    // auto-compact every hour
+    db.users.persistence.setAutocompactionInterval(60000 * 60);
+
   };
 
   //
