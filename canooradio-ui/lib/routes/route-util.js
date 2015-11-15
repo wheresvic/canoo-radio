@@ -103,5 +103,25 @@ module.exports = function (db, mpd, logger) {
 
   };
 
+  self.enhanceSongsWithUserInfo = function (userId, songs) {
+
+    return db.getUserAsync(userId)
+      .then(function (user) {
+
+        if (user) {
+          _.each(user.queue, function (path) {
+            _.each(songs, function (song) {
+              if (song.id === path) {
+                song.isMine = true;
+              }
+            });
+          });
+        }
+
+        return songs;
+      });
+
+  }
+
   return self;
 };

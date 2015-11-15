@@ -69,9 +69,32 @@ describe("radio", function() {
   /**
    * helper which returns a promise on /playlist/upcoming
    */
-  var getUpcomingSongs = function () {
+  var getUpcomingSongs = function (userId) {
+
+    var route = routePlaylist + '/upcoming';
+
+    if (userId) {
+      route += '?userId=' + userId;
+    }
+
     return request(app_url)
-      .get(routePlaylist + '/upcoming')
+      .get(route)
+      .expect(200)
+      .then(function (res) {
+        // console.log(res.body);
+        return res.body;
+      });
+  };
+
+  /**
+   * helper which returns a promise on /playlist/played
+   */
+  var getPlayedSongs = function () {
+
+    var route = routePlaylist + '/played';
+
+    return request(app_url)
+      .get(route)
       .expect(200)
       .then(function (res) {
         // console.log(res.body);
@@ -101,17 +124,15 @@ describe("radio", function() {
     });
 
     it('should get played songs', function () {
-
-      return request(app_url)
-        .get(routePlaylist + '/played')
-        .expect(200)
-        .then(function (res) {
-          console.log(res.body);
-        });
+      return getPlayedSongs();
     });
 
     it('should get upcoming songs', function () {
       return getUpcomingSongs();
+    });
+
+    it('should get upcoming songs for a user', function () {
+      return getUpcomingSongs(getRandomUserId());
     });
 
   });
@@ -127,6 +148,7 @@ describe("radio", function() {
           expect(user._id).to.equal(userId);
           expect(user.id).to.equal(userId);
           expect(user.votes).not.to.be.null;
+          expect(user.queue).not.to.be.null;
         });
     });
 

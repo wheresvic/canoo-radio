@@ -117,7 +117,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="played" ng-repeat="song in playlists.played">
+                <tr class="played" ng-class="mySongCss(song)" ng-repeat="song in playlists.played">
                     <td class="align-right voting">
                         <i ng-if="userId" class="fa fa-thumbs-o-up fa-lg addSongCursor" ng-class="votedCss(song, 1)" ng-click="vote(song, 1)"></i>
                     </td>
@@ -139,7 +139,7 @@
                     <td>{{current.artist}}</td>
                     <td>{{current.song}}</td>
                 </tr>
-                <tr ng-repeat="song in playlists.upcoming" ng-class="isAnimated(song)">
+                <tr ng-repeat="song in playlists.upcoming" ng-class="mySongCss(song)">
                     <td class="align-right voting"></td>
                     <td class="text-center voting">
                         <span class="votes">{{song.votes}}</span>
@@ -213,6 +213,7 @@
                             <thead>
                             <tr>
                                 <th></th>
+                                <th>Votes</th>
                                 <th>Artist</th>
                                 <th>Song</th>
                                 <th>Album</th>
@@ -220,6 +221,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="song in charts">
+                                <td><i class="addSongCursor" ng-class="{'fa fa-plus-circle' : isNotQueued(song.id)}" ng-click="addToPlaylist(song)"></i></td>
                                 <td>{{song.votes}}</td>
                                 <td>{{song.artist}}</td>
                                 <td>{{song.song}}</td>

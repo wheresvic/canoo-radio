@@ -85,6 +85,16 @@ app.controller('RadioController',
         return cssClass;
     };
 
+    $scope.mySongCss = function (song) {
+        var cssClass = '';
+
+        if (song.isMine) {
+          cssClass += 'mine';
+        }
+
+        return cssClass;
+    };
+
     // upload on file select or drop
     $scope.upload = function (file) {
         if (file.size === 0) {
@@ -422,14 +432,14 @@ app.controller('RadioController',
      */
     var pollData = function () {
 
-        $http.get(app.custom.serverBaseUrl + "/playlist/played").then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/played?userId=" + $scope.userId).then(
             function successCB(response) {
                 $scope.playlists.played = response.data;
             },
             httpErrorCb
         );
 
-        $http.get(app.custom.serverBaseUrl + "/playlist/upcoming").then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/upcoming?userId=" + $scope.userId).then(
             function successCB(response) {
                 $scope.playlists.upcoming = response.data;
             },

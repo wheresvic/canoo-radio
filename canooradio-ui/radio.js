@@ -57,9 +57,18 @@ app.get('/api/playlist/played', function (req, res, next) {
 
 app.get('/api/playlist/upcoming', function (req, res, next) {
 
+  var userId = req.query.userId;
+
   mpd.getUpcomingSongsAsync()
     .then(function (playlist) {
       return routeUtil.enhanceSongsWithVotes(playlist);
+    })
+    .then(function (songs) {
+      if (userId) {
+        return routeUtil.enhanceSongsWithUserInfo(userId, songs);
+      } else {
+        return songs;
+      }
     })
     .then(function (songs) {
       res.send(songs);

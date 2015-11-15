@@ -1,7 +1,19 @@
-$red1: #f6b8c5;
-$red2: #62494e;
-$bgcolor1: #e3e7e4;
-$bgcolor2: #656a64;
+$body: #777;
+$bg: #f7f7f7;
+
+$red1: #f6b8c5; // primary pink
+$red2: #62494e; // secondary brown
+$red3: #79A0AE; // tertiary blue
+$red4: #5D5D5D;
+
+$bgcolor1: #e3e7e4; // grey
+$bgcolor2: #656a64; //
+
+$playlist-alt: #fdfdfd; // white
+
+//
+// notifications
+//
 
 #alert-view-container {
   position: fixed;
@@ -17,6 +29,10 @@ $bgcolor2: #656a64;
   }
 }
 
+//
+// playlists
+//
+
 table.playlist {
 
   td {
@@ -24,6 +40,7 @@ table.playlist {
   }
 
   td.voting {
+    color: $body;
     background-color: $bgcolor1;
   }
 
@@ -39,6 +56,7 @@ table.playlist {
     }
 
   }
+
   .votes {
     vertical-align: middle;
     margin-left: 3px;
@@ -48,14 +66,32 @@ table.playlist {
 
   tr.current {
      background-color: $red2;
-     color: #fdfdfd;
+     color: $playlist-alt;
+  }
+
+  tr.mine {
+    background-color: $red4;
+    color: $playlist-alt;
   }
 
 }
 
+//
+// misc
+//
+
+.addSongCursor {
+  cursor: pointer;
+}
+
+
 .nav-tabs > li > a {
   color: #999;
 }
+
+//
+// header
+//
 
 .on-air-background {
   padding: 200px 0 60px;
@@ -73,12 +109,14 @@ table.playlist {
   font-weight: 900;
 }
 
-/* inner heading */
 .on-air-background.inner {
   background: #eee;
   padding: 150px 0 50px;
 }
 
+//
+// browser tabs
+//
 
 #music-browser {
   margin-top: 20px;
@@ -94,6 +132,7 @@ table.playlist {
   vertical-align: middle;
   padding:0 10px;
 }
+
 #browser-tab input[type=text]:focus {
   background: rgba(101, 106, 100, 1);
   color: #eff1ef;
@@ -105,7 +144,15 @@ table.playlist {
   -webkit-transition: background 0.25 ease-in;
 }
 
+.browser_tabs {
+  margin: auto;
+  width: 400px;
+  padding-left: 75px;
+}
+
+
 #drop-files {
+
   width: 100%;
   height: 125px;
   background: $bgcolor1;
@@ -125,7 +172,13 @@ table.playlist {
   }
 }
 
-#mask{
+
+//
+// relax
+//
+
+
+#mask {
   position:fixed;
   top:0;
   left:0;
@@ -135,6 +188,7 @@ table.playlist {
   height:100%;
   display:none;
 }
+
 #relax-overlay {
     height:80%;
     width:80%;
@@ -187,11 +241,11 @@ table.playlist {
       }
     }
 }
+
 .display-overlay {
   display:block !important;
   opacity:1;
 }
-
 
 .animate-enter,
 .animate-leave
@@ -220,13 +274,4 @@ table.playlist {
   opacity: 1;
   width: 150px;
   height: 30px;
-}
-
-.addSongCursor {
-  cursor: pointer;
-}
-.browser_tabs {
-  margin: auto;
-  width: 400px;
-  padding-left: 75px;
 }
