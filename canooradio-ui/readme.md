@@ -66,6 +66,7 @@ sudo npm install -g nodemon
 sudo npm install -g envify
 sudo npm install -g node-sass
 sudo npm install -g mocha
+sudo npm install -g forever
 ```
 
 Install project dependencies via `npm install`.
@@ -83,7 +84,14 @@ This will dist the combined `app.js` under the `public/dist/` folder and the `ca
 node radio.js
 ```
 
-to run the app
+to run the app. However in production you probably want to run node using a process manager like `forever`.
+
+```
+forever list
+forever stop radio.js
+forever start radio.js
+
+```
 
 ### Testing
 
@@ -91,6 +99,7 @@ to run the app
 env ENV=test mocha test/test-mpd.js
 env ENV=test mocha test/test-radio.js
 env ENV=test mocha test/test-db-wrapper.js
+mocha test/test-mpd-integration.js
 ```
 
 to run tests located under the `tests` folder. Note that the `test` environment uses mock mpd data and if you'd like to test with the mpd service running then exclude the environment variable but then the expectations on tests will likely not pass :)

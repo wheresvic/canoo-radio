@@ -18,6 +18,8 @@ var mpd = require('mpd'),
       return 'song';
     } else if (key === 'Album') {
       return 'album';
+    } else if (key === 'Time') {
+      return 'duration';
     }
 
     return null;
@@ -106,16 +108,16 @@ var mpd = require('mpd'),
   };
 
   var mockDb = [
-    { id: 'a.mp3', artist: 'a', song: 'a1' },
-    { id: 'b.mp3', artist: 'b', song: 'b1' },
-    { id: 'c.mp3', artist: 'c', song: 'c1' },
-    { id: 'd.mp3', artist: 'd', song: 'd1' },
-    { id: 'current.mp3', artist: 'current', song: 'current1', Pos: 4 },
-    { id: 'e.mp3', artist: 'e', song: 'e1' },
-    { id: 'f.mp3', artist: 'f', song: 'f1' },
-    { id: 'g.mp3', artist: 'g', song: 'g1' },
-    { id: 'h.mp3', artist: 'h', song: 'h1' },
-    { id: 'i.mp3', artist: 'i', song: 'i1' }
+    { id: 'a.mp3', artist: 'a', song: 'a1', duration: 300 },
+    { id: 'b.mp3', artist: 'b', song: 'b1', duration: 301 },
+    { id: 'c.mp3', artist: 'c', song: 'c1', duration: 302 },
+    { id: 'd.mp3', artist: 'd', song: 'd1', duration: 303 },
+    { id: 'current.mp3', artist: 'current', song: 'current1', Pos: 4, duration: 304 },
+    { id: 'e.mp3', artist: 'e', song: 'e1', duration: 305 },
+    { id: 'f.mp3', artist: 'f', song: 'f1', duration: 306 },
+    { id: 'g.mp3', artist: 'g', song: 'g1', duration: 307 },
+    { id: 'h.mp3', artist: 'h', song: 'h1', duration: 308 },
+    { id: 'i.mp3', artist: 'i', song: 'i1', duration: 309 }
   ];
 
 /**
