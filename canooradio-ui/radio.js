@@ -283,7 +283,7 @@ app.get('/api/music/random', function (req, res) {
       return routeUtil.enhanceSongsWithVotes(songs.slice(0, limit));
     })
     .then(function (songs) {
-      res.send();
+      res.send(songs);
     })
     .catch(function (err) {
       next(err);
