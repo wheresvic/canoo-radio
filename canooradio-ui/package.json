@@ -17,6 +17,7 @@
     "musicmetadata": "~2.0.2",
     "nedb": "~1.2.1",
     "ng-file-upload": "~9.1.1",
+    "numeral": "^1.5.3",
     "supertest": "~1.1.0",
     "supertest-as-promised": "~2.0.2",
     "underscore": "1.8.3",

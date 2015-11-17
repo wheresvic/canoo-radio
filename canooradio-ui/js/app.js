@@ -6,6 +6,19 @@ var angular = require('angular');
 var Chance = require('chance'),
     chance = new Chance();
 
+// var numeral = require('numeral');
+
+/**
+ * @param {Number} n      the number to pad
+ * @param {Number} width  the width of the output
+ * @param {String} z      the character to pad with (defaults to '0')
+ */
+var pad = function (n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+};
+
 var app =
     angular.module('canooradio', [require('ng-file-upload')])
         .config(function($locationProvider) {
@@ -23,6 +36,17 @@ app.custom = {
     serverBaseUrl: '/api', // (window.location.hostname === 'localhost' ? '/api' : '')
     streamSrc: (window.location.hostname === 'localhost' ? 'http://192.168.111.11:4710/stream' : 'http://radio.canoo.com:4710/stream')
 };
+
+app.filter('duration', function() {
+  return function(input) {
+
+    var mins = parseInt(input / 60);
+    var secs = input % 60;
+
+    // return numeral(input).format('00:00');
+    return pad(mins, 2) + ':' + pad(secs, 2);
+  };
+});
 
 
 app.controller('RadioController',

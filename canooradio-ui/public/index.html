@@ -113,6 +113,7 @@
                     <th class="voting"></th>
                     <th>Artist</th>
                     <th>Song</th>
+                    <th>Duration</th>
 
                 </tr>
                 </thead>
@@ -129,6 +130,7 @@
                     </td>
                     <td>{{song.artist}}</td>
                     <td>{{song.song}}</td>
+                    <td>{{song.duration | duration}}</td>
                 </tr>
                 <tr class="current">
                     <td class="align-right"></td>
@@ -138,6 +140,7 @@
                     <td class="align-left"></td>
                     <td>{{current.artist}}</td>
                     <td>{{current.song}}</td>
+                    <td>{{current.duration | duration}}</td>
                 </tr>
                 <tr ng-repeat="song in playlists.upcoming" ng-class="mySongCss(song)">
                     <td class="align-right voting"></td>
@@ -147,6 +150,7 @@
                     <td class="align-left voting"></td>
                     <td>{{song.artist}}</td>
                     <td>{{song.song}}</td>
+                    <td>{{song.duration | duration}}</td>
                 </tr>
                 </tbody>
 
@@ -194,6 +198,7 @@
                                 <th>Artist</th>
                                 <th>Song</th>
                                 <th>Album</th>
+                                <th>Duration</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -202,6 +207,7 @@
                                 <td>{{song.artist}}</td>
                                 <td>{{song.song}}</td>
                                 <td>{{song.album}}</td>
+                                <td>{{song.duration | duration}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -217,6 +223,7 @@
                                 <th>Artist</th>
                                 <th>Song</th>
                                 <th>Album</th>
+                                <th>Duration</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -226,6 +233,7 @@
                                 <td>{{song.artist}}</td>
                                 <td>{{song.song}}</td>
                                 <td>{{song.album}}</td>
+                                <td>{{song.duration | duration}}</td>
                             </tr>
                             </tbody>
                         </table>
