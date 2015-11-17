@@ -276,10 +276,14 @@ app.get('/api/music/random', function (req, res) {
 
   mpd.getAllSongsAsync()
     .then(function (songs) {
+      util.shuffleArray(songs);
+      return songs;
+    })
+    .then(function (songs) {
       return routeUtil.enhanceSongsWithVotes(songs.slice(0, limit));
     })
     .then(function (songs) {
-      res.send(util.shuffleArray(songs));
+      res.send();
     })
     .catch(function (err) {
       next(err);
