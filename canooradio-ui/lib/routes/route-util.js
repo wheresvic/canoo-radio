@@ -23,8 +23,15 @@ module.exports = function (db, mpd, logger) {
     }
   });
 
+  var validMimeTypes = ['audio/mpeg', 'audio/x-mpeg', 'audio/mp3', 'audio/x-mp3',
+                        'audio/mpeg3', 'audio/x-mpeg3', 'audio/mpg', 'audio/x-mpg', 
+                        'audio/x-mpegaudio'];
+
   var multerFileFilter = function(req, file, cb) {
-    if (file.mimetype !== 'audio/mp3') {
+    
+    if (validMimeTypes.indexOf(file.mimetype) == -1) {
+      console.log(file);
+      logger.error(file.originalname + ' has an invalid mimetype ' + file.mimetype);
       return cb(null, false);
     }
 

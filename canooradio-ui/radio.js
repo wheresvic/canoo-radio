@@ -3,6 +3,7 @@
  */
 
 var express = require('express');
+var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var Promise = require('bluebird');
 var _ = require('underscore');
@@ -34,6 +35,8 @@ var server = null;
 // app.use(morgan('dev'));
 
 app.use(cors.allowAll);
+app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded 
+app.use(bodyParser.json()); // parse application/json 
 
 
 //
@@ -324,8 +327,8 @@ app.post('/api/music/upload', routeUtil.upload.single('file'), function (request
   // console.log(request);
 
   if (!request.hasOwnProperty("file")) {
-      // 400 Bad Request
-      return response.status(400).send();
+      // 500 couldn't upload the file
+      return response.status(500).send();
   }
 
   var file = request.file;

@@ -97,6 +97,11 @@ app.controller('RadioController',
 
     // upload on file select or drop
     $scope.upload = function (file) {
+        
+        if (!file) {
+            return;
+        }
+
         if (file.size === 0) {
             postNotification('error', "File is empty");
             return;
@@ -104,7 +109,8 @@ app.controller('RadioController',
 
         Upload.upload({
             url: app.custom.serverBaseUrl + '/music/upload',
-            data: {file: file}
+            // data: {file: file},
+            file: file
         }).then(function (resp) {
 
             postNotification('success', "Successfully uploaded your song");
