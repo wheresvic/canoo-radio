@@ -2,6 +2,7 @@
 var fs = require('fs');
 var mm = require('musicmetadata');
 var Promise = require('bluebird');
+var _ = require('underscore');
 
 var util = require('../util');
 
@@ -28,8 +29,16 @@ module.exports = function (app, mpd, db, logger) {
 
     mpd.getAllSongsAsync()
       .then(function (songs) {
-        // shallow copy to not screw up the mock
-        util.shuffleArray(songs.slice(0));
+
+        var santized = [];
+
+        _.each(songs, function (song) {
+          if (song.artist && song.song) {
+            santized.push(song);
+          }
+        });
+
+        util.shuffleArray(santized);
         return songs;
       })
       .then(function (songs) {
