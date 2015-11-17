@@ -378,7 +378,7 @@ app.use(function (err, req, res, next) {
 });
 
 var init = function () {
-  var port = 8000;
+  var port = 8080;
   server = http.createServer(app).listen(port);
   logger.info('listening on ' + port);
 };
