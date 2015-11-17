@@ -28,7 +28,8 @@ module.exports = function (app, mpd, db, logger) {
 
     mpd.getAllSongsAsync()
       .then(function (songs) {
-        util.shuffleArray(songs);
+        // shallow copy to not screw up the mock
+        util.shuffleArray(songs.slice(0));
         return songs;
       })
       .then(function (songs) {

@@ -43,7 +43,8 @@ app.controller('RadioController',
         artist: 'Artist',
         song: 'Song',
         votes: 0,
-        id: 1
+        id: 1,
+        duration: 0
     };
 
     $scope.user = {
@@ -97,7 +98,7 @@ app.controller('RadioController',
 
     // upload on file select or drop
     $scope.upload = function (file) {
-        
+
         if (!file) {
             return;
         }

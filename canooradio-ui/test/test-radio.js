@@ -9,7 +9,7 @@ var radio = require('../radio');
 
 describe("radio", function() {
 
-  var app_url = 'http://localhost:8000';
+  var app_url = 'http://localhost:8080';
 
   /*
   beforeEach(function (done) {
@@ -250,7 +250,7 @@ describe("radio", function() {
           return getUpcomingSongs();
         })
         .then(function (upcoming) {
-          // console.log(upcoming);
+          console.log(upcoming);
           expect(upcoming.length).to.equal(6);
         })
         .then(function () {
