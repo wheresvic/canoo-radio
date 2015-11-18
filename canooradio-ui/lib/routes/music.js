@@ -39,7 +39,7 @@ module.exports = function (app, mpd, db, logger) {
         });
 
         util.shuffleArray(santized);
-        return songs;
+        return santized;
       })
       .then(function (songs) {
         return routeUtil.enhanceSongsWithVotes(songs.slice(0, limit));
