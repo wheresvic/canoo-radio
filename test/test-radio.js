@@ -127,12 +127,32 @@ describe("radio", function() {
       return getPlayedSongs();
     });
 
+    it('should get played songs with time ago', function (done) {
+      var playedSongs = getPlayedSongs();
+      playedSongs.then(function(songs){
+        expect(songs[0].durationAsString).to.contain('ago');
+        expect(songs[songs.length-1].durationAsString).to.equal('just played');
+        done();
+      });
+
+    });
+
     it('should get upcoming songs', function () {
       return getUpcomingSongs();
     });
 
     it('should get upcoming songs for a user', function () {
       return getUpcomingSongs(getRandomUserId());
+    });
+
+    it('should get upcoming with relative times', function (done) {
+      var upcomingSongs = getUpcomingSongs();
+      upcomingSongs.then(function(songs){
+        expect(songs[0].durationAsString).to.equal('coming up');
+        expect(songs[1].durationAsString).to.contain('in');
+        done();
+      });
+
     });
 
   });

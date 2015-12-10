@@ -46,6 +46,9 @@ app.get('/api/playlist/played', function (req, res, next) {
     .then(function (playlist) {
       return routeUtil.enhanceSongsWithVotes(playlist);
     })
+      .then(function (songs) {
+          return routeUtil.enhanceSongsWithRelativeTimeBeforeNow(songs);
+      })
     .then(function (songs) {
       res.send(songs);
     })
@@ -69,8 +72,9 @@ app.get('/api/playlist/upcoming', function (req, res, next) {
       } else {
         return songs;
       }
-    })
-    .then(function (songs) {
+    }).then(function (songs) {
+          return routeUtil.enhanceSongsWithRelativeTimeAfterNow(songs);
+    }).then(function (songs) {
       res.send(songs);
     })
     .catch(function (err) {
