@@ -119,4 +119,31 @@ describe("db-wrapper", function() {
 
   });
 
+  describe("playcounts", function() {
+
+    it("should update the play count", function(done) {
+      var songId = chance.string();
+
+      dbWrapper.updatePlayCount(songId, function (err1, count1) {
+        expect(err1).to.be.null;
+        expect(count1).to.equal(1);
+
+        dbWrapper.updatePlayCount(songId, function (err2, count2) {
+          expect(err2).to.be.null;
+          expect(count2).to.equal(2);
+          done();
+        });
+      });
+    });
+
+    it("should get the play count for a song", function(done) {
+      dbWrapper.getPlayCount(chance.string(), function (err, count) {
+        expect(err).to.be.null;
+        expect(count).to.equal(0);
+        done();
+      });
+    });
+
+  });
+
 });
