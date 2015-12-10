@@ -1,5 +1,0 @@
-
-```
-./gradlew buildUI
-./gradlew run
-```
