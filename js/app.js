@@ -34,7 +34,7 @@ var app =
 app.custom = {
     url: "/api",
     serverBaseUrl: '/api', // (window.location.hostname === 'localhost' ? '/api' : '')
-    streamSrc: (window.location.hostname === 'localhost' ? 'http://192.168.111.11:4710/stream' : 'http://radio.canoo.com:4710/stream')
+    streamSrc: (window.location.hostname === 'localhost' ? 'http://localhost:4710/stream' : 'http://radio.canoo.com:4710/stream')
 };
 
 app.filter('duration', function() {
@@ -63,7 +63,7 @@ app.controller('RadioController',
         played: []
     };
 
-    $scope.current = {
+    $scope.currentSong = {
         artist: 'Artist',
         song: 'Song',
         votes: 0,
@@ -205,7 +205,7 @@ app.controller('RadioController',
             }
         });
 
-        if ($scope.current.id === songId) {
+        if ($scope.currentSong.id === songId) {
             isNotQueued = false;
         }
 
@@ -308,6 +308,7 @@ app.controller('RadioController',
                 function successCB() {
                     delete $scope.user.votes[song.id];
                     clearVoteInPlaylist($scope.playlists.played, song);
+                    clearVoteInPlaylist([$scope.currentSong], song);
                     clearVoteInPlaylist($scope.playlists.upcoming, song);
                 },
                 httpErrorCb
@@ -327,6 +328,7 @@ app.controller('RadioController',
             $scope.user.votes[song.id] = indication;
 
             updateVoteInPlaylist($scope.playlists.played, song, indication, previousVote);
+            updateVoteInPlaylist([$scope.currentSong], song, indication, previousVote);
             updateVoteInPlaylist($scope.playlists.upcoming, song, indication, previousVote);
         };
 
@@ -480,7 +482,7 @@ app.controller('RadioController',
         $http.get(app.custom.serverBaseUrl + "/playlist/current").then(
             function successCB(response) {
                 if (response.data) {
-                    $scope.current = response.data;
+                    $scope.currentSong = response.data;
                 }
             },
             httpErrorCb
