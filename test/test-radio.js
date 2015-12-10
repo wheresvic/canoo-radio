@@ -210,6 +210,9 @@ describe("radio", function() {
         .then(function (res) {
           var songs = res.body;
           expect(songs.length).to.equal(2);
+
+          var song = songs[0];
+          expect(song.playCount).to.equal(0);
         });
     });
 

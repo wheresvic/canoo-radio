@@ -131,7 +131,7 @@ app.get('/api/playlist/add', function (req, res, next) {
   // if the queue has space then
   //   check if the song is not already on the queue
   //   if yes, then save user and return
-  //   if no, then add song to the playlist, update the user queue, save user and return
+  //   if no, then add song to the playlist, update playcount, update the user queue, save user and return
   //
 
   db.getUserAsync(data.userId)
@@ -165,6 +165,9 @@ app.get('/api/playlist/add', function (req, res, next) {
 
                 return mpd.addSongToPlaylistAsync(data.filename)
                   .then(function () {
+                    return db.updatePlayCountAsync(data.filename);
+                  })
+                  .then(function (playCount) {
                     // logger.debug('updating user ' + user.queue.length);
                     return db.updateUserAsync(user);
                   })
