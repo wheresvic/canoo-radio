@@ -113,7 +113,6 @@
                     <th class="voting"></th>
                     <th>Artist</th>
                     <th>Song</th>
-                    <th>Duration</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -130,7 +129,6 @@
                     </td>
                     <td>{{song.artist}}</td>
                     <td>{{song.song}}</td>
-                    <td>{{song.duration | duration}} </td>
                     <td>{{song.durationAsString}} </td>
                 </tr>
                 <tr class="current">
@@ -145,7 +143,6 @@
                     </td>
                     <td>{{currentSong.artist}}</td>
                     <td>{{currentSong.song}}</td>
-                    <td>{{currentSong.duration | duration}}</td>
                     <td></td>
                 </tr>
                 <tr ng-repeat="song in playlists.upcoming" ng-class="mySongCss(song)">
@@ -156,7 +153,6 @@
                     <td class="align-left voting"></td>
                     <td>{{song.artist}}</td>
                     <td>{{song.song}}</td>
-                    <td>{{song.duration | duration}}</td>
                     <td>{{song.durationAsString}}</td>
                 </tr>
                 </tbody>
