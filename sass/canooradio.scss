@@ -39,13 +39,13 @@ table.playlist {
     vertical-align: middle !important;
   }
 
-  td.voting {
-    color: $body;
-    background-color: $bgcolor1;
-  }
-
   tr.played {
     color: #aaa;
+
+    td.voting {
+      color: $body;
+      background-color: $bgcolor1;
+    }
 
     i:hover {
       color: $red1;
@@ -54,7 +54,6 @@ table.playlist {
     i.voted {
       color: $red2;
     }
-
   }
 
   .votes {
@@ -65,8 +64,20 @@ table.playlist {
   }
 
   tr.current {
-     background-color: $red2;
-     color: $playlist-alt;
+    background-color: $red2;
+    color: $playlist-alt;
+
+    td.voting {
+      color: #aaa;
+    }
+
+    i:hover {
+      color: $red1;
+    }
+
+    i.voted {
+      color: white;
+    }
   }
 
   tr.mine {
