@@ -133,14 +133,18 @@
                     <td>{{song.duration | duration}}</td>
                 </tr>
                 <tr class="current">
-                    <td class="align-right"></td>
-                    <td class="text-center">
-                        <span class="votes">{{current.votes}}</span>
+                    <td class="align-right voting">
+                        <i ng-if="userId" class="fa fa-thumbs-o-up fa-lg addSongCursor" ng-class="votedCss(currentSong, 1)" ng-click="vote(currentSong, 1)"></i>
                     </td>
-                    <td class="align-left"></td>
-                    <td>{{current.artist}}</td>
-                    <td>{{current.song}}</td>
-                    <td>{{current.duration | duration}}</td>
+                    <td class="text-center">
+                        <span class="votes">{{currentSong.votes}}</span>
+                    </td>
+                    <td class="align-left voting">
+                        <i ng-if="userId" class="fa fa-thumbs-o-down fa-lg addSongCursor" ng-class="votedCss(currentSong, -1)" ng-click="vote(currentSong, -1)"></i>
+                    </td>
+                    <td>{{currentSong.artist}}</td>
+                    <td>{{currentSong.song}}</td>
+                    <td>{{currentSong.duration | duration}}</td>
                 </tr>
                 <tr ng-repeat="song in playlists.upcoming" ng-class="mySongCss(song)">
                     <td class="align-right voting"></td>
