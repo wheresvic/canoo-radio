@@ -1,7 +1,12 @@
+# Canoo Radio
 
-# Setup
+Canoo Radio is a radio station based on mpd where listeners decide upon and vote on its content. It is a full fledged web application that comes with a Node.js server and an Angular.js front-end. Canoo radio also depends upon mpd to manage the song library + the playlist and Icecast to allow the output of mpd to be fed to an http audio streamng endpoint.
 
-## MPD
+At the moment the entire development stack is setup on Linux with instructions provided here for installing mpd and icecast on debian based systems. Mac and windows users will need to figure out how to get mpd and icecast setup as the installation is different from that of linux. One option is to install mpd and icecast on a separate ubuntu machine and connect to the mpd server on it.
+
+## Setup
+
+### Installing mpd and icecast on linux
 
 `sudo apt-get install mpd`. Configure mpd in `/etc/mpd.conf`
 
@@ -50,9 +55,7 @@ sudo service mpd status
 sudo service icecast2 status
 ```
 
-mpd gui: `sudo apt-get install ario`
-
-Set the relevant variables in `application.properties`. Note that mpd is listening on `6600` and icecast is listening on `4710` in the current setup. Can install `sonata` which is a gui that can connect to and manage(?) mpd.
+Note that mpd is listening on `6600` and icecast is listening on `4710` in the current setup. Can install `sonata` which is a gui that can connect to and manage(?) mpd.
 
 ## Project
 
