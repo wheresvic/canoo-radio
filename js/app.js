@@ -19,6 +19,8 @@ var pad = function (n, width, z) {
   return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 };
 
+var radioPlayer;
+
 var app =
     angular.module('canooradio', [require('ng-file-upload')])
         .config(function($locationProvider) {
@@ -186,11 +188,15 @@ app.controller('RadioController',
     };
 
     $scope.addToPlaylist = function (song) {
-        $http.get(app.custom.serverBaseUrl + "/playlist/add?userId="+$scope.userId+"&fileName=" + song.id).then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/add?userId=" + $scope.userId + "&fileName=" + song.id).then(
             function successCB() {
                 $scope.songAdded = 'animated slideInDown';
                 song.isAdded = true;
                 $scope.playlists.upcoming.push(song);
+
+                if (radioPlayer[0].readyState === 0) {
+                    radioPlayer[0].load();
+                }
             },
             httpErrorCb
         );
@@ -509,6 +515,9 @@ app.filter('trusted', ['$sce', function ($sce) {
 app.run(function () {
 
     (function($) {
+
+        radioPlayer = $('#radio-player');
+        console.log(radioPlayer);
 
         $(window).scroll(function() {
             if ($(this).scrollTop() > 100) {
