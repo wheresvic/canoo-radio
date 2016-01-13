@@ -36,7 +36,7 @@ var app =
 app.custom = {
     url: "/api",
     serverBaseUrl: '/api', // (window.location.hostname === 'localhost' ? '/api' : '')
-    streamSrc: (window.location.hostname === 'localhost' ? 'http://localhost:4710/stream' : 'http://radio.canoo.com:4710/stream')
+    streamSrc: ('http://' + window.location.host + ':4710/stream')
 };
 
 app.filter('duration', function() {
