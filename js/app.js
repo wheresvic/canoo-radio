@@ -132,7 +132,12 @@ app.controller('RadioController',
 
     // upload on file select or drop
     $scope.upload = function (file) {
+        var demoNoUpload = "No uploads allowed in the demo version.";
 
+        postNotification('error', demoNoUpload);
+        return;
+
+        /*
         if (!file) {
             return;
         }
@@ -162,7 +167,7 @@ app.controller('RadioController',
             } else if (resp.status === 413) {
                 msg = "File too big, please ensure that it is under 20Mb";
             } else if (resp.status === 501) {
-                msg = "No uploads allowed in the demo version.";
+                msg = demoNoUpload;
             }
 
             postNotification('error', msg);
@@ -171,6 +176,7 @@ app.controller('RadioController',
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
         });
+        */
     };
 
     $scope.searchKeyPress = function(keyEvent) {
