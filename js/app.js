@@ -161,6 +161,8 @@ app.controller('RadioController',
                 msg = "Could not upload file. Please ensure that it is a mp3 file with valid artist, title and album idv3 tags!";
             } else if (resp.status === 413) {
                 msg = "File too big, please ensure that it is under 20Mb";
+            } else if (resp.status === 501) {
+                msg = "No uploads allowed in the demo version.";
             }
 
             postNotification('error', msg);
