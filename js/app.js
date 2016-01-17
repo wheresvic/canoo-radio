@@ -2,6 +2,8 @@
 'use strict';
 
 var angular = require('angular');
+var introJs = require('intro.js').introJs;
+
 
 var Chance = require('chance'),
     chance = new Chance();
@@ -59,7 +61,63 @@ app.filter('relative', function() {
 });
 
 app.controller('RadioController',
-    ['$scope', '$http', '$interval', 'Upload', function($scope, $http, $interval, Upload) {
+    ['$scope', '$http', '$interval', '$timeout', 'Upload', function($scope, $http, $interval, $timeout, Upload) {
+
+    $scope.igniteIntro = function() {
+
+        $timeout(function() {
+            var intro = introJs();
+
+            intro.setOptions({
+                steps: [
+                    {
+                        intro: "Welcome to Canoo radio! Click next for an introduction."
+                    },
+                    {
+                        element: angular.element('#music-browser tr')[1],
+                        intro: "This is a tooltip."
+                    },
+                    {
+                        element: document.querySelectorAll('#step2')[0],
+                        intro: "Ok, wasn't that fun?",
+                        position: 'right'
+                    },
+                    {
+                        element: '#step3',
+                        intro: 'More features, more fun.',
+                        position: 'left'
+                    },
+                    {
+                        element: '#step4',
+                        intro: "Another step.",
+                        position: 'bottom'
+                    },
+                    {
+                        element: '#step5',
+                        intro: 'Get it, use it.'
+                    }
+                ]
+            });
+
+            intro.onchange(function(targetElement){
+                console.log('onchange');
+                $timeout(function() {$scope.$digest();});
+            });
+
+            intro.onbeforechange(function(targetElement) {
+                $timeout(function() {$scope.$digest();});
+            });
+
+            intro.onafterchange(function(targetElement){
+                $timeout(function() {$scope.$digest();});
+            });
+
+            intro.start();
+
+        }, 0);
+    };
+
+
 
     $scope.streamSrc = app.custom.streamSrc;
 
@@ -536,6 +594,7 @@ app.filter('trusted', ['$sce', function ($sce) {
 }]);
 
 
+
 app.run(function () {
 
     (function($) {
@@ -581,7 +640,6 @@ app.run(function () {
                 }
             });
         }
-
 
     })(jQuery);
 
