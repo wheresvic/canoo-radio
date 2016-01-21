@@ -11,6 +11,7 @@ var http = require('http');
 
 var env = process.env.ENV;
 
+var util = require('./lib/util');
 var cors = require('./lib/cors.js');
 var logger = require('./lib/logger.js').logger;
 var mpdWrapper = require('./lib/mpd-wrapper')(env, 'localhost', 6600, logger);
@@ -278,6 +279,12 @@ app.use(function (err, req, res, next) {
 
     logger.error(err + '');
     res.header('Error', err);
+
+    if (util.isNumber(err)) {
+      res.status(err).send();
+      return;
+    }
+
     res.status(500).send();
 
 });
