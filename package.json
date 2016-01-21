@@ -25,12 +25,12 @@
     "winston": "~2.1.0"
   },
   "scripts": {
-    "build-js": "browserify js/app.js -o public/dist/app.js",
-    "build-min-js": "browserify js/app.js | uglifyjs -o public/dist/app.min.js",
+    "build-js": "mkdir -p public/dist && browserify js/app.js -o public/dist/app.js",
+    "build-min-js": "mkdir -p public/dist && browserify js/app.js | uglifyjs -o public/dist/app.min.js",
     "watch-js": "nodemon -e js -w js -x 'npm run build-js'",
     "watch-min-js": "nodemon -e js -w js -x 'npm run build-min-js'",
-    "build-sass": "node-sass sass/canooradio.scss public/dist/canooradio.css",
-    "build-min-sass": "node-sass sass/canooradio.scss | cleancss -o public/dist/canooradio.min.css",
+    "build-sass": "mkdir -p public/dist && node-sass sass/canooradio.scss public/dist/canooradio.css",
+    "build-min-sass": "mkdir -p public/dist && node-sass sass/canooradio.scss | cleancss -o public/dist/canooradio.min.css",
     "watch-sass": "nodemon -e scss -w sass -x 'npm run build-sass'",
     "build": "npm run build-js",
     "watch": "npm run watch-js",

@@ -74,7 +74,7 @@
                     </p>
 
                     <p>
-                        Canoo Radio is here to the rescue.
+                        <a target="_blank" href="https://github.com/canoo/canoo-radio">Canoo Radio</a> is here to the rescue.
                     </p>
                 </div>
             </div>
@@ -92,16 +92,21 @@
                 <div class="section-header">
                     <h2 class="section-heading">Listen</h2>
 
-                    <p>Hit the play button to start Canoo Radio!</p>
+                    <p>Hit the play button to start Canoo Radio! If the stream is disabled then try adding a song from the playlist (click the 'plus' sign beside the song) to enable the stream.</p>
 
-                    <p>Below you find the playlist with recently broadcasted songs ready to be rated, the currently
-                        played title and the upcoming songs.</p>
                 </div>
             </div>
         </div>
 
         <div id="radio-container" class="row align-center mar-bot40">
             <audio controls id="radio-player" ng-src="{{streamSrc | trusted}}"></audio>
+        </div>
+
+        <div class="row mar-bot40">
+            <div class="col-md-offset-3 col-md-6">
+                <p>Below you will find the playlist with recently broadcasted songs ready to be rated, the currently
+                    played title and the upcoming songs.</p>
+            </div>
         </div>
 
         <div class="row mar-bot40 col-md-10 col-md-offset-1">
@@ -174,7 +179,7 @@
                     <h2 class="section-heading">Music browser</h2>
                     <ul class="nav nav-tabs browser_tabs">
                         <li class="active"><a data-toggle="tab" href="#browser-tab">Browser</a></li>
-                        <li><a data-toggle="tab" href="#chart-tab">Canoo Charts</a></li>
+                        <li><a data-toggle="tab" href="#chart-tab">Charts</a></li>
                     </ul>
                 </div>
             </div>
@@ -280,7 +285,7 @@
                 <div class="section-header">
                     <h2 class="section-heading">Upload MP3 Files</h2>
 
-                    <p>Share your music with the Canoo Community!</p>
+                    <p>Share your music with the Community!</p>
                     <p>The mp3 file needs to have an ID3 tag with valid artist, title and album fields filled in!</p>
 
                     <div id="drop-files" ngf-drop="upload($file)" ngf-select="upload($file)">
@@ -304,7 +309,7 @@
         </div>
 
         <div class="row align-center copyright">
-            <div class="col-sm-12"><p>Copyright &copy; 2015-16 Canoo Engineering AG</p></div>
+            <div class="col-sm-12"><p>Made with <i class="fa fa-heart"></i> by the folks at <a target="_blank" href="http://www.canoo.com">Canoo Engineering AG</a></p></div>
         </div>
     </div>
 
