@@ -37,12 +37,12 @@ describe("db-wrapper", function() {
 
       dbWrapper.addUser({_id: chance.string(), name: 'yoyo'}, function (err, user) {
         expect(err).to.be.null;
-        
+
         user.lastname = 'ma';
-        
+
         dbWrapper.updateUser(user, function (err, numUpdated) {
           expect(err).to.be.null;
-          
+
           dbWrapper.getUser(user._id, function (err, found) {
             expect(err).to.be.null;
             expect(found.lastname).to.equal('ma');
@@ -177,68 +177,59 @@ describe("db-wrapper", function() {
       dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+1000}, function (err, musicUploadDate1) {
         expect(err).to.be.null;
 
-	dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+2000}, function (err, musicUploadDate2) {
+        dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+2000}, function (err, musicUploadDate2) {
           expect(err).to.be.null;
 
-	  dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+3000}, function (err, musicUploadDate3) {
+          dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+3000}, function (err, musicUploadDate3) {
             expect(err).to.be.null;
 
-	    dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+4000}, function (err, musicUploadDate4) {
+            dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+4000}, function (err, musicUploadDate4) {
               expect(err).to.be.null;
 
-	      dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+5000}, function (err, musicUploadDate5) {
+              dbWrapper.addMusicUploadDate({_id: chance.string(), date: now+5000}, function (err, musicUploadDate5) {
                 expect(err).to.be.null;
-        
-		dbWrapper.getRecentMusic(5, function (err, songs) {
-	          expect(err).to.be.null;
-        	  expect(songs).not.to.be.null;
-		  expect(songs[0].date).to.equal(now+5000);
-		  expect(songs[1].date).to.equal(now+4000);
-		  expect(songs[2].date).to.equal(now+3000);
-		  expect(songs[3].date).to.equal(now+2000);
-		  expect(songs[4].date).to.equal(now+1000);
+
+		            dbWrapper.getRecentMusic(5, function (err, songs) {
+                  expect(err).to.be.null;
+                  expect(songs).not.to.be.null;
+                  expect(songs[0].date).to.equal(now+5000);
+                  expect(songs[1].date).to.equal(now+4000);
+                  expect(songs[2].date).to.equal(now+3000);
+                  expect(songs[3].date).to.equal(now+2000);
+                  expect(songs[4].date).to.equal(now+1000);
                   console.log(songs);
 
-		  // Delete stuff
-		  dbWrapper.removeMusicUploadDate(musicUploadDate1._id, function(err){
-  	            expect(err).to.be.null;
+                  // Delete stuff
+                  dbWrapper.removeMusicUploadDate(musicUploadDate1._id, function(err){
+                    expect(err).to.be.null;
 
-		    dbWrapper.removeMusicUploadDate(musicUploadDate2._id, function(err){
-  	              expect(err).to.be.null;
+                    dbWrapper.removeMusicUploadDate(musicUploadDate2._id, function(err){
+                      expect(err).to.be.null;
 
-		      dbWrapper.removeMusicUploadDate(musicUploadDate3._id, function(err){
-  	                expect(err).to.be.null;
+                      dbWrapper.removeMusicUploadDate(musicUploadDate3._id, function(err){
+                        expect(err).to.be.null;
 
-		        dbWrapper.removeMusicUploadDate(musicUploadDate4._id, function(err){
-  	                  expect(err).to.be.null;
+                        dbWrapper.removeMusicUploadDate(musicUploadDate4._id, function(err){
+                          expect(err).to.be.null;
 
-		          dbWrapper.removeMusicUploadDate(musicUploadDate5._id, function(err){
-  	                    expect(err).to.be.null;
-			    done();
-			  });
-			
-			});
-		     
-		      });
-
-		    });
-
-		  });
-
-        	});
-
-	      });
-
-	    });
-
-	  });
-
-	});
+                          dbWrapper.removeMusicUploadDate(musicUploadDate5._id, function(err){
+                            expect(err).to.be.null;
+                            done();
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
 
       });
 
-    });
+    }); // end it
 
-  });
+  }); // end describe('musicUploadDates')
 
 });
