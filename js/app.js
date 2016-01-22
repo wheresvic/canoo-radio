@@ -6,6 +6,8 @@ var angular = require('angular');
 var Chance = require('chance'),
     chance = new Chance();
 
+var moment = require('moment');
+
 // var numeral = require('numeral');
 
 /**
@@ -50,6 +52,11 @@ app.filter('duration', function() {
   };
 });
 
+app.filter('relative', function() {
+  return function(input) {
+    return moment(input).fromNow();
+  };
+});
 
 app.controller('RadioController',
     ['$scope', '$http', '$interval', 'Upload', function($scope, $http, $interval, Upload) {
@@ -81,6 +88,7 @@ app.controller('RadioController',
 
     $scope.music = [];
     $scope.charts = [];
+    $scope.recentUploads = [];
 
     // a poor attempt to try and get the browser to slide down when a song is added
     // but it's pointless given that the list refreshes on poll anyways
@@ -176,7 +184,7 @@ app.controller('RadioController',
             updateMusicBrowser();
 
         } else {
-            $http.get(app.custom.serverBaseUrl + "/music/search?query=" + searchString).then(
+            $http.get(app.custom.serverBaseUrl + "/music/search?query=" + encodeURIComponent(searchString)).then(
                 function successCB(response) {
                     $scope.music = response.data;
                 },
@@ -188,12 +196,13 @@ app.controller('RadioController',
     };
 
     $scope.addToPlaylist = function (song) {
-        $http.get(app.custom.serverBaseUrl + "/playlist/add?userId=" + $scope.userId + "&fileName=" + song.id).then(
+        $http.get(app.custom.serverBaseUrl + "/playlist/add?userId=" + $scope.userId + "&fileName=" + encodeURIComponent(song.id)).then(
             function successCB() {
                 $scope.songAdded = 'animated slideInDown';
                 song.isAdded = true;
                 $scope.playlists.upcoming.push(song);
 
+                // fire up the radio player in case it is dead
                 if (radioPlayer[0].readyState === 0) {
                     radioPlayer[0].load();
                 }
@@ -310,7 +319,7 @@ app.controller('RadioController',
 
         if (previousVote === indication) {
 
-            $http.get(app.custom.serverBaseUrl + "/vote/clear?filename=" + song.id + "&userId=" + $scope.userId).then(
+            $http.get(app.custom.serverBaseUrl + "/vote/clear?filename=" + encodeURIComponent(song.id) + "&userId=" + $scope.userId).then(
                 function successCB() {
                     delete $scope.user.votes[song.id];
                     clearVoteInPlaylist($scope.playlists.played, song);
@@ -350,7 +359,7 @@ app.controller('RadioController',
             url = app.custom.serverBaseUrl + "/vote/down";
         }
 
-        url += "?filename=" + song.id + "&userId=" + $scope.userId;
+        url += "?filename=" + encodeURIComponent(song.id) + "&userId=" + $scope.userId;
 
         $http.get(url).then(cb, httpErrorCb);
 
@@ -497,6 +506,13 @@ app.controller('RadioController',
         $http.get(app.custom.serverBaseUrl + "/music/charts?limit=25").then(
             function successCB(response) {
                 $scope.charts = response.data;
+            },
+            httpErrorCb
+        );
+
+        $http.get(app.custom.serverBaseUrl + "/music/recentUpload?limit=25").then(
+            function successCB(response) {
+                $scope.recentUploads = response.data;
             },
             httpErrorCb
         );
