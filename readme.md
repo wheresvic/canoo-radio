@@ -95,7 +95,9 @@ npm run build-js
 npm run build-sass
 ```
 
-This will dist the combined `app.js` under the `public/dist/` folder and the `canooradio.css` to the dist folder as well. You might need to create the `dist` folder as it is not checked in. `npm run all` will run in development mode where changes to the `js` folder and the `sass` folder are watched via nodemon.
+This will dist the combined `app.js` under the `public/dist/` folder and the `canooradio.css` to the dist folder as well. You might need to create the `dist` folder as it is not checked in.
+
+`npm run all` will run in development mode where changes to the `js` folder and the `sass` folder are watched via nodemon.
 
 ```
 node radio.js
@@ -122,3 +124,7 @@ mocha test/test-mpd-integration.js
 to run tests located under the `tests` folder. Note that the `test` environment uses mock mpd data and if you'd like to test with the mpd service running then exclude the environment variable but then the expectations on tests will likely not pass :)
 
 Note that the tests need to be run individually due to the file-based db
+
+# References
+
+[http://www.musicpd.org/doc/protocol/database.html]
