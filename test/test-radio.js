@@ -216,6 +216,21 @@ describe("radio", function() {
         });
     });
 
+    it('should get recently uploaded songs', function () {
+
+      return request(app_url)
+        .get(routeMusicDb + '/recentUpload?limit=2')
+        .expect(200)
+        .then(function (res) {
+          var songs = res.body;
+          console.log(songs);
+          expect(songs.length).to.equal(2);
+
+          var song = songs[0];
+          expect(song.uploaded).to.be.above(0);
+        });
+    });
+
   });
 
   describe(routeVote, function () {
