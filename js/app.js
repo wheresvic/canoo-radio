@@ -534,8 +534,7 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
 
             getMusicLibrary();
             pollData();
-            $scope.searchSongs("", 25);
-
+            
             $interval(pollData, 5000);
         };
 
