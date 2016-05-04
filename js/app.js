@@ -156,7 +156,7 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
                 type: 'number'
             }, {
                 field: 'playCount',
-                width: 150,
+                width: 170,
                 filters: [{
                     condition: uiGridConstants.filter.GREATER_THAN,
                     placeholder: 'greater than'
