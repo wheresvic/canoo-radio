@@ -152,7 +152,8 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
                     placeholder: 'less than'
                 }],
                 headerCellClass: $scope.highlightFilteredHeader,
-                cellClass: $scope.centeredCellClass
+                cellClass: $scope.centeredCellClass,
+                type: 'number'
             }, {
                 field: 'playCount',
                 width: 150,
@@ -164,7 +165,8 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
                     placeholder: 'less than'
                 }],
                 headerCellClass: $scope.highlightFilteredHeader,
-                cellClass: $scope.centeredCellClass
+                cellClass: $scope.centeredCellClass,
+                type: 'number'
             }],
             onRegisterApi: function(gridApi) {
                 $scope.libraryGridApi = gridApi;
