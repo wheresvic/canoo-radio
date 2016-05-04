@@ -89,6 +89,8 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
 
         $scope.recentUploads = [];
 
+        $scope.library = [];
+
         // a poor attempt to try and get the browser to slide down when a song is added
         // but it's pointless given that the list refreshes on poll anyways
         $scope.songAdded = '';
@@ -115,7 +117,7 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
         var templateWithTooltip = '<div class="ui-grid-cell-contents"><a tooltip="{{row.entity[col.field]}}" tooltip-append-to-body="true" tooltip-placement="right">{{row.entity[col.field]}}</a></div>';
 
         $scope.libraryGridOptions = {
-            data: [],
+            data: 'library',
             enableSorting: true,
             enableFiltering: true,
             enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
@@ -534,7 +536,7 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
 
             getMusicLibrary();
             pollData();
-            
+
             $interval(pollData, 5000);
         };
 
@@ -542,7 +544,7 @@ app.controller('RadioController', ['$scope', '$http', '$interval', 'Upload', 'ui
         var getMusicLibrary = function() {
             $http.get(app.custom.serverBaseUrl + "/music").then(
                 function successCB(response) {
-                    $scope.libraryGridOptions.data = response.data;
+                    $scope.library = response.data;
                 },
                 httpErrorCb
             );
