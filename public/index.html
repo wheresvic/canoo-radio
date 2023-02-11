@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="css/Lato-Regular.css">
     -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ui-grid/ui-grid.min.css">
+
     <link rel="stylesheet" href="dist/canooradio.css">
     <!-- skin -->
     <link rel="stylesheet" href="skin/default.css">
@@ -178,8 +180,7 @@
                 <div class="section-header">
                     <h2 class="section-heading">Music browser</h2>
                     <ul class="nav nav-tabs browser_tabs">
-                        <li class="active"><a data-toggle="tab" href="#browser-tab">Browser</a></li>
-                        <li><a data-toggle="tab" href="#chart-tab">Charts</a></li>
+                        <li class="active"><a data-toggle="tab" href="#music-library-tab">Library ({{library.length}})</a></li>
                         <li><a data-toggle="tab" href="#recent-uploads-tab">Recent Uploads</a></li>
                     </ul>
                 </div>
@@ -189,67 +190,12 @@
         <div class="row mar-bot40 col-md-10 col-md-offset-1">
 
             <div class="tab-content">
-                <div id="browser-tab" class="tab-pane fade in active">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search song or empty search for random songs..." ng-model="searchInput" ng-keypress="searchKeyPress($event)">
-      							<span class="input-group-btn">
-        							<button class="btn btn-theme" type="button" ng-click="searchSongs(searchInput)">Go!</button>
-      							</span>
-                    </div>
-                    <!-- /input-group -->
-
-                    <div id="music-browser" class="infinite">
-
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Artist</th>
-                                <th>Song</th>
-                                <th>Album</th>
-                                <th>Duration</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="song in music">
-                                <td><i class="addSongCursor" ng-class="{'fa fa-plus-circle' : isNotQueued(song.id)}" ng-click="addToPlaylist(song)"></i></td>
-                                <td>{{song.artist}}</td>
-                                <td>{{song.song}}</td>
-                                <td>{{song.album}}</td>
-                                <td>{{song.duration | duration}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <div id="music-library-tab" class="tab-pane fade in active">
+                    <div id="music-library">
+                        <div id="music-library-grid" ui-grid="libraryGridOptions"></div>
                     </div>
                 </div>
-                <div id="chart-tab" class="tab-pane fade">
-                    <div id="music-charts">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th>Votes</th>
-                                <th>Artist</th>
-                                <th>Song</th>
-                                <th>Album</th>
-                                <th>Duration</th>
-                                <th>Play count</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="song in charts">
-                                <td><i class="addSongCursor" ng-class="{'fa fa-plus-circle' : isNotQueued(song.id)}" ng-click="addToPlaylist(song)"></i></td>
-                                <td class="text-center">{{song.votes}}</td>
-                                <td>{{song.artist}}</td>
-                                <td>{{song.song}}</td>
-                                <td>{{song.album}}</td>
-                                <td>{{song.duration | duration}}</td>
-                                <td>{{song.playCount}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
 
                 <div id="recent-uploads-tab" class="tab-pane fade">
                     <div id="recent-uploads">

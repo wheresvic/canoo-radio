@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "dependencies": {
     "angular": "1.4.7",
+    "angular-ui-grid": "^3.1.1",
     "bluebird": "~3.0.5",
     "body-parser": "^1.14.1",
     "chai": "~3.4.0",
